@@ -215,7 +215,7 @@ if ($edit_id > 0) {
 }
 
 $type_labels = ['general'=>'General','board'=>'Board','special'=>'Special','other'=>'Other'];
-$type_colors = ['general'=>'#003594','board'=>'#1b5e20','special'=>'#A6192E','other'=>'#5a6a7a'];
+$type_colors = ['general'=>'#000000','board'=>'#1b5e20','special'=>'#A6192E','other'=>'#5a6a7a'];
 
 admin_header('Meeting Minutes');
 echo show_flash();
@@ -346,12 +346,12 @@ echo show_flash();
     <td>
       <?= $m['location'] ? h($m['location']) : '<span style="color:#c0c8d4">—</span>' ?>
       <?php if (!empty($m['meeting_link'])): ?>
-        <div><a href="<?= h($m['meeting_link']) ?>" target="_blank" rel="noopener" style="font-size:.75rem;color:#003594;font-weight:600;text-decoration:none">🔗 Join</a></div>
+        <div><a href="<?= h($m['meeting_link']) ?>" target="_blank" rel="noopener" style="font-size:.75rem;color:#000000;font-weight:600;text-decoration:none">🔗 Join</a></div>
       <?php endif; ?>
     </td>
     <td>
       <?php if ($m['minutes_file']): ?>
-        <a href="minutes-serve.php?id=<?= (int)$m['id'] ?>" target="_blank" style="color:#003594;font-size:.78rem;font-weight:600;text-decoration:none">📄 View</a>
+        <a href="minutes-serve.php?id=<?= (int)$m['id'] ?>" target="_blank" style="color:#000000;font-size:.78rem;font-weight:600;text-decoration:none">📄 View</a>
         <form method="POST" style="display:inline" onsubmit="return confirm('Remove this file?')">
           <?= csrf_field() ?>
           <input type="hidden" name="action" value="delete_file">
@@ -362,7 +362,7 @@ echo show_flash();
           <?= csrf_field() ?>
           <input type="hidden" name="action" value="notify_board">
           <input type="hidden" name="id" value="<?= (int)$m['id'] ?>">
-          <button type="submit" class="btn btn-sm" style="padding:.1rem .4rem;font-size:.7rem;color:#003594;background:none;border:none;cursor:pointer;text-decoration:underline">📧 Notify Board</button>
+          <button type="submit" class="btn btn-sm" style="padding:.1rem .4rem;font-size:.7rem;color:#000000;background:none;border:none;cursor:pointer;text-decoration:underline">📧 Notify Board</button>
         </form>
       <?php else: ?>
         <form method="POST" enctype="multipart/form-data" style="display:flex;align-items:center;gap:.3rem">

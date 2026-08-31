@@ -37,7 +37,7 @@ admin_header('View Member');
 .vf:last-child{margin-bottom:0}
 .vf-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9aa5b4;margin-bottom:.2rem}
 .vf-val{font-size:.92rem;color:#1a2332}
-a.vf-val{color:#003594}
+a.vf-val{color:#000000}
 .paid-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:4px;font-weight:700;font-size:.85rem}
 @media(max-width:700px){.vcard{grid-template-columns:1fr}}
 </style>

@@ -44,7 +44,7 @@ admin_header('Event RSVPs');
     if ($count === 0) continue;
   ?>
   <div class="er-row">
-    <strong style="color:#002554"><?= h($e['title']) ?></strong>
+    <strong style="color:#000000"><?= h($e['title']) ?></strong>
     <span style="font-size:.78rem;color:#1565c0;font-weight:700"> — <?= $count ?> RSVP<?= $count!==1?'s':'' ?><?= $guests>0 ? " + $guests guest".($guests!==1?'s':'') : '' ?> (<?= $count + $guests ?> total)</span>
     <div class="er-meta"><?php if ($e['event_date']): ?><?= date('M j, Y', strtotime($e['event_date'])) ?><?php endif; ?></div>
     <?php if (!empty($rosters[$e['id']])): ?>

@@ -55,14 +55,14 @@ if (isset($_GET['export'])) {
     fclose($out); exit;
 }
 
-$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#003594'];
+$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#000000'];
 
 admin_header('Finance');
 ?>
 <style>
 .fin-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-bottom:1.25rem}
 .fin-card{background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:1rem;text-align:center}
-.fin-amount{font-size:1.5rem;font-weight:700;color:#002554}
+.fin-amount{font-size:1.5rem;font-weight:700;color:#000000}
 .fin-label{font-size:.72rem;color:#5a6a7a;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem}
 .status-badge{display:inline-block;padding:.15rem .5rem;border-radius:3px;font-size:.7rem;font-weight:700;white-space:nowrap}
 @media(max-width:600px){.fin-cards{grid-template-columns:1fr 1fr}}
@@ -108,7 +108,7 @@ admin_header('Finance');
     <div class="fin-amount">$<?= number_format($total_shipping, 2) ?></div>
     <div class="fin-label">Shipping</div>
   </div>
-  <div class="fin-card" style="border:2px solid #003594">
+  <div class="fin-card" style="border:2px solid #000000">
     <div class="fin-amount" style="color:#A6192E">$<?= number_format($total_all, 2) ?></div>
     <div class="fin-label">Grand Total</div>
   </div>
@@ -254,7 +254,7 @@ admin_header('Finance');
             <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
             <input type="hidden" name="action" value="paid">
             <input type="hidden" name="note" id="pn-<?= (int)$p['id'] ?>">
-            <button type="button" class="btn btn-sm" style="background:#003594;color:#fff;white-space:nowrap"
+            <button type="button" class="btn btn-sm" style="background:#000000;color:#fff;white-space:nowrap"
               onclick="doAction('pf-<?= (int)$p['id'] ?>','pn-<?= (int)$p['id'] ?>','Note (optional):','Confirm this purchase has been paid?')">✓ Mark Paid</button>
           </form>
           <?php endif; ?>
@@ -293,7 +293,7 @@ admin_header('Finance');
 <!-- Reimburse modal -->
 <div id="reimburse-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,.25);padding:1.75rem;max-width:420px;width:90%;margin:1rem">
-    <h2 style="font-size:1rem;color:#002554;margin-bottom:.25rem">Submit Payment</h2>
+    <h2 style="font-size:1rem;color:#000000;margin-bottom:.25rem">Submit Payment</h2>
     <p id="reimburse-modal-desc" style="font-size:.85rem;color:#5a6a7a;margin-bottom:1.25rem"></p>
     <div class="form-group">
       <label>Payment Method *</label>

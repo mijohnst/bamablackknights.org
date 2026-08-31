@@ -183,7 +183,7 @@ echo show_flash();
       ⚠ Large selection — consider uploading in batches under 200 MB to avoid server limits.
     </div>
     <button type="submit" class="btn btn-primary" id="upload-btn">Upload Photos</button>
-    <div id="upload-notice" style="display:none;margin-top:.75rem;background:#e8f0fb;border:1px solid #b3caf5;border-radius:4px;padding:.6rem .8rem;font-size:.82rem;color:#003594">
+    <div id="upload-notice" style="display:none;margin-top:.75rem;background:#e8f0fb;border:1px solid #b3caf5;border-radius:4px;padding:.6rem .8rem;font-size:.82rem;color:#000000">
       ⏳ Uploading — please wait and do not click again.
     </div>
   </form>
@@ -234,7 +234,7 @@ uploadForm.addEventListener('submit', function(e) {
 
 <?php if (!empty($photos)): ?>
 <!-- Bulk bar -->
-<div id="bulk-bar" style="display:none;position:sticky;top:0;z-index:100;background:#003594;color:white;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;align-items:center;gap:.75rem;flex-wrap:wrap">
+<div id="bulk-bar" style="display:none;position:sticky;top:0;z-index:100;background:#000000;color:white;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;align-items:center;gap:.75rem;flex-wrap:wrap">
   <span id="bulk-count" style="font-size:.85rem;font-weight:600;min-width:80px"></span>
   <button onclick="bulkDelete()" class="btn btn-danger btn-sm">Delete Selected</button>
   <button onclick="clearSelection()" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:.85rem;margin-left:auto">✕ Clear</button>

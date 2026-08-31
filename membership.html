@@ -38,17 +38,17 @@
     .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: var(--navy); font-size: 0.9rem; }
     .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--silver2); border-radius: 4px; font-family: var(--font-body); color: var(--navy); font-size: 0.95rem; background: var(--white); }
     .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 2px rgba(0, 53, 148, 0.15); }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 2px rgba(0,0,0, 0.15); }
     .form-group .hint { font-size: 0.78rem; color: var(--gray); margin-top: 0.25rem; }
 
     .radio-group { display: flex; gap: 1.5rem; margin-top: 0.25rem; }
     .radio-group label { font-weight: 400; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
     .radio-group input[type="radio"] { width: auto; accent-color: var(--navy); }
 
-    .form-divider { border: none; border-top: 2px solid rgba(0, 53, 148, 0.15); margin: 2rem 0 1.5rem; }
+    .form-divider { border: none; border-top: 2px solid rgba(0,0,0, 0.15); margin: 2rem 0 1.5rem; }
     .form-divider-label { font-family: var(--font-display); font-size: 1.1rem; color: var(--navy); margin-bottom: 1rem; }
 
-    .cta-button { display: inline-block; background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%); color: var(--white); padding: 0.9rem 2rem; border-radius: 4px; font-family: var(--font-body); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem; transition: all 0.15s ease; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,.25); position: relative; top: 0; }
+    .cta-button { display: inline-block; background: linear-gradient(180deg, #1a5cbf 0%, #000000 100%); color: var(--white); padding: 0.9rem 2rem; border-radius: 4px; font-family: var(--font-body); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem; transition: all 0.15s ease; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,.25); position: relative; top: 0; }
     .cta-button:hover { background: linear-gradient(180deg, #2166cc 0%, #003080 100%); box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,.2); top: 2px; }
     .cta-button:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -173,7 +173,7 @@
       <!-- Progress indicator -->
       <div style="display:flex;gap:0;margin-bottom:1.75rem;overflow:hidden;border-radius:4px">
         <div id="form-progress" style="display:flex;width:100%">
-          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#003594;color:#fff;border-right:1px solid rgba(255,255,255,.2)">① Cadet</div>
+          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#000000;color:#fff;border-right:1px solid rgba(255,255,255,.2)">① Cadet</div>
           <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a;border-right:1px solid rgba(255,255,255,.4)">② Consent</div>
           <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a;border-right:1px solid rgba(255,255,255,.4)">③ Parents</div>
           <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a;border-right:1px solid rgba(255,255,255,.4)">④ Address</div>
@@ -444,7 +444,7 @@
           if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.6) active = s.idx;
         });
         bars.forEach(function(b, i) {
-          b.style.background = i <= active ? '#003594' : '#e1e5eb';
+          b.style.background = i <= active ? '#000000' : '#e1e5eb';
           b.style.color      = i <= active ? '#fff'    : '#5a6a7a';
         });
       }

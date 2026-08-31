@@ -41,17 +41,17 @@ if ($user && !$expired && $_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="icon" type="image/png" href="logo01.png" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",Arial,sans-serif;background:#002554;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:1rem}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#000000;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:1rem}
 .box{background:#fff;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,.3);padding:2rem;width:100%;max-width:400px}
 .logo{text-align:center;margin-bottom:1.5rem}
 .logo img{height:48px;border-radius:4px;margin-bottom:.75rem;display:block;margin-left:auto;margin-right:auto}
-.logo strong{display:block;font-size:.95rem;color:#002554;letter-spacing:.02em}
+.logo strong{display:block;font-size:.95rem;color:#000000;letter-spacing:.02em}
 .logo small{color:#5a6a7a;font-size:.8rem}
-h2{font-size:1rem;color:#002554;margin-bottom:1.25rem;text-align:center}
+h2{font-size:1rem;color:#000000;margin-bottom:1.25rem;text-align:center}
 label{display:block;font-size:.78rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem}
 input{width:100%;padding:.65rem .75rem;border:1px solid #d0d5dd;border-radius:4px;font-size:.95rem;margin-bottom:1rem;font-family:inherit}
-input:focus{outline:none;border-color:#003594;box-shadow:0 0 0 2px rgba(0,53,148,.15)}
-button{width:100%;padding:.75rem;background:#003594;color:#fff;border:none;border-radius:4px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit}
+input:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
+button{width:100%;padding:.75rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit}
 button:hover{background:#002268}
 .alert{padding:.65rem .9rem;border-radius:4px;margin-bottom:1rem;font-size:.875rem;background:#ffebee;color:#c62828;border-left:4px solid #f44336}
 .note{background:#e8f5e9;border-left:4px solid #4caf50;padding:.75rem 1rem;border-radius:4px;font-size:.82rem;color:#1b5e20;margin-bottom:1.25rem}

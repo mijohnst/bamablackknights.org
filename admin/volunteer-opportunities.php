@@ -147,7 +147,7 @@ echo show_flash();
   <div class="vo-row <?= $o['active'] ? '' : 'inactive' ?>">
     <div style="display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap">
       <div style="flex:1;min-width:0">
-        <strong style="color:#002554"><?= h($o['title']) ?></strong>
+        <strong style="color:#000000"><?= h($o['title']) ?></strong>
         <span class="spots-badge" style="background:<?= $badge_color ?>22;color:<?= $badge_color ?>"><?= $filled ?>/<?= $needed ?> filled</span>
         <?php if (!$o['active']): ?><span style="color:#9aa5b4;font-size:.75rem"> · Closed</span><?php endif; ?>
         <div class="vo-meta">

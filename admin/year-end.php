@@ -63,12 +63,12 @@ admin_header('Year-End Summary');
 .bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;font-size:.82rem}
 .bar-label{width:170px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar-track{flex:1;background:#f0f2f5;border-radius:99px;height:14px;overflow:hidden}
-.bar-fill{height:100%;background:#003594;border-radius:99px}
-.bar-amt{width:75px;text-align:right;font-weight:700;color:#002554;flex-shrink:0}
+.bar-fill{height:100%;background:#000000;border-radius:99px}
+.bar-amt{width:75px;text-align:right;font-weight:700;color:#000000;flex-shrink:0}
 .bar-pct{width:38px;text-align:right;font-size:.72rem;color:#9aa5b4;flex-shrink:0}
 .mb{display:flex;align-items:flex-end;gap:3px;height:80px}
 .mb-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
-.mb-bar{width:100%;background:#003594;border-radius:3px 3px 0 0;min-height:2px}
+.mb-bar{width:100%;background:#000000;border-radius:3px 3px 0 0;min-height:2px}
 .mb-lbl{font-size:.62rem;color:#9aa5b4}
 @media(max-width:700px){.ye-grid{grid-template-columns:1fr}}
 </style>
@@ -98,7 +98,7 @@ admin_header('Year-End Summary');
 <!-- Summary cards -->
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.75rem;margin-bottom:1.5rem">
   <div class="card" style="padding:1rem;text-align:center;margin:0">
-    <div style="font-size:1.5rem;font-weight:700;color:#002554"><?= count($all) ?></div>
+    <div style="font-size:1.5rem;font-weight:700;color:#000000"><?= count($all) ?></div>
     <div style="font-size:.72rem;color:#5a6a7a;text-transform:uppercase">All Purchases</div>
   </div>
   <div class="card" style="padding:1rem;text-align:center;margin:0">
@@ -161,8 +161,8 @@ admin_header('Year-End Summary');
         $h_px = $amt > 0 ? max(4, round($amt/$max_month*72)) : 0;
       ?>
       <div class="mb-col">
-        <div style="font-size:.62rem;color:#002554;font-weight:700"><?= $amt>0?'$'.number_format($amt,0):'' ?></div>
-        <div class="mb-bar" style="height:<?= $h_px ?>px;background:<?= $amt>0?'#003594':'#e1e5eb' ?>"></div>
+        <div style="font-size:.62rem;color:#000000;font-weight:700"><?= $amt>0?'$'.number_format($amt,0):'' ?></div>
+        <div class="mb-bar" style="height:<?= $h_px ?>px;background:<?= $amt>0?'#000000':'#e1e5eb' ?>"></div>
         <div class="mb-lbl"><?= $fy_months[$mo-1] ?></div>
       </div>
       <?php endfor; ?>

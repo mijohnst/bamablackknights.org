@@ -56,7 +56,7 @@ function delta_pct(float $prev, float $curr): ?float {
     return round(($curr - $prev) / $prev * 100, 1);
 }
 
-$bar_colors = ['#003594','#A6192E','#1b5e20'];
+$bar_colors = ['#000000','#A6192E','#1b5e20'];
 
 admin_header('Multi-Year Spending Comparison');
 ?>

@@ -11,8 +11,8 @@ require_login();
 <style>
 /* ── Tokens ── */
 :root {
-  --navy:    #002554;
-  --blue:    #003594;
+  --navy:    #000000;
+  --blue:    #000000;
   --crimson: #A6192E;
   --silver:  #8A8D8F;
   --bg:           #FFFFFF;
@@ -20,7 +20,7 @@ require_login();
   --text:         #0D1B2A;
   --text-muted:   #4A5A6B;
   --border:       #C5D4E8;
-  --heading:      #002554;
+  --heading:      #000000;
   --card-bg:      #F3F7FD;
   --df: Georgia,'Palatino Linotype',Palatino,serif;
   --ds: 'Segoe UI','Helvetica Neue',Arial,sans-serif;
@@ -31,7 +31,7 @@ require_login();
 }}
 :root[data-theme="light"]{
   --bg:#FFFFFF;--bg-alt:#EDF2F9;--text:#0D1B2A;--text-muted:#4A5A6B;
-  --border:#C5D4E8;--heading:#002554;--card-bg:#F3F7FD;
+  --border:#C5D4E8;--heading:#000000;--card-bg:#F3F7FD;
 }
 :root[data-theme="dark"]{
   --bg:#0C1623;--bg-alt:#142035;--text:#DCE8F5;--text-muted:#7A9AB8;
@@ -112,7 +112,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
 
 /* ── Role pills ── */
 .pill{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.18rem .55rem;margin:.1rem}
-.pill-admin    {background:#002554;color:#fff}
+.pill-admin    {background:#000000;color:#fff}
 .pill-tech     {background:#154077;color:#fff}
 .pill-officer  {background:#0D5C8C;color:#fff}
 .pill-secretary{background:#1A6B3C;color:#fff}

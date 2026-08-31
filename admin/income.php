@@ -166,7 +166,7 @@ echo show_flash();
 
 <!-- Summary chips -->
 <div class="summary-chips">
-  <div class="summary-chip" style="background:#002554;color:#fff">Combined Total: $<?= number_format($grand_income_total,2) ?></div>
+  <div class="summary-chip" style="background:#000000;color:#fff">Combined Total: $<?= number_format($grand_income_total,2) ?></div>
   <?php foreach (INCOME_SOURCE_TYPES as $k => $v): if (isset($by_type[$k])): ?>
   <div class="summary-chip" style="background:<?= INCOME_TYPE_COLORS[$k] ?>22;color:<?= INCOME_TYPE_COLORS[$k] ?>"><?= $v ?>: $<?= number_format($by_type[$k],2) ?></div>
   <?php endif; endforeach; ?>

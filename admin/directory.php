@@ -72,28 +72,28 @@ $members = $stmt->fetchAll();
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Segoe UI",Arial,sans-serif;font-size:13px;color:#111;background:#fff;padding:1.5rem}
-h1{font-size:1.2rem;color:#002554;margin-bottom:.25rem}
+h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
 .subtitle{font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem}
 .filters{display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:flex-end}
 .filters select,.filters a{padding:.4rem .65rem;border:1px solid #d0d5dd;border-radius:4px;font-size:.82rem;font-family:inherit;background:#fff;color:#1a2332;cursor:pointer;text-decoration:none}
-.filters button{padding:.4rem .9rem;background:#003594;color:#fff;border:none;border-radius:4px;font-size:.82rem;cursor:pointer}
+.filters button{padding:.4rem .9rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.82rem;cursor:pointer}
 .cd{position:relative;width:180px}
 .cd-btn{width:100%;text-align:left;background:#fff;border:1px solid #d0d5dd;border-radius:4px;padding:.4rem .65rem;cursor:pointer;font-size:.82rem;color:#1a2332;display:flex;justify-content:space-between;align-items:center;font-family:inherit}
 .cd-btn::after{content:'▾';font-size:.75rem;color:#5a6a7a;flex-shrink:0}
-.cd-btn:focus{outline:none;border-color:#003594;box-shadow:0 0 0 2px rgba(0,53,148,.15)}
+.cd-btn:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
 .cd-panel{display:none;position:absolute;top:calc(100% + 3px);left:0;right:0;background:#fff;border:1px solid #d0d5dd;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.12);z-index:200;padding:.4rem 0;min-width:160px}
 .cd.open .cd-panel{display:block}
 .cd-panel label{display:flex;align-items:center;gap:.55rem;padding:.32rem .7rem;cursor:pointer;font-size:.8rem;color:#1a2332;white-space:nowrap}
 .cd-panel label:hover{background:#f5f7fa}
-.cd-panel input[type=checkbox]{width:auto;accent-color:#003594;cursor:pointer}
+.cd-panel input[type=checkbox]{width:auto;accent-color:#000000;cursor:pointer}
 .cd-footer{border-top:1px solid #e1e5eb;padding:.4rem .7rem 0;display:flex;gap:.4rem;margin-top:.25rem}
 .cd-group-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9aa5b4;padding:.45rem .7rem .15rem}
 .cd-footer button{padding:.28rem .55rem;font-size:.7rem;border-radius:4px;cursor:pointer;border:1px solid #d0d5dd;background:#f0f2f5;color:#333}
 .yr-group{margin-bottom:1.5rem}
-.yr-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#003594;border-bottom:2px solid #003594;padding-bottom:.25rem;margin-bottom:.75rem}
+.yr-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#000000;border-bottom:2px solid #000000;padding-bottom:.25rem;margin-bottom:.75rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.65rem}
 .card{border:1px solid #e1e5eb;border-radius:4px;padding:.7rem .85rem;page-break-inside:avoid}
-.cadet-name{font-weight:700;font-size:.92rem;color:#002554}
+.cadet-name{font-weight:700;font-size:.92rem;color:#000000}
 .cadet-meta{font-size:.72rem;color:#5a6a7a;margin-bottom:.4rem}
 .p-name{font-weight:600;font-size:.8rem;color:#1a2332;margin-top:.35rem}
 .p-detail{font-size:.75rem;color:#333;line-height:1.6}
@@ -115,7 +115,7 @@ h1{font-size:1.2rem;color:#002554;margin-bottom:.25rem}
     <div class="subtitle">USAFA Parents Club of Alabama &mdash; <?= date('F Y') ?> &mdash; <?= can_view_member_pii() ? 'excludes families who opted out of directory listing' : 'shows only families who opted in to directory listing' ?></div>
   </div>
   <div style="display:flex;gap:.5rem">
-    <button onclick="window.print()" style="padding:.5rem 1.1rem;background:#003594;color:#fff;border:none;border-radius:4px;font-size:.85rem;cursor:pointer">Print / Save PDF</button>
+    <button onclick="window.print()" style="padding:.5rem 1.1rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.85rem;cursor:pointer">Print / Save PDF</button>
     <a href="dashboard.php" style="padding:.5rem 1.1rem;background:#f0f2f5;color:#333;border:1px solid #d0d5dd;border-radius:4px;font-size:.85rem;text-decoration:none">← Back</a>
   </div>
 </div>

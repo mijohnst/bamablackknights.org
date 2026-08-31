@@ -196,7 +196,7 @@ admin_header('Take Attendance — ' . h($meeting['title']));
 
 <div class="card" style="padding:1.25rem;margin-bottom:1.25rem">
   <div style="font-size:.8rem;color:#5a6a7a;margin-bottom:.25rem"><?= date('l, F j, Y', strtotime($meeting['meeting_date'])) ?> · <?= h(ucfirst($meeting['meeting_type'])) ?> Meeting</div>
-  <div style="font-size:1.1rem;font-weight:700;color:#002554"><?= h($meeting['title']) ?></div>
+  <div style="font-size:1.1rem;font-weight:700;color:#000000"><?= h($meeting['title']) ?></div>
   <?php if ($meeting['location']): ?><div style="font-size:.8rem;color:#5a6a7a;margin-top:.2rem">📍 <?= h($meeting['location']) ?></div><?php endif; ?>
 </div>
 

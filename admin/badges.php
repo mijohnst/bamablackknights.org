@@ -251,7 +251,7 @@ admin_header('Parents Club Badges');
       }
   ?>
   <div style="display:flex;align-items:baseline;gap:.6rem;margin:1.25rem 0 .4rem;flex-wrap:wrap">
-    <h3 style="margin:0;color:#002554"><?= h($gyear) ?></h3>
+    <h3 style="margin:0;color:#000000"><?= h($gyear) ?></h3>
     <span style="font-size:.78rem;color:#9aa5b4"><?= $done_cnt ?>/<?= count($gslots) ?> done · <?= $mailed_cnt ?>/<?= count($gslots) ?> delivered</span>
   </div>
   <div class="card" style="padding:0;overflow-x:auto">

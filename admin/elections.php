@@ -334,7 +334,7 @@ echo show_flash();
             </form>
           </div>
         <?php elseif ($c['status'] === 'approved'): ?>
-          <span style="font-weight:700;color:#003594;white-space:nowrap"><?= $vote_counts[$c['id']] ?? 0 ?> vote<?= (($vote_counts[$c['id']] ?? 0) == 1 ? '' : 's') ?></span>
+          <span style="font-weight:700;color:#000000;white-space:nowrap"><?= $vote_counts[$c['id']] ?? 0 ?> vote<?= (($vote_counts[$c['id']] ?? 0) == 1 ? '' : 's') ?></span>
         <?php else: ?>
           <span style="font-size:.78rem;color:#9aa5b4">Never approved</span>
         <?php endif; ?>

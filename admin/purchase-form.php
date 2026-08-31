@@ -241,7 +241,7 @@ admin_header($title);
 .receipt-preview{margin-top:.5rem;max-width:100%;border-radius:4px;border:1px solid #e1e5eb}
 .amount-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9rem}
 @media(max-width:500px){.amount-row{grid-template-columns:1fr}}
-.total-display{background:#f0f4ff;border:2px solid #003594;border-radius:4px;padding:.6rem .9rem;font-size:1.2rem;font-weight:700;color:#002554;text-align:center}
+.total-display{background:#f0f4ff;border:2px solid #000000;border-radius:4px;padding:.6rem .9rem;font-size:1.2rem;font-weight:700;color:#000000;text-align:center}
 </style>
 
 <div class="page-head">
@@ -353,9 +353,9 @@ if (!empty($real_errors)): ?>
           $step = STATUS_ORDER[$k];
           $cur  = STATUS_ORDER[$cur_status];
           $done = $step < $cur; $active = $step === $cur;
-          $col  = $done||$active ? '#003594' : '#d0d5dd';
-          $bg   = $active ? '#003594' : ($done ? '#e8f0fe' : '#f5f7fa');
-          $tc   = $active ? '#fff' : ($done ? '#003594' : '#9aa5b4');
+          $col  = $done||$active ? '#000000' : '#d0d5dd';
+          $bg   = $active ? '#000000' : ($done ? '#e8f0fe' : '#f5f7fa');
+          $tc   = $active ? '#fff' : ($done ? '#000000' : '#9aa5b4');
         ?>
         <div style="display:flex;align-items:center;gap:.4rem">
           <?php if ($step > 0): ?><span style="color:<?= $col ?>;font-size:1rem">→</span><?php endif; ?>
@@ -417,7 +417,7 @@ if (!empty($real_errors)): ?>
         <input type="file" id="receipt-file"   name="receipt_file" accept="image/*,application/pdf" style="display:none" onchange="previewReceipt(this)">
         <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.25rem">
           <button type="button" onclick="document.getElementById('receipt-camera').click()"
-            style="flex:1;min-width:140px;padding:.75rem;background:#003594;color:#fff;border:none;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem">
+            style="flex:1;min-width:140px;padding:.75rem;background:#000000;color:#fff;border:none;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem">
             📷 Take Photo
           </button>
           <button type="button" onclick="document.getElementById('receipt-file').click()"
@@ -431,7 +431,7 @@ if (!empty($real_errors)): ?>
         </div>
         <?php if ($is_edit && !empty($p['receipt_filename'])): ?>
           <div style="margin-top:.5rem;font-size:.82rem">
-            Current receipt: <a href="receipt-view.php?id=<?= $id ?>" target="_blank" style="color:#003594">View</a>
+            Current receipt: <a href="receipt-view.php?id=<?= $id ?>" target="_blank" style="color:#000000">View</a>
             <span style="color:#9aa5b4"> — use buttons above to replace it</span>
           </div>
         <?php endif; ?>
@@ -516,7 +516,7 @@ if (!empty($real_errors)): ?>
       <?php endif; ?>
       <?php if (!empty($p['paid_note'])): ?>
       <div style="background:#e3f2fd;border-left:3px solid #2196f3;padding:.6rem .9rem;border-radius:4px;font-size:.85rem">
-        <strong style="color:#003594">Paid note:</strong> <?= h($p['paid_note']) ?>
+        <strong style="color:#000000">Paid note:</strong> <?= h($p['paid_note']) ?>
       </div>
       <?php endif; ?>
     </fieldset>

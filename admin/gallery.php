@@ -178,7 +178,7 @@ echo show_flash();
     </div>
     <?php endif; ?>
     <button type="submit" class="btn btn-primary" id="upload-btn">Upload Photos</button>
-    <div id="upload-notice" style="display:none;margin-top:.75rem;background:#e8f0fb;border:1px solid #b3caf5;border-radius:4px;padding:.6rem .8rem;font-size:.82rem;color:#003594">
+    <div id="upload-notice" style="display:none;margin-top:.75rem;background:#e8f0fb;border:1px solid #b3caf5;border-radius:4px;padding:.6rem .8rem;font-size:.82rem;color:#000000">
       ⏳ Uploading — this may take a moment for large photos. Please wait and do not click again.
     </div>
   </form>
@@ -194,10 +194,10 @@ document.getElementById('upload-btn').closest('form').addEventListener('submit',
 
 <!-- Bulk action bar -->
 <?php if (!empty($photos)): ?>
-<div id="bulk-bar" style="display:none;position:sticky;top:0;z-index:100;background:#003594;color:white;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;display:none;align-items:center;gap:.75rem;flex-wrap:wrap">
+<div id="bulk-bar" style="display:none;position:sticky;top:0;z-index:100;background:#000000;color:white;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;display:none;align-items:center;gap:.75rem;flex-wrap:wrap">
   <span id="bulk-count" style="font-size:.85rem;font-weight:600;min-width:80px"></span>
   <input id="bulk-caption-input" type="text" placeholder="Caption to apply…" style="flex:1;min-width:160px;padding:.4rem .6rem;border-radius:4px;border:none;font-size:.85rem;color:#111">
-  <button onclick="bulkCaption()" class="btn btn-secondary btn-sm" style="background:white;color:#003594">Apply Caption</button>
+  <button onclick="bulkCaption()" class="btn btn-secondary btn-sm" style="background:white;color:#000000">Apply Caption</button>
   <button onclick="bulkDelete()" class="btn btn-danger btn-sm">Delete Selected</button>
   <button onclick="clearSelection()" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:.85rem;margin-left:auto">✕ Clear</button>
 </div>

@@ -184,7 +184,7 @@ foreach ($linkable_members as $lm) {
 }
 
 $role_labels = ['admin'=>'Admin','tech'=>'Tech Support','officer'=>'Officer','secretary'=>'Secretary','treasurer'=>'Treasurer','member'=>'Member'];
-$role_colors = ['admin'=>'#002554','tech'=>'#bf360c','officer'=>'#1a237e','secretary'=>'#5c007a','treasurer'=>'#1b5e20','member'=>'#7b3f00'];
+$role_colors = ['admin'=>'#000000','tech'=>'#bf360c','officer'=>'#1a237e','secretary'=>'#5c007a','treasurer'=>'#1b5e20','member'=>'#7b3f00'];
 
 admin_header('Users');
 echo show_flash();
@@ -195,12 +195,12 @@ echo show_flash();
 .user-card.inactive{opacity:.55}
 .user-role{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.15rem .5rem;border-radius:3px;background:#f0f2f5;margin-bottom:.5rem}
 .user-top{display:flex;gap:.75rem;align-items:flex-start}
-.user-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#003594;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:700;flex-shrink:0}
-.user-name{font-size:1rem;font-weight:700;color:#002554;margin-bottom:.15rem}
+.user-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#000000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:700;flex-shrink:0}
+.user-name{font-size:1rem;font-weight:700;color:#000000;margin-bottom:.15rem}
 .user-meta{font-size:.78rem;color:#5a6a7a;margin-bottom:.75rem}
 .user-actions{display:flex;gap:.4rem;flex-wrap:wrap}
 .form-card{background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:1.5rem;max-width:520px;margin-bottom:1.5rem}
-.form-card h2{font-size:1rem;color:#002554;margin-bottom:1.25rem}
+.form-card h2{font-size:1rem;color:#000000;margin-bottom:1.25rem}
 @media(max-width:500px){.user-grid{grid-template-columns:1fr}}
 </style>
 

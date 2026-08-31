@@ -187,7 +187,7 @@ echo show_flash();
   ?>
   <tr>
     <td><strong><?= h($v['name']) ?></strong></td>
-    <td><a href="mailto:<?= h($v['email']) ?>" style="color:#003594"><?= h($v['email']) ?></a></td>
+    <td><a href="mailto:<?= h($v['email']) ?>" style="color:#000000"><?= h($v['email']) ?></a></td>
     <td style="font-size:.82rem"><?= h($v['phone']) ?: '—' ?></td>
     <td style="font-size:.78rem;color:#5a6a7a"><?= h($v['areas']) ?: '—' ?></td>
     <td style="font-size:.78rem;color:#5a6a7a"><?= h($v['availability']) ?: '—' ?></td>

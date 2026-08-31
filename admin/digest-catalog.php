@@ -123,7 +123,7 @@ document.getElementById('edit-form').addEventListener('submit', function() {
   <?php foreach ($digests as $d): $saved = date('M j, Y g:ia', strtotime($d['updated_at'])); ?>
   <div class="dg-row">
     <div style="flex:1;min-width:0">
-      <strong style="color:#002554"><?= h($d['title']) ?></strong>
+      <strong style="color:#000000"><?= h($d['title']) ?></strong>
       <span style="font-size:.78rem;color:#9aa5b4"> — saved <?= $saved ?><?= $d['author_name'] ? ' by ' . h($d['author_name']) : '' ?></span>
       <div class="dg-snippet"><?= h(digest_html_to_text($d['html_body'])) ?></div>
     </div>

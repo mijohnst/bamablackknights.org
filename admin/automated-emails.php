@@ -66,7 +66,7 @@ echo show_flash();
 <style>
 .ae-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.25rem}
 .ae-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.25rem;flex-wrap:wrap}
-.ae-title{font-size:1rem;font-weight:700;color:#002554}
+.ae-title{font-size:1rem;font-weight:700;color:#000000}
 .ae-desc{font-size:.8rem;color:#5a6a7a;margin-top:.15rem;max-width:640px}
 .ae-toggle{display:flex;align-items:center;gap:.5rem;flex-shrink:0;cursor:pointer}
 .ae-toggle input{width:auto}
