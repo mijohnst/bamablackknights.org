@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent Liaison Team - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%);
+      color: var(--white);
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 245, 240, 0.9);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: rgba(245,245,240,0.85);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* LAYOUT */
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section + .section {
+      padding-top: 0;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+
+    .section p {
+      color: var(--gray);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    /* MISSION BOX */
+    .mission-box {
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 6px;
+      padding: 2.5rem 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .mission-box p {
+      color: rgba(245,245,240,0.92);
+      font-size: 1.15rem;
+      line-height: 1.8;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--light);
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .info-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+      color: var(--navy);
+    }
+
+    .info-box p {
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .info-box p:last-child { margin-bottom: 0; }
+
+    .info-box a {
+      color: var(--blue);
+      font-weight: 600;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .info-box a:hover { border-bottom-color: var(--blue); }
+
+    /* LINK LIST */
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .link-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .link-list li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    .link-list a {
+      color: var(--blue);
+      font-weight: 600;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .link-list a:hover { border-bottom-color: var(--blue); }
+
+    /* CONTACT CARD */
+    .contact-card {
+      background: var(--white);
+      border: 1px solid rgba(0, 53, 148, 0.2);
+      border-top: 4px solid var(--navy);
+      border-radius: 6px;
+      padding: 2rem 2rem;
+      max-width: 560px;
+    }
+
+    .contact-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-card .role {
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .contact-detail span {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .contact-detail strong {
+      color: var(--navy);
+      min-width: 90px;
+    }
+
+    .contact-detail a {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .bct-note {
+      margin-top: 1.25rem;
+      background: var(--light);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-size: 0.88rem;
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(0, 53, 148, 0.12);
+      margin: 0 2rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--topbar);
+      color: rgba(245, 245, 240, 0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: rgba(245, 245, 240, 0.8);
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--white); }
+    footer p { margin-bottom: 0.5rem; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+    }
+
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">USAFA/CM</div>
+      <h1>Parent Liaison Team</h1>
+      <p>Your official connection between the Air Force Academy and the USAFA parent community &mdash; supporting families through every milestone from I-Day to graduation.</p>
+    </div>
+  </div>
+
+  <!-- MISSION -->
+  <section class="section">
+    <h2>Mission</h2>
+    <div class="mission-box">
+      <p>The Parent Liaison Team directly serves the USAFA parent community as project officers for all institutional events requiring parent involvement, provides oversight and information to all USAFA parents' clubs, and ensures strong communication lines between USAFA and the parent community.</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section class="section">
+    <h2>USAFA Parent Liaison Contact</h2>
+    <p>Email is the best way to reach the Parent Liaison Team and is monitored 7 days a week during BCT.</p>
+
+    <div class="contact-card">
+      <h3>Rose "Marie" Nikovits</h3>
+      <p class="role">USAFA Parent Liaison &bull; HQ USAFA/CM</p>
+      <div class="contact-detail">
+        <span>
+          <strong>Address:</strong>
+          <span>2304 Cadet Drive, Suite 3200<br>United States Air Force Academy, CO 80840</span>
+        </span>
+        <span>
+          <strong>Phone:</strong>
+          <span>(719) 333-3828</span>
+        </span>
+        <span>
+          <strong>Toll-Free:</strong>
+          <span>877-268-3383</span>
+        </span>
+        <span>
+          <strong>Email:</strong>
+          <a href="mailto:USAFA.Parent.Liaison@afacademy.af.edu">USAFA.Parent.Liaison@afacademy.af.edu</a>
+        </span>
+        <span>
+          <strong>Website:</strong>
+          <a href="https://www.usafa.edu/parents/" target="_blank" rel="noopener">usafa.edu/parents</a>
+        </span>
+      </div>
+      <div class="bct-note">
+        Email is monitored 7 days a week during Basic Cadet Training.
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PARENT RESOURCES -->
+  <section class="section">
+    <h2>Parent Support &amp; Information</h2>
+    <p>The following official resources are your primary sources of information throughout your cadet's time at the Academy.</p>
+
+    <div class="info-box">
+      <h3>Official USAFA Resources</h3>
+      <ul class="link-list">
+        <li><a href="https://www.usafa.edu/parents/" target="_blank" rel="noopener">USAFA Official Parent Webpage</a> &mdash; your main hub for all parent information</li>
+        <li><a href="https://www.usafa.edu/app/uploads/2030-Appointee-Handbook.pdf" target="_blank" rel="noopener">Class of 2030 Appointee Handbook</a> &mdash; everything your appointee needs before I-Day</li>
+        <li><a href="https://www.usafa.edu/parents/parent-clubs-spirit-committees/" target="_blank" rel="noopener">Parents' Clubs &amp; Spirit Committees</a> &mdash; find and connect with clubs nationwide</li>
+        <li><a href="https://youtu.be/7d9164ZG2FQ/" target="_blank" rel="noopener">Parent Appointee Virtual Video Brief</a> &mdash; a detailed video walkthrough for new cadet families</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>Other Key Resources</h3>
+      <ul class="link-list">
+        <li><strong>2030 Spirit Committee</strong> &mdash; a parent group that supports USAFA milestones throughout all four years</li>
+        <li><strong>Official Class of 2030 Parent Facebook Group</strong> &mdash; search "USAFA Class of 2030 Parents Group OFFICIAL"</li>
+        <li><a href="https://www.usafa.edu/in-processing-day/" target="_blank" rel="noopener">In-Processing Day Webpage</a> &mdash; complete details about I-Day logistics</li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Cadet Training (BCT) Webpage</a> &mdash; what to expect during BCT</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>Key Dates &amp; Academy Calendar</h3>
+      <p>View the full Class of 2030 milestone schedule, I-Day events, and the USAFA academic calendar on the <a href="events-calendar.html">Events &amp; Academy Calendar</a> page.</p>
+    </div>
+
+    <div class="info-box">
+      <h3>BCT Emergency Contact</h3>
+      <p>For family emergencies during Basic Cadet Training, contact the BCT Command Post:</p>
+      <p><strong>(719) 333-2910</strong></p>
+      <p>The USAFA Parent Liaison Team monitors email 7 days a week during BCT. Email is the best way to reach them (see contact information below).</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  </body>
+</html>

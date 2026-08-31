@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero{min-height:100vh;background-color:#003594;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;background-image:linear-gradient(rgba(0,53,148,0.88),rgba(0,37,84,0.92)),url("hero-background.jpg");background-size:cover;background-position:center top;}
+    .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 80px,rgba(0,53,148,.03) 80px,rgba(0,53,148,.03) 81px);pointer-events:none;}
+    .hero-motto{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:1.5rem;opacity:0;animation:fadeUp .6s .2s forwards;}
+    .hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.8rem);color:#ffffff;line-height:1.15;margin-bottom:.5rem;opacity:0;animation:fadeUp .6s .4s forwards;}
+    .hero h1 span{color:#A7A9AC;display:block;}
+    .hero-sub{font-size:clamp(.9rem,2vw,1.1rem);color:rgba(255,255,255,.82);max-width:640px;margin:1rem auto 2.5rem;opacity:0;animation:fadeUp .6s .6s forwards;}
+    .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .6s .8s forwards;}
+    .btn{padding:.75rem 2rem;font-family:var(--font-body);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;border-radius:3px;cursor:pointer;transition:all .2s;border:2px solid transparent;display:inline-block;}
+    .btn-gold{background:linear-gradient(180deg,#1a5cbf 0%,#002554 100%);color:#ffffff;border:none;box-shadow:0 4px 0 #001535,0 6px 12px rgba(0,0,0,.25);position:relative;top:0;transition:all .15s ease;}
+    .btn-gold:hover{background:linear-gradient(180deg,#2166cc 0%,#003080 100%);box-shadow:0 2px 0 #001535,0 4px 8px rgba(0,0,0,.2);top:2px;}
+    .btn-outline{background:linear-gradient(180deg,#1a5cbf 0%,#002554 100%);color:#ffffff;border:none;box-shadow:0 4px 0 #001535,0 6px 12px rgba(0,0,0,.25);position:relative;top:0;transition:all .15s ease;}
+    .btn-outline:hover{background:linear-gradient(180deg,#2166cc 0%,#003080 100%);box-shadow:0 2px 0 #001535,0 4px 8px rgba(0,0,0,.2);top:2px;}
+    .hero-stats{display:flex;gap:3rem;margin-top:4rem;opacity:0;animation:fadeUp .6s 1s forwards;}
+    .stat{text-align:center;}
+    .stat strong{display:block;font-family:var(--font-display);font-size:2rem;color:#FFC72C;}
+    .stat span{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.65);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    /* SECTIONS */
+    section{padding:5rem 2rem;}
+    .section-label{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:.5rem;}
+    .section-title{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--navy);margin-bottom:1.5rem;}
+    .container{max-width:1100px;margin:0 auto;}
+    .divider{width:48px;height:3px;background:linear-gradient(90deg,var(--blue),transparent);margin-bottom:2rem;}
+
+    /* JOB DROP NIGHT */
+    #job-drop{background:var(--light);}
+    .jd-caption{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:2.5rem 1.5rem 1.25rem;text-align:left;background:linear-gradient(to top, rgba(0,20,50,.88) 0%, rgba(0,20,50,.6) 55%, transparent 100%);}
+    .jd-caption-title{color:#fff;font-family:var(--font-display);font-weight:700;font-size:1.7rem;line-height:1.15;margin-bottom:.25rem;text-shadow:0 2px 8px rgba(0,0,0,.5);}
+    .jd-caption-name{color:rgba(255,255,255,.9);font-size:1rem;font-weight:500;margin:0;}
+    .jd-watch-btn{display:inline-flex;align-items:center;gap:.4rem;margin-top:.6rem;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);color:#fff;font-size:.85rem;font-weight:600;padding:.4rem .85rem;border-radius:30px;cursor:pointer;transition:background .2s;}
+    .jd-watch-btn:hover{background:rgba(255,255,255,.3);}
+    .jd-lightbox{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.93);align-items:center;justify-content:center;padding:1.5rem;}
+    .jd-lightbox.open{display:flex;}
+    .jd-lb-inner{position:relative;width:100%;max-width:900px;aspect-ratio:16/9;background:#000;}
+    .jd-lb-inner iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+    .jd-lb-close{position:fixed;top:1.25rem;right:1.5rem;background:none;border:none;color:white;font-size:2rem;cursor:pointer;line-height:1;padding:.2rem .5rem;opacity:.75;transition:opacity .2s;}
+    .jd-lb-close:hover{opacity:1;}
+
+    /* ABOUT */
+    #about{background:var(--white);}
+    .about-grid{display:grid;grid-template-columns:280px 1fr;gap:3rem;align-items:start;}
+    .about-img img{width:100%;max-width:280px;border-radius:4px;box-shadow:12px 12px 0 var(--silver);}
+    @media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2rem;}.about-img{text-align:center;}.about-img img{max-width:200px;margin:0 auto;}}
+
+    /* PROGRAMS */
+    #programs{background:var(--white);}
+    .program-icon{font-size:1.8rem;margin-bottom:.75rem;}
+
+    /* MEMBERSHIP */
+    #membership{background:var(--white);}
+    #membership .section-title{color:var(--navy);}
+    #membership .section-label{color:var(--blue);}
+    #membership .divider{background:linear-gradient(90deg,var(--blue),transparent);}
+    .membership-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:1rem;align-items:stretch;max-width:800px;margin-left:auto;margin-right:auto;}
+    .membership-card{background:var(--white);border:1px solid rgba(0,53,148,.15);border-radius:4px;padding:2.5rem;border-left:3px solid var(--blue);display:flex;flex-direction:column;}
+    .membership-card h3{font-family:var(--font-display);font-size:1.2rem;color:var(--navy);margin-bottom:1rem;}
+    .membership-card p{font-size:.9rem;color:#5a6a7a;margin-bottom:1rem;}
+    .price-tag{font-family:var(--font-display);font-size:2rem;color:var(--navy);margin-bottom:1rem;}
+    .price-tag span{font-size:.9rem;color:var(--gray);font-family:var(--font-body);}
+    .payment-note{font-size:.8rem;color:var(--gray);margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,53,148,.15);}
+    .payment-note a{color:var(--blue);}
+    .tax-note{font-size:.82rem;color:#5a6a7a;margin-top:1rem;padding:.75rem 1rem;background:rgba(0,53,148,.04);border:1px solid rgba(0,53,148,.12);border-radius:3px;}
+    .tax-note a{color:var(--blue);text-decoration:underline;}
+    .payment-portal{margin-top:auto;padding:1.5rem;background:rgba(0,53,148,.04);border:1px dashed rgba(0,53,148,.3);border-radius:4px;text-align:center;}
+    .payment-portal p{font-size:.85rem;color:var(--gray);margin-bottom:1rem;}
+    .payment-portal .btn-pay{background:linear-gradient(180deg,#1a5cbf 0%,#002554 100%);color:#ffffff;border:none;padding:.85rem 1.5rem;font-size:.85rem;box-shadow:0 4px 0 #001535,0 6px 12px rgba(0,0,0,.25);border-radius:4px;position:relative;top:0;transition:all .15s ease;width:100%;display:block;text-align:center;white-space:nowrap;}
+    .payment-portal .btn-pay:hover{background:linear-gradient(180deg,#2166cc 0%,#003080 100%);box-shadow:0 2px 0 #001535,0 4px 8px rgba(0,0,0,.2);top:2px;}
+    .membership-card.featured{border-left-color:#A6192E;background:linear-gradient(180deg,rgba(166,25,46,.05) 0%,var(--white) 18%);}
+    .limited-badge{display:inline-block;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#fff;background:#A6192E;padding:3px 10px;border-radius:2px;margin-bottom:.75rem;font-weight:700;}
+    .payment-portal.featured{background:rgba(166,25,46,.05);border-color:rgba(166,25,46,.3);}
+    .payment-portal .btn-pay.btn-shop{background:linear-gradient(180deg,#c62839 0%,#7a0f1f 100%);box-shadow:0 4px 0 #4a0913,0 6px 12px rgba(0,0,0,.25);}
+    .payment-portal .btn-pay.btn-shop:hover{background:linear-gradient(180deg,#d63a4b 0%,#8f1224 100%);box-shadow:0 2px 0 #4a0913,0 4px 8px rgba(0,0,0,.2);}
+    @media(max-width:640px){.membership-grid{grid-template-columns:1fr;}}
+
+    /* EVENTS */
+    #events{background:var(--light);}
+    #events .section-title{color:var(--navy);}
+    #events .section-label{color:var(--blue);}
+    #events .divider{background:linear-gradient(90deg,var(--blue),transparent);}
+    .events-list{display:flex;flex-direction:column;gap:1rem;margin-top:1rem;}
+    .event-card{display:grid;grid-template-columns:80px 1fr;gap:1.5rem;align-items:center;background:var(--white);border:1px solid rgba(166,25,46,.25);border-left:4px solid #A6192E;border-radius:4px;padding:1.5rem;transition:background .2s,box-shadow .2s;}
+    .event-card:hover{background:#fdf5f6;box-shadow:0 4px 16px rgba(166,25,46,.12);}
+    .events-group-label{font-family:var(--font-display);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.4rem .75rem;margin-bottom:.5rem;border-radius:3px;display:inline-block;}
+    .events-group-label.label-upcoming{background:var(--blue);color:#fff;}
+    .events-group-label.label-cadets{background:#A6192E;color:#fff;}
+    .events-group-label.label-future{background:#002554;color:#FFC72C;}
+    .event-date{text-align:center;background:var(--blue);color:var(--white);border-radius:4px;padding:.5rem;min-width:80px;}
+    .event-date .month{font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;}
+    .event-date .day{font-family:var(--font-display);font-size:1.4rem;line-height:1;white-space:nowrap;}
+    .event-info h3{font-family:var(--font-display);font-size:1rem;color:var(--navy);margin-bottom:.25rem;}
+    .event-info p{font-size:.85rem;color:#5a6a7a;}
+    .event-tag{display:inline-block;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-top:.4rem;}
+    .tag-social{background:rgba(107,110,112,.12);color:#3a3d3f;border:1px solid rgba(107,110,112,.2);}
+    .tag-volunteer{background:rgba(30,100,30,.1);color:#1a5a1a;border:1px solid rgba(30,100,30,.2);}
+
+    /* NEWS */
+    #usafa-news{background:var(--white);}
+    #news-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:1.5rem;}
+    .news-card{background:#ffffff;border-radius:4px;overflow:hidden;border:1px solid rgba(0,53,148,.12);box-shadow:0 2px 8px rgba(0,53,148,.06);transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;}
+    .news-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,53,148,.2);background:#b8cce8;border-color:rgba(166,25,46,.4);}
+    .news-card-body{padding:1.5rem;}
+    .news-card-date{font-size:.75rem;color:var(--gray);letter-spacing:.08em;margin-bottom:.5rem;}
+    .news-card h3{font-family:var(--font-display);font-size:.95rem;color:var(--navy);margin-bottom:.5rem;}
+    .news-card p{font-size:.875rem;color:#5a6a7a;}
+    .news-card a.read-more{display:inline-block;margin-top:.75rem;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:600;}
+    .news-card a.read-more:hover{color:var(--silver);}
+    .news-loading{color:var(--gray);font-style:italic;grid-column:1/-1;padding:2rem 0;}
+    .news-view-all{margin-top:2rem;text-align:center;}
+
+    /* LEADERSHIP */
+    #leadership{background:var(--white);}
+    .leadership-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.5rem;margin-top:1rem;}
+    .officer-card{background:var(--white);border-radius:4px;padding:2rem 1.5rem;text-align:center;border:1px solid rgba(166,25,46,.25);border-top:4px solid #A6192E;transition:transform .2s,box-shadow .2s;position:relative;cursor:default;}
+    .officer-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,53,148,.2);background:#b8cce8;border-top-color:#A6192E;}
+    .officer-photo{width:72px;height:72px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;overflow:hidden;border:3px solid rgba(0,53,148,.15);}
+    .officer-photo img{width:100%;height:100%;object-fit:cover;}
+    .officer-card h3{font-family:var(--font-display);font-size:1rem;color:var(--navy);margin-bottom:.25rem;}
+    .officer-role{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:.75rem;}
+    .officer-card .send-email{font-size:.8rem;color:var(--blue);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;font-family:inherit;}
+    .officer-card .send-email:hover{color:var(--gray);}
+    /* Bio tooltip on hover */
+    .officer-bio-tooltip{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:260px;background:#002554;color:var(--white);border-radius:6px;padding:1rem;font-size:.8rem;line-height:1.5;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.25);text-align:left;pointer-events:none;}
+    .officer-bio-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#002554;}
+    .officer-card:hover .officer-bio-tooltip{display:block;}
+
+
+    .btn-dark{background:linear-gradient(180deg,#1a5cbf 0%,#002554 100%);color:#ffffff;border:none;box-shadow:0 4px 0 #001535,0 6px 12px rgba(0,0,0,.25);border-radius:4px;position:relative;top:0;transition:all .15s ease;}
+    .btn-dark:hover{background:linear-gradient(180deg,#2166cc 0%,#003080 100%);box-shadow:0 2px 0 #001535,0 4px 8px rgba(0,0,0,.2);top:2px;}
+    /* COMMUNITY PHOTOS */
+    #photos{background:var(--light);}
+    #photos .section-title{color:var(--navy);}
+    #photos .divider{background:linear-gradient(90deg,var(--blue),transparent);}
+    .slideshow-wrap{position:relative;max-width:860px;margin:0 auto;}
+    .slideshow-viewport{position:relative;overflow:hidden;border-radius:6px;background:#001535;aspect-ratio:16/9;max-height:520px;border:3px solid var(--navy);box-shadow:0 8px 32px rgba(0,37,84,.2);}
+    .slideshow-track{display:flex;height:100%;transition:transform .45s ease;}
+    .slide{min-width:100%;height:100%;position:relative;overflow:hidden;}
+    .slide-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(24px) brightness(.55);transform:scale(1.15);}
+    .slide-fg{position:relative;width:100%;height:100%;object-fit:contain;display:block;z-index:1;}
+    .slideshow-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,37,84,.75);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:1.6rem;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;z-index:2;}
+    .slideshow-btn:hover{background:rgba(0,37,84,.97);}
+    .slideshow-btn.prev{left:.75rem;}
+    .slideshow-btn.next{right:.75rem;}
+    .slideshow-dots{display:flex;justify-content:center;gap:.4rem;margin-top:.75rem;flex-wrap:wrap;}
+    .slideshow-dot{width:8px;height:8px;border-radius:50%;background:rgba(0,53,148,.2);border:none;cursor:pointer;padding:0;transition:background .2s;}
+    .slideshow-dot.active{background:var(--blue);}
+    .slideshow-counter{text-align:center;font-size:.78rem;color:var(--gray);margin-top:.4rem;}
+    .photos-msg{text-align:center;color:var(--gray);padding:3rem 1rem;font-size:.95rem;}
+    /* CONTACT */
+    #volunteer{background:var(--light);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:2.5rem;align-items:stretch;}
+    .contact-info{background:var(--white);border-radius:4px;padding:2.5rem;box-shadow:0 4px 24px rgba(0,48,135,.08);display:flex;flex-direction:column;}
+    .contact-info h3{font-family:var(--font-display);font-size:1.1rem;color:var(--navy);margin-bottom:.75rem;}
+    .contact-info p{font-size:.9rem;color:#5a6a7a;margin-bottom:1.5rem;}
+    .contact-detail{display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:var(--navy);margin-bottom:.75rem;}
+    .contact-detail .icon{font-size:1.1rem;}
+    .contact-detail a{color:var(--blue);}
+    .contact-detail a:hover{color:var(--silver);}
+    .fb-icon{display:inline-flex;align-items:center;gap:.5rem;color:var(--blue);transition:color .2s;}
+    .fb-icon:hover{color:#1877f2;}
+    .fb-icon svg{width:22px;height:22px;flex-shrink:0;}
+    .footer-fb{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;color:rgba(245,245,240,.75);transition:color .2s;}
+    .footer-fb:hover{color:#1877f2;}
+    .footer-fb svg{width:18px;height:18px;flex-shrink:0;}
+    .contact-form{background:var(--white);border-radius:4px;padding:2.5rem;box-shadow:0 4px 24px rgba(0,48,135,.08);}
+    .form-group{margin-bottom:1.25rem;}
+    .form-group label{display:block;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:.4rem;}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:.7rem 1rem;border:1px solid #d0d8e4;border-radius:3px;font-family:var(--font-body);font-size:.9rem;color:var(--navy);background:var(--white);transition:border-color .2s;}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,51,160,.08);}
+    .form-group textarea{resize:vertical;min-height:120px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    #form-status{margin-top:1rem;padding:.75rem 1rem;border-radius:3px;font-size:.875rem;display:none;}
+    #form-status.success{background:rgba(50,120,50,.1);color:#1a6a1a;border:1px solid rgba(50,120,50,.3);display:block;}
+    #form-status.error{background:rgba(180,30,30,.1);color:#9a1a1a;border:1px solid rgba(180,30,30,.3);display:block;}
+    @media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:2rem;}.form-row{grid-template-columns:1fr;}}
+
+    /* OPEN VOLUNTEER OPPORTUNITIES — specific dated needs, claimable without a portal login */
+    .vol-opp-card{background:var(--light);border-radius:8px;padding:1.25rem 1.5rem;border-left:4px solid var(--navy);}
+    .vol-opp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;}
+    .vol-opp-head h4{color:var(--navy);font-family:var(--font-display);font-size:1.05rem;margin:0;}
+    .vol-opp-spots{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--navy);padding:.25rem .7rem;border-radius:99px;white-space:nowrap;}
+    .vol-opp-spots.full{background:#9aa5b4;}
+    .vol-opp-meta{color:var(--gray);font-size:.85rem;margin:.4rem 0 0;}
+    .vol-opp-desc{color:var(--gray);font-size:.88rem;margin:.6rem 0 0;line-height:1.5;}
+    .vol-opp-actions{margin-top:1rem;}
+    .vol-opp-claim-form{margin-top:1rem;padding-top:1rem;border-top:1px solid #d0d8e4;}
+    .vol-opp-status{display:none;margin-top:.75rem;padding:.75rem 1rem;border-radius:4px;font-size:.85rem;font-weight:600;}
+    .vol-opp-status.success{background:rgba(50,120,50,.1);color:#1a6a1a;border:1px solid rgba(50,120,50,.3);display:block;}
+    .vol-opp-status.error{background:rgba(180,30,30,.1);color:#9a1a1a;border:1px solid rgba(180,30,30,.3);display:block;}
+
+    /* PARENT SPOTLIGHT / LATEST SPONSOR — each half hidden until its feed supplies data */
+    #spotlight{background:var(--light);display:none;}
+    .spotlight-split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;position:relative;}
+    .spotlight-split.single-col{grid-template-columns:1fr;max-width:420px;margin:0 auto;}
+    .spotlight-split.has-divider::after{content:'';position:absolute;top:.25rem;bottom:.25rem;left:50%;width:1px;background:linear-gradient(180deg,transparent,rgba(0,53,148,.2) 15%,rgba(0,53,148,.2) 85%,transparent);}
+    .spotlight-col{max-width:420px;margin:0 auto;text-align:center;display:none;}
+    .spotlight-title-wrap{display:inline-block;text-align:left;}
+    .spotlight-col .divider{margin:.5rem 0 1.5rem;}
+    .spotlight-col .section-title{font-size:1.3rem;margin-bottom:1.25rem;}
+    .spotlight-photo{width:150px;height:150px;border-radius:50%;object-fit:cover;margin:0 auto 1.25rem;border:4px solid var(--navy);box-shadow:0 8px 24px rgba(0,53,148,.15);display:none;}
+    .spotlight-sponsor-item{margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid rgba(0,53,148,.12);}
+    .spotlight-sponsor-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+    .spotlight-sponsor-logo{max-width:180px;max-height:100px;object-fit:contain;margin:0 auto 1rem;}
+    .spotlight-sponsor-link-wrap{display:block;text-decoration:none;color:inherit;}
+    .spotlight-sponsor-link-wrap:hover .spotlight-name{text-decoration:underline;}
+    .spotlight-name{font-family:var(--font-display);font-size:1.15rem;color:var(--navy);margin-bottom:.6rem;}
+    .spotlight-sponsor-amount{color:var(--blue);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;}
+    .spotlight-description{color:var(--gray);font-size:.96rem;line-height:1.75;white-space:pre-line;text-align:justify;}
+    .spotlight-link{display:inline-block;margin-top:1rem;color:var(--navy);font-weight:600;font-size:.85rem;}
+    .spotlight-link:hover{text-decoration:underline;}
+    @media(max-width:768px){.spotlight-split{grid-template-columns:1fr;max-width:420px;margin:0 auto;}.spotlight-split.has-divider::after{display:none;}}
+
+    /* FOOTER */
+    footer{background:#002554;border-top:1px solid rgba(138,141,143,.2);padding:4rem 2rem 2rem;}
+    .footer-grid{max-width:1100px;margin:0 auto 3rem;}
+    .footer-brand img{width:80px;margin-bottom:1rem;border-radius:4px;}
+    .footer-brand p{font-size:.85rem;color:rgba(245,245,240,.75);line-height:1.8;max-width:280px;}
+    .footer-col h4{font-family:var(--font-display);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--silver2);margin-bottom:1rem;}
+    .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+    .footer-col li a{font-size:.85rem;color:rgba(245,245,240,.75);transition:color .2s;}
+    .footer-col li a:hover{color:var(--silver2);}
+    .footer-bottom{max-width:1100px;margin:0 auto;padding-top:1.5rem;border-top:1px solid rgba(245,245,240,.08);display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:rgba(245,245,240,.35);flex-wrap:wrap;gap:.5rem;}
+    @media(max-width:560px){.footer-grid{grid-template-columns:1fr;}}
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+<!-- ANNOUNCEMENT BANNER — sticky below the fixed nav -->
+<div id="site-announcement" style="display:none;position:sticky;top:64px;z-index:99;width:100%"></div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <p class="hero-motto">Integrity First &middot; Service Before Self &middot; Excellence in All We Do</p>
+  <h1>USAFA Parents Club<span>of Alabama</span></h1>
+  <p class="hero-sub" id="hero-subtitle">Uniting current, incoming, and alumni families of United States Air Force Academy cadets across the great state of Alabama &mdash; offering support, community, and connection from appointment through graduation and beyond.</p>
+  <div class="hero-cta">
+    <a href="#membership" class="btn btn-gold" id="hero-cta">Join Our Club</a>
+    <a href="#about" class="btn btn-outline">Learn More</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><strong id="stat-current-cadets">60+</strong><span>Current Cadets</span></div>
+    <div class="stat"><strong id="stat-annual-events">4+</strong><span>Annual Events</span></div>
+    <div class="stat"><strong id="stat-years-active">10+</strong><span>Years Active</span></div>
+  </div>
+</section>
+
+<!-- JOB DROP NIGHT -->
+<section id="job-drop" style="display:none">
+  <div class="container">
+    <p class="section-label">Career Fields</p>
+    <h2 class="section-title">Job Drop Night</h2>
+    <div class="divider"></div>
+    <div class="slideshow-wrap" style="max-width:640px">
+      <div class="slideshow-viewport" id="jd-viewport" style="aspect-ratio:4/3;max-height:460px">
+        <div class="slideshow-track" id="jd-track"></div>
+        <button class="slideshow-btn prev" id="jd-prev" aria-label="Previous cadet">&#8249;</button>
+        <button class="slideshow-btn next" id="jd-next" aria-label="Next cadet">&#8250;</button>
+      </div>
+      <div class="slideshow-dots" id="jd-dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- JOB DROP NIGHT VIDEO LIGHTBOX -->
+<div class="jd-lightbox" id="jd-lightbox" role="dialog" aria-modal="true" aria-label="Job Drop reveal video">
+  <button class="jd-lb-close" id="jd-lb-close" aria-label="Close video">&times;</button>
+  <div class="jd-lb-inner" id="jd-lb-inner"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="section-label">Who We Are</p>
+    <h2 class="section-title">About Our Club</h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-img">
+        <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+      </div>
+      <div class="about-content">
+        <p>The USAFA Parents Club of Alabama is a volunteer-run, non-profit organization dedicated to supporting Alabama families whose sons and daughters have earned the honor of attending the United States Air Force Academy in Colorado Springs, Colorado.</p>
+        <p style="margin-top:1rem;">We serve as a bridge for families at home and their cadets at the Academy, working in coordination with Academy officials and liaison officers &mdash; providing guidance, community, and resources from the moment of appointment through commissioning day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARENT SPOTLIGHT / LATEST SPONSOR -->
+<section id="spotlight">
+  <div class="container">
+    <div class="spotlight-split">
+      <div class="spotlight-col" id="spotlight-parent-col">
+        <div class="spotlight-title-wrap">
+          <h2 class="section-title">Parent of the Month</h2>
+          <div class="divider"></div>
+        </div>
+        <img class="spotlight-photo" id="spotlight-photo" src="" alt="">
+        <h3 class="spotlight-name" id="spotlight-name"></h3>
+        <p class="spotlight-description" id="spotlight-description"></p>
+      </div>
+      <div class="spotlight-col" id="spotlight-sponsor-col">
+        <div class="spotlight-title-wrap">
+          <h2 class="section-title">Latest Club Sponsors</h2>
+          <div class="divider"></div>
+        </div>
+        <div id="spotlight-sponsor-list"></div>
+        <a class="spotlight-link" href="sponsorship.html">View All Sponsors &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP -->
+<section id="leadership">
+  <div class="container">
+    <p class="section-label">Our Team</p>
+    <h2 class="section-title">Club Leadership</h2>
+    <div class="divider"></div>
+    <p style="color:#5a6a7a;margin-bottom:2rem;">Your club officers are fellow USAFA parents who have walked the same path and are honored to serve Alabama's cadet families.</p>
+    <div class="leadership-grid" id="leadership-grid">
+      <p class="news-loading">Loading leadership&hellip;</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="container">
+    <p class="section-label">Upcoming</p>
+    <h2 class="section-title">Events &amp; Key Dates</h2>
+    <div class="divider"></div>
+    <p style="color:#5a6a7a;margin-bottom:2rem;">Events are added and updated as they come up &mdash; check back often for the latest schedule.</p>
+    <div class="events-list" id="events-list">
+      <p class="news-loading">&#128197; Loading events&hellip;</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="usafa-news">
+  <div class="container">
+    <p class="section-label">From the Academy</p>
+    <h2 class="section-title">Latest USAFA News</h2>
+    <div class="divider"></div>
+    <p style="color:#5a6a7a;margin-bottom:1rem;">Stay connected with the latest news and updates from the United States Air Force Academy.</p>
+    <div id="news-container"><p class="news-loading">&#128225; Loading latest USAFA news...</p></div>
+    <p id="news-updated" style="font-size:.78rem;color:#9aa5b4;margin-top:.5rem;text-align:right"></p>
+    <div class="news-view-all"><a href="https://www.usafa.edu/news/" target="_blank" rel="noopener" class="btn btn-dark">View All USAFA News</a></div>
+  </div>
+</section>
+
+<!-- COMMUNITY PHOTOS -->
+<section id="photos">
+  <div class="container">
+    <h2 class="section-title">Member Photos</h2>
+    <div class="divider"></div>
+    <p style="color:#5a6a7a;margin-bottom:1.5rem;font-size:.95rem;">Celebrating our Falcon families across Alabama.</p>
+    <div class="slideshow-wrap">
+      <div class="slideshow-viewport" id="slideshow-viewport">
+        <div class="slideshow-track" id="slideshow-track"></div>
+        <button class="slideshow-btn prev" id="slide-prev" aria-label="Previous photo">&#8249;</button>
+        <button class="slideshow-btn next" id="slide-next" aria-label="Next photo">&#8250;</button>
+      </div>
+      <div class="slideshow-dots" id="slideshow-dots"></div>
+      <p class="slideshow-counter" id="slideshow-counter"></p>
+      <p class="photos-msg" id="photos-msg">Loading photos&#8230;</p>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section id="membership">
+  <div class="container">
+    <p class="section-label">Support Our Mission</p>
+    <h2 class="section-title">Membership &amp; Donations</h2>
+    <div class="divider"></div>
+    <div class="membership-grid">
+      <div class="membership-card">
+        <h3>Annual Membership</h3>
+        <div class="price-tag" id="membership-dues">$75 <span>/ year</span></div>
+        <div id="membership-description">
+        <p>Membership dues cover cadet support activities, club operations, and care packages for Alabama cadets throughout their Academy journey.</p>
+        <p style="margin-top:.75rem;">As a member, you'll be part of a community of Alabama families who share the unique experience of having a son or daughter at the Academy &mdash; with access to resources and a network of parents who understand the journey firsthand.</p>
+        <p style="margin-top:.75rem;">Paid members also get access to our member portal, where you can vote for (and run for) club leadership, join committees, RSVP to events, share event photos, and connect with other families through our member directory.</p>
+        </div>
+        <p style="margin-top:.75rem;">🎖️ <strong>Paid members will receive a club identification badge</strong></p>
+        <div class="payment-portal" style="margin-top:auto;">
+          <p>Secure online payment.</p>
+          <a href="membership.html" class="btn btn-pay">PAY ANNUAL DUES</a>
+        </div>
+      </div>
+      <div class="membership-card">
+        <h3>Donations</h3>
+        <div class="program-icon" style="font-size:2rem;margin-bottom:.75rem;">🤝</div>
+        <p>In addition to membership dues, we gratefully accept donations of any amount. Your generosity directly funds care packages, cadet recognition events, and family support activities across Alabama.</p>
+        <p style="margin-top:.75rem;">Every contribution &mdash; large or small &mdash; makes a real difference in the lives of Alabama cadets and their families.</p>
+        <div class="payment-portal" style="margin-top:auto;">
+          <p>Secure online donation.</p>
+          <a href="payment.html" class="btn btn-pay">MAKE A DONATION</a>
+        </div>
+      </div>
+    </div>
+    <div class="tax-note" style="margin-top:1.5rem;">
+      We are a <strong>501(c)(3) organization</strong> and your contributions are tax deductible.
+      <a href="https://www.irs.gov/charities-non-profits/charitable-organizations/exemption-requirements-501c3-organizations" target="_blank" rel="noopener">Learn more about 501(c)(3) requirements &rarr;</a>
+    </div>
+    <p style="margin-top:.75rem;font-size:.9rem;color:#5a6a7a;">Already a member? <a href="update.html">Update your information</a> instead.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="volunteer">
+  <div class="container">
+    <p class="section-label">Get Involved</p>
+    <h2 class="section-title">Volunteer with Us</h2>
+    <div class="divider"></div>
+
+    <div id="volunteer-opportunities-wrap" style="display:none;margin-bottom:2.75rem">
+      <h3 style="color:var(--navy);font-family:var(--font-display);font-size:1.3rem;margin-bottom:.5rem">Open Volunteer Spots</h3>
+      <p style="color:var(--gray);margin-bottom:1.25rem">Sign up for a specific need below — no club membership or portal account required.</p>
+      <div id="volunteer-opportunities-list" style="display:grid;gap:1rem"></div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Support our cadets &amp; families</h3>
+        <p style="margin-bottom:1.25rem;">Our club runs on the energy of dedicated volunteers. Whether you can help at events, coordinate care packages, or lend your skills — we'd love to have you.</p>
+
+        <!-- What you'll do -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem">
+          <div style="background:var(--light);border-radius:6px;padding:.75rem;text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:.25rem">🎉</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em">Events</div>
+            <div style="font-size:.72rem;color:var(--gray);margin-top:.15rem">Plan &amp; support club socials</div>
+          </div>
+          <div style="background:var(--light);border-radius:6px;padding:.75rem;text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:.25rem">📦</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em">Care Packages</div>
+            <div style="font-size:.72rem;color:var(--gray);margin-top:.15rem">Assemble &amp; send to cadets</div>
+          </div>
+          <div style="background:var(--light);border-radius:6px;padding:.75rem;text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:.25rem">🤝</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em">Mentorship</div>
+            <div style="font-size:.72rem;color:var(--gray);margin-top:.15rem">Guide new cadet families</div>
+          </div>
+          <div style="background:var(--light);border-radius:6px;padding:.75rem;text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:.25rem">📢</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em">Communications</div>
+            <div style="font-size:.72rem;color:var(--gray);margin-top:.15rem">Newsletter &amp; outreach</div>
+          </div>
+        </div>
+
+        <!-- What to expect -->
+        <div style="border-top:1px solid #d0d8e4;padding-top:1.1rem;margin-bottom:1.25rem">
+          <p style="font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem">What to Expect</p>
+          <div style="display:flex;flex-direction:column;gap:.6rem">
+            <div style="display:flex;align-items:flex-start;gap:.6rem">
+              <span style="background:var(--navy);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:.1rem">1</span>
+              <div style="font-size:.82rem;color:var(--gray)"><strong style="color:var(--navy)">Submit this form</strong> — takes about 2 minutes</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.6rem">
+              <span style="background:var(--navy);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:.1rem">2</span>
+              <div style="font-size:.82rem;color:var(--gray)"><strong style="color:var(--navy)">A club officer contacts you</strong> — usually within a day</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.6rem">
+              <span style="background:#A6192E;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:.1rem">3</span>
+              <div style="font-size:.82rem;color:var(--gray)"><strong style="color:var(--navy)">Start serving</strong> — on your schedule, your way</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #d0d8e4;padding-top:.9rem;margin-top:auto">
+          <div class="contact-detail"><span class="icon">&#9993;&#65039;</span><span><a href="mailto:info@alabamafalcons.org">Email Us Directly</a></span></div>
+          <p style="font-size:.75rem;color:var(--gray);margin-top:.5rem;">Having website issues? <a href="mailto:mijohnst@alabamafalcons.org" style="color:var(--blue);">Contact the Site Administrator</a>.</p>
+        </div>
+      </div>
+      <div class="contact-form">
+        <form id="volunteer-form">
+          <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+            <label for="vol-website">Leave this field empty</label>
+            <input type="text" id="vol-website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="vol-name">Your Name *</label><input type="text" id="vol-name" name="name" required placeholder="First Last" /></div>
+            <div class="form-group"><label for="vol-email">Email Address *</label><input type="email" id="vol-email" name="email" required placeholder="you@example.com" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="vol-phone">Phone</label><input type="tel" id="vol-phone" name="phone" placeholder="555-555-5555" /></div>
+            <div class="form-group"><label for="vol-cadet">Cadet Name &amp; Class Year</label><input type="text" id="vol-cadet" name="cadetInfo" placeholder="Chesley Sullenberger, Class of 1973" /></div>
+          </div>
+          <div class="form-group">
+            <label>Areas of Interest <span style="font-weight:300;font-size:.85rem">(select all that apply)</span></label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .75rem;margin-top:.4rem">
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Events" style="width:auto"> Events &amp; Socials</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Care Packages" style="width:auto"> Care Packages</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Mentorship" style="width:auto"> Mentorship Program</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Cadet Support" style="width:auto"> Cadet Support</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Communications" style="width:auto"> Communications</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Fundraising" style="width:auto"> Fundraising</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Leadership" style="width:auto"> Club Leadership</label>
+              <label style="display:flex;align-items:center;gap:.4rem;font-weight:400;font-size:.88rem;cursor:pointer"><input type="checkbox" name="areas" value="Other" style="width:auto"> Other</label>
+            </div>
+          </div>
+          <div class="form-group"><label for="vol-avail">Availability</label><input type="text" id="vol-avail" name="availability" placeholder="e.g. Weekends, occasional weeknights" /></div>
+          <div class="form-group"><label for="vol-comments">Additional Comments</label><textarea id="vol-comments" name="comments" placeholder="Tell us a bit about yourself or how you'd like to help…"></textarea></div>
+          <button type="submit" class="btn btn-dark" style="width:100%;">Submit Volunteer Interest</button>
+          <div id="volunteer-status"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto 3rem">
+    <div class="footer-brand">
+      <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+      <p>Supporting Alabama families and their cadets at the United States Air Force Academy.</p>
+      <a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener" class="footer-fb" id="footer-fb-link" style="margin-top:.75rem">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Alabama Falcons Facebook
+      </a>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#membership">Membership</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="#volunteer">Volunteer</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <ul>
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="mentorship.html">Mentorship</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>USAFA Resources</h4>
+      <ul id="footer-resources">
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">Academy Calendar</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+    <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    <a href="/admin/login.php" style="color:rgba(245,245,240,.35);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='rgba(245,245,240,.75)'" onmouseout="this.style.color='rgba(245,245,240,.35)'">Club Portal</a>
+  </div>
+</footer>
+
+<script>
+// ── Volunteer form ────────────────────────────────────────────────────────
+var volForm   = document.getElementById('volunteer-form');
+var volStatus = document.getElementById('volunteer-status');
+if (volForm) {
+  volForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = volForm.querySelector('button[type="submit"]');
+    btn.textContent = 'Submitting…'; btn.disabled = true;
+    volStatus.className = ''; volStatus.style.display = 'none';
+    var areas = Array.from(volForm.querySelectorAll('input[name="areas"]:checked')).map(function(c){ return c.value; });
+    try {
+      var payload = {
+        name:         document.getElementById('vol-name').value.trim(),
+        email:        document.getElementById('vol-email').value.trim(),
+        phone:        document.getElementById('vol-phone').value.trim(),
+        cadetInfo:    document.getElementById('vol-cadet').value.trim(),
+        areas:        areas,
+        availability: document.getElementById('vol-avail').value.trim(),
+        comments:     document.getElementById('vol-comments').value.trim(),
+        website:      document.getElementById('vol-website').value.trim()
+      };
+      var resp = await fetch('volunteer-handler.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      var data = await resp.json();
+      if (resp.ok && data.success) {
+        volStatus.textContent = data.message || 'Thank you! We\'ll be in touch soon.';
+        volStatus.className = 'success'; volStatus.style.display = 'block';
+        volForm.reset();
+      } else { throw new Error(data.error || 'Submission failed'); }
+    } catch(err) {
+      volStatus.textContent = err.message || 'Something went wrong. Please email info@alabamafalcons.org';
+      volStatus.className = 'error'; volStatus.style.display = 'block';
+    } finally {
+      btn.textContent = 'Submit Volunteer Interest'; btn.disabled = false;
+    }
+  });
+}
+
+// ── Open Volunteer Opportunities (specific dated needs, no login required) ─
+(function() {
+  var wrap = document.getElementById('volunteer-opportunities-wrap');
+  var list = document.getElementById('volunteer-opportunities-list');
+  if (!wrap || !list) return;
+
+  fetch('volunteer-opportunities-public.php').then(function(r) { return r.json(); }).then(function(d) {
+    if (!d.success || !d.opportunities || !d.opportunities.length) return;
+    wrap.style.display = 'block';
+    list.innerHTML = d.opportunities.map(renderOppCard).join('');
+    list.querySelectorAll('.vol-opp-claim-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var form = btn.closest('.vol-opp-card').querySelector('.vol-opp-claim-form');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      });
+    });
+    list.querySelectorAll('.vol-opp-submit-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { submitOppClaim(btn); });
+    });
+  }).catch(function() { /* fail silently — the general interest form below still works */ });
+
+  function renderOppCard(o) {
+    var full = o.filled >= o.spots_needed;
+    var meta = [o.event_date ? formatOppDate(o.event_date) : '', o.location].filter(Boolean).join(' · ');
+    return '<div class="vol-opp-card" data-id="' + o.id + '">'
+      + '<div class="vol-opp-head"><h4>' + escHtml(o.title) + '</h4>'
+      + '<span class="vol-opp-spots' + (full ? ' full' : '') + '">' + (full ? 'Full' : (o.filled + ' of ' + o.spots_needed + ' filled')) + '</span></div>'
+      + (meta ? '<p class="vol-opp-meta">' + escHtml(meta) + '</p>' : '')
+      + (o.description ? '<p class="vol-opp-desc">' + escHtml(o.description) + '</p>' : '')
+      + (full ? '' :
+          '<div class="vol-opp-actions"><button type="button" class="btn btn-dark vol-opp-claim-btn">Claim a Spot</button></div>'
+          + '<div class="vol-opp-claim-form" style="display:none">'
+          + '<div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true"><label>Leave this field empty</label><input type="text" class="vol-opp-website" tabindex="-1" autocomplete="off"></div>'
+          + '<div class="form-row"><div class="form-group"><label>Your Name *</label><input type="text" class="vol-opp-name"></div>'
+          + '<div class="form-group"><label>Email *</label><input type="email" class="vol-opp-email"></div></div>'
+          + '<button type="button" class="btn btn-dark vol-opp-submit-btn">Confirm Sign-Up</button>'
+          + '<div class="vol-opp-status"></div></div>'
+        )
+      + '</div>';
+  }
+
+  // event_date is a plain "YYYY-MM-DD" string — build the Date from parts
+  // rather than passing the string straight to `new Date()`, which parses
+  // it as UTC midnight and can display a day early in US time zones.
+  function formatOppDate(iso) {
+    var parts = iso.split('-');
+    if (parts.length !== 3) return iso;
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function submitOppClaim(btn) {
+    var card     = btn.closest('.vol-opp-card');
+    var form     = btn.closest('.vol-opp-claim-form');
+    var statusEl = form.querySelector('.vol-opp-status');
+    var name     = form.querySelector('.vol-opp-name').value.trim();
+    var email    = form.querySelector('.vol-opp-email').value.trim();
+    var website  = form.querySelector('.vol-opp-website').value;
+
+    statusEl.className = 'vol-opp-status'; statusEl.style.display = 'none';
+    if (!name || !email) {
+      statusEl.textContent = 'Please enter your name and email.';
+      statusEl.className = 'vol-opp-status error';
+      return;
+    }
+
+    var originalText = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Submitting…';
+
+    fetch('volunteer-opportunity-claim.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ opportunity_id: card.getAttribute('data-id'), name: name, email: email, website: website })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.success) {
+        form.innerHTML = '<p class="vol-opp-status success" style="display:block">' + escHtml(data.message || "You're signed up — thank you!") + '</p>';
+        var spotsEl  = card.querySelector('.vol-opp-spots');
+        var claimBtn = card.querySelector('.vol-opp-claim-btn');
+        var m = spotsEl ? spotsEl.textContent.match(/^(\d+) of (\d+)/) : null;
+        if (spotsEl && m) {
+          var newFilled = parseInt(m[1], 10) + 1;
+          var total     = parseInt(m[2], 10);
+          spotsEl.textContent = newFilled >= total ? 'Full' : (newFilled + ' of ' + total + ' filled');
+          if (newFilled >= total) spotsEl.classList.add('full');
+        }
+        if (claimBtn) claimBtn.style.display = 'none';
+      } else {
+        statusEl.textContent = data.error || 'Something went wrong. Please try again or email info@alabamafalcons.org.';
+        statusEl.className = 'vol-opp-status error';
+        btn.disabled = false; btn.textContent = originalText;
+      }
+    }).catch(function() {
+      statusEl.textContent = 'Something went wrong. Please try again or email info@alabamafalcons.org.';
+      statusEl.className = 'vol-opp-status error';
+      btn.disabled = false; btn.textContent = originalText;
+    });
+  }
+})();
+
+function fetchWithTimeout(url, ms) {
+  var ctrl = new AbortController();
+  var timer = setTimeout(function() { ctrl.abort(); }, ms);
+  return fetch(url, { signal: ctrl.signal }).finally(function() { clearTimeout(timer); });
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function safeHref(url) {
+  return /^https?:\/\/|^\/|^#/i.test(url || '') ? url : '#';
+}
+
+function renderNews(items, isLive) {
+  var container = document.getElementById('news-container');
+  var ts = document.getElementById('news-updated');
+  if (!items || items.length === 0) {
+    container.innerHTML = '<p class="news-loading">No news items available at this time.</p>';
+    return;
+  }
+  items = items.slice(0, 3); // show 3 articles for a clean grid
+  if (ts) {
+    var now = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+    ts.textContent = isLive ? 'Live feed · Updated ' + now : 'Showing cached news · Last checked ' + now;
+  }
+  container.innerHTML = items.map(function(item) {
+    var safeLink = (item.link && /^https?:\/\//i.test(item.link)) ? item.link : '';
+    return '<div class="news-card"><div class="news-card-body">' +
+      '<p class="news-card-date">' + escHtml(item.date) + '</p>' +
+      '<h3>' + escHtml(item.title) + '</h3>' +
+      '<p>' + escHtml(item.description) + '</p>' +
+      (safeLink ? '<a class="read-more" href="' + escHtml(safeLink) + '" target="_blank" rel="noopener">Read More &rarr;</a>' : '') +
+      '</div></div>';
+  }).join('');
+}
+
+async function loadNews() {
+  var container = document.getElementById('news-container');
+
+  // Fallback cached news data
+  var cachedNewsData = {
+    status: 'ok',
+    items: [
+      {
+        title: 'Vice President JD Vance named commencement speaker for U.S. Air Force Academy Class of 2026 graduation',
+        link: 'https://www.usafa.edu/vice-president-jd-vance-named-commencement-speaker-for-u-s-air-force-academy-class-of-2026-graduation/',
+        pubDate: 'Tue, 19 May 2026 19:55:44 +0000',
+        description: 'The Academy announced that Vice President Vance will address the Class of 2026 graduation ceremony on May 28, 2026, at Falcon Stadium. More than 900 cadets will commission as officers in the Air Force and Space Force.'
+      },
+      {
+        title: 'Hosmer Visitor Center Grand Opening Showcases Cadet Experiences',
+        link: 'https://www.usafa.edu/hosmer-visitor-center-grand-opening-showcases-cadet-experiences/',
+        pubDate: 'Mon, 18 May 2026 16:27:31 +0000',
+        description: 'Over 1,600 people attended the May 16 grand opening of the Hosmer Visitor Center, featuring interactive galleries demonstrating the 47-month cadet journey. The facility showcases Academy heritage and cadet life.'
+      },
+      {
+        title: 'Academy opens Hosmer Visitor Center with ribbon-cutting ceremony',
+        link: 'https://www.usafa.edu/academys-hosmer-visitor-center-ribbon-cutting-ceremony/',
+        pubDate: 'Mon, 18 May 2026 16:08:46 +0000',
+        description: 'The Academy celebrated the Hosmer Visitor Center opening with a ribbon-cutting ceremony on May 15, 2026. The 34,000-square-foot facility honors retired Lt. Gen. Bradley Hosmer and serves as a gateway to understanding the Academy\'s mission.'
+      },
+      {
+        title: 'FalconSAT program builds cadet skills through space projects',
+        link: 'https://www.usafa.edu/falconsat-program-builds-cadet-skills-through-space-projects/',
+        pubDate: 'Mon, 11 May 2026 19:51:36 +0000',
+        description: 'Cadets in the FalconSAT program gained hands-on experience developing satellite components including reaction wheels and star trackers. The nearly 20-year program provides practical training in problem-solving and team leadership.'
+      }
+    ]
+  };
+
+  try {
+    var r = await fetchWithTimeout('/usafa-news.php', 6000);
+    if (r.ok) {
+      var parsed = await r.json();
+      var raw = (parsed.status === 'ok' && parsed.items) ? parsed.items : (Array.isArray(parsed) ? parsed : null);
+      if (raw && raw.length > 0) {
+        var items = raw.map(function(i) {
+          var d = '';
+          if (i.pubDate) {
+            try { d = new Date(i.pubDate).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'}); } catch(ex) {}
+          }
+          return {
+            title: i.title || '',
+            link: i.link || '',
+            date: d,
+            description: i.description
+          };
+        });
+        renderNews(items, true);
+        return;
+      }
+    }
+  } catch (error) {
+    console.error('News fetch error:', error);
+  }
+
+  // Fallback to cached data if fetch fails or returns no items
+  var items = cachedNewsData.items.map(function(i) {
+    var d = '';
+    if (i.pubDate) {
+      try { d = new Date(i.pubDate).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'}); } catch(ex) {}
+    }
+    return {
+      title: i.title || '',
+      link: i.link || '',
+      date: d,
+      description: i.description
+    };
+  });
+  renderNews(items, false);
+}
+
+// Load news when page loads
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNews);
+} else {
+  loadNews();
+}
+
+// ── Job Drop Night — same slide-track technique as the Member Photos
+// slideshow below (pre-built slides + CSS transform), rather than swapping
+// a single <img> src — that approach could flash/pop if a new image hadn't
+// finished loading by the time the crossfade revealed it. ─────────────────
+(function() {
+  var track   = document.getElementById('jd-track');
+  var dotsEl  = document.getElementById('jd-dots');
+  var prevBtn = document.getElementById('jd-prev');
+  var nextBtn = document.getElementById('jd-next');
+  var viewport= document.getElementById('jd-viewport');
+  if (!track) return;
+  var current = 0;
+  var items   = [];
+  var autoTimer = null;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var lightbox  = document.getElementById('jd-lightbox');
+  var lbInner   = document.getElementById('jd-lb-inner');
+  var lbClose   = document.getElementById('jd-lb-close');
+
+  function openVideo(youtubeId) {
+    lbInner.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(youtubeId) +
+      '?autoplay=1" title="Job Drop reveal video" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    lightbox.classList.add('open');
+  }
+  function closeVideo() {
+    lightbox.classList.remove('open');
+    lbInner.innerHTML = ''; // stop playback
+  }
+  lbClose.addEventListener('click', closeVideo);
+  lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeVideo(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeVideo(); });
+
+  function buildSlide(item) {
+    var slide = document.createElement('div');
+    slide.className = 'slide';
+    var src = 'job-drop-photo-serve.php?f=' + encodeURIComponent(item.filename);
+    var bg = document.createElement('img');
+    bg.className = 'slide-bg'; bg.src = src; bg.alt = ''; bg.setAttribute('aria-hidden', 'true'); bg.loading = 'lazy';
+    var fg = document.createElement('img');
+    fg.className = 'slide-fg'; fg.src = src; fg.alt = item.cadet_name + ' — ' + item.job_title; fg.loading = 'lazy';
+    var caption = document.createElement('div');
+    caption.className = 'jd-caption';
+    var title = document.createElement('p');
+    title.className = 'jd-caption-title'; title.textContent = item.job_title;
+    var name = document.createElement('p');
+    name.className = 'jd-caption-name'; name.textContent = item.cadet_name;
+    caption.appendChild(title); caption.appendChild(name);
+    if (item.youtube_id) {
+      var watchBtn = document.createElement('button');
+      watchBtn.type = 'button';
+      watchBtn.className = 'jd-watch-btn';
+      watchBtn.innerHTML = '&#9654; Watch the reveal';
+      watchBtn.addEventListener('click', function() { openVideo(item.youtube_id); });
+      caption.appendChild(watchBtn);
+    }
+    slide.appendChild(bg); slide.appendChild(fg); slide.appendChild(caption);
+    return slide;
+  }
+
+  function goTo(index) {
+    if (!items.length) return;
+    var dots = dotsEl.querySelectorAll('.slideshow-dot');
+    if (dots[current]) dots[current].classList.remove('active');
+    current = (index + items.length) % items.length;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    if (dots[current]) dots[current].classList.add('active');
+  }
+
+  function startAuto() {
+    if (reduceMotion || items.length < 2) return;
+    clearInterval(autoTimer);
+    autoTimer = setInterval(function() { goTo(current + 1); }, 10000);
+  }
+  function resetAuto() { startAuto(); }
+
+  async function loadJobDrops() {
+    try {
+      var resp = await fetchWithTimeout('job-drop-feed.php', 6000);
+      var data = await resp.json();
+      if (!(data && data.success && data.drops && data.drops.length)) return;
+      items = data.drops;
+      if (reduceMotion) track.style.transition = 'none';
+      items.forEach(function(item, i) {
+        track.appendChild(buildSlide(item));
+        var dot = document.createElement('button');
+        dot.className = 'slideshow-dot';
+        dot.setAttribute('aria-label', 'Cadet ' + (i + 1));
+        dot.addEventListener('click', function() { goTo(i); resetAuto(); });
+        dotsEl.appendChild(dot);
+      });
+      if (items.length < 2) { prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; dotsEl.style.display = 'none'; }
+      document.getElementById('job-drop').style.display = 'block';
+      goTo(0);
+      startAuto();
+      viewport.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
+      viewport.addEventListener('mouseleave', startAuto);
+      var touchStartX = 0;
+      viewport.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, {passive:true});
+      viewport.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 40) { goTo(dx < 0 ? current + 1 : current - 1); resetAuto(); }
+      }, {passive:true});
+    } catch (err) {
+      // Silent failure — section just stays hidden if the feed can't be reached.
+    }
+  }
+
+  prevBtn.addEventListener('click', function() { goTo(current - 1); resetAuto(); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); resetAuto(); });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadJobDrops);
+  } else {
+    loadJobDrops();
+  }
+})();
+
+// ── Spotlight layout — two centered columns when both halves have data,
+// one centered column (no divider) when only one does ────────────────────
+function updateSpotlightDivider() {
+  var parentOn = document.getElementById('spotlight-parent-col').style.display === 'block';
+  var sponsorOn = document.getElementById('spotlight-sponsor-col').style.display === 'block';
+  var split = document.querySelector('.spotlight-split');
+  split.classList.toggle('has-divider', parentOn && sponsorOn);
+  split.classList.toggle('single-col', parentOn !== sponsorOn);
+}
+
+// ── Site settings loader ───────────────────────────────────────────────────
+fetch('settings-feed.php').then(function(r){return r.json();}).then(function(data){
+  if (!data.success || !data.settings) return;
+  var s = data.settings;
+  // Hero
+  if (s.hero_subtitle) document.getElementById('hero-subtitle').textContent = s.hero_subtitle;
+  if (s.hero_cta_text || s.hero_cta_url) {
+    var cta = document.getElementById('hero-cta');
+    if (cta) { if (s.hero_cta_text) cta.textContent = s.hero_cta_text; if (s.hero_cta_url) cta.href = safeHref(s.hero_cta_url); }
+  }
+  // Hero stats — falls back to the hardcoded defaults already in the markup
+  // if a value is blank or the migration adding these settings hasn't run yet.
+  if (s.stat_current_cadets) document.getElementById('stat-current-cadets').textContent = s.stat_current_cadets;
+  if (s.stat_annual_events)  document.getElementById('stat-annual-events').textContent  = s.stat_annual_events;
+  if (s.stat_years_active)   document.getElementById('stat-years-active').textContent   = s.stat_years_active;
+  // Parent Spotlight — left half stays hidden unless a name is set
+  if (s.spotlight_name) {
+    document.getElementById('spotlight-name').textContent = s.spotlight_name;
+    document.getElementById('spotlight-description').textContent = s.spotlight_description || '';
+    if (s.spotlight_photo) {
+      var spImg = document.getElementById('spotlight-photo');
+      spImg.src = 'spotlight-photos/' + s.spotlight_photo;
+      spImg.style.display = 'block';
+    }
+    document.getElementById('spotlight-parent-col').style.display = 'block';
+    document.getElementById('spotlight').style.display = 'block';
+    updateSpotlightDivider();
+  }
+  // Membership
+  if (s.membership_dues) {
+    var dt = document.getElementById('membership-dues');
+    if (dt) dt.innerHTML = escHtml(s.membership_dues) + ' <span>/ year</span>';
+  }
+  if (s.membership_description) {
+    var md = document.getElementById('membership-description');
+    if (md) md.innerHTML = s.membership_description.split(/\r?\n\s*\r?\n/).map(function(p){ return '<p>' + escHtml(p.trim()) + '</p>'; }).join('');
+  }
+  // Facebook
+  if (s.facebook_url) {
+    document.querySelectorAll('a[id="footer-fb-link"], a.fb-icon, a.footer-fb').forEach(function(el){ el.href = safeHref(s.facebook_url); });
+  }
+  // Footer resources
+  if (s.footer_resources) {
+    var ul = document.getElementById('footer-resources');
+    if (ul) {
+      var lines = s.footer_resources.split('\n').filter(function(l){ return l.trim(); });
+      ul.innerHTML = lines.map(function(l){
+        var parts = l.split('|');
+        if (parts.length < 2) return '';
+        var url = parts[1].trim();
+        if (!/^https?:\/\/|^\//i.test(url)) return ''; // block non-http URLs
+        return '<li><a href="' + escHtml(url) + '" target="_blank" rel="noopener">' + escHtml(parts[0].trim()) + '</a></li>';
+      }).join('');
+    }
+  }
+}).catch(function(){});
+
+// ── Latest sponsors (right half of the Spotlight section) ─────────────────
+// Reuses the same public feed as sponsorship.html; "latest" = most recent
+// created_at. Falls back to id ordering on installs that haven't run
+// migrate_sponsors_created_at.sql yet (id order isn't reliable long-term —
+// bulk-imported sponsors all share one id sequence regardless of when the
+// sponsorship deal was actually made).
+// Uses about_text (the public-facing blurb) — description is internal notes only.
+fetch('sponsors-feed.php').then(function(r){return r.json();}).then(function(data){
+  if (!data.success || !data.sponsors || !data.sponsors.length) return;
+  var latest = data.sponsors.slice().sort(function(a, b){
+    var at = a.created_at ? new Date(a.created_at.replace(' ', 'T')).getTime() : a.id;
+    var bt = b.created_at ? new Date(b.created_at.replace(' ', 'T')).getTime() : b.id;
+    return bt - at;
+  }).slice(0, 2);
+  document.getElementById('spotlight-sponsor-list').innerHTML = latest.map(function(sp){
+    var logoHtml = '';
+    if (sp.logo_filename && /^[a-zA-Z0-9._-]+$/.test(sp.logo_filename)) {
+      // Newly-uploaded logos live in sponsor-logos/, but a couple of legacy
+      // sponsors have their file sitting at site root instead — try the
+      // proper folder first and fall back to root on a 404.
+      logoHtml = '<img class="spotlight-sponsor-logo" src="sponsor-logos/' + escHtml(sp.logo_filename) + '" alt="' + escHtml(sp.name) + ' logo" onerror="this.onerror=null;this.src=\'' + escHtml(sp.logo_filename) + '\';">';
+    }
+    var amountHtml = sp.contribution_amount
+      ? '<p class="spotlight-sponsor-amount">' + escHtml(sp.contribution_amount) + (sp.contribution_type ? ' &middot; ' + escHtml(sp.contribution_type) : '') + '</p>'
+      : '';
+    var blurb = sp.about_text ? sp.about_text.split(/\r?\n\s*\r?\n/)[0].trim() : '';
+    return '<div class="spotlight-sponsor-item">'
+      + '<a class="spotlight-sponsor-link-wrap" href="sponsorship.html#sponsor-' + sp.id + '">'
+      + logoHtml
+      + '<h3 class="spotlight-name">' + escHtml(sp.name) + '</h3>'
+      + '</a>'
+      + amountHtml
+      + (blurb ? '<p class="spotlight-description">' + escHtml(blurb) + '</p>' : '')
+      + '</div>';
+  }).join('');
+  document.getElementById('spotlight-sponsor-col').style.display = 'block';
+  document.getElementById('spotlight').style.display = 'block';
+  updateSpotlightDivider();
+}).catch(function(){});
+
+// ── Announcement banner ────────────────────────────────────────────────────
+async function loadAnnouncements() {
+  try {
+    var r = await fetchWithTimeout('/announcements-feed.php', 4000);
+    if (!r.ok) return;
+    var data = await r.json();
+    if (!data.success || !data.announcements || !data.announcements.length) return;
+    var banner = document.getElementById('site-announcement');
+    var ann    = data.announcements[0];
+    var colors = {info:['#e3f2fd','#003594'],warning:['#fff8e1','#5f4c00'],urgent:['#ffebee','#b71c1c']};
+    var c = colors[ann.type] || colors.info;
+    var html = '<div style="background:' + c[0] + ';color:' + c[1] + ';padding:.85rem 3rem;position:relative;text-align:center;font-size:1rem;font-weight:600;line-height:1.5">'
+             + '<span>' + escHtml(ann.message)
+             + (ann.link_text && ann.link_url ? ' <a href="' + escHtml(safeHref(ann.link_url)) + '" style="color:' + c[1] + ';text-decoration:underline;margin-left:.5rem;font-weight:700">' + escHtml(ann.link_text) + ' →</a>' : '')
+             + '</span>'
+             + '<button onclick="this.parentElement.parentElement.style.display=\'none\'" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.4rem;color:' + c[1] + ';opacity:.6;line-height:1;padding:.25rem">&times;</button>'
+             + '</div>';
+    banner.innerHTML = html;
+    banner.style.display = 'block';
+    banner.style.position = 'sticky';
+    banner.style.top = '64px';
+    banner.style.zIndex = '99';
+  } catch(e) {}
+}
+loadAnnouncements();
+
+// ── Leadership section ─────────────────────────────────────────────────────
+async function loadLeadership() {
+  var grid = document.getElementById('leadership-grid');
+  if (!grid) return;
+  try {
+    var r = await fetchWithTimeout('/leadership-feed.php', 6000);
+    if (!r.ok) throw new Error();
+    var data = await r.json();
+    if (!data.success || !data.officers || !data.officers.length) throw new Error();
+    var html = '';
+    data.officers.forEach(function(o) {
+      var photoSrc = o.photo_filename ? '/leadership-photos/' + o.photo_filename : '';
+      var photoHtml = photoSrc
+        ? '<div class="officer-photo"><img src="' + escHtml(photoSrc) + '" alt="' + escHtml(o.name) + '" /></div>'
+        : '<div class="officer-photo" style="background:#003594;display:flex;align-items:center;justify-content:center;font-size:2rem">👤</div>';
+      var emailHtml = o.email ? '<a href="mailto:' + escHtml(o.email) + '" class="send-email">Send Email</a>' : '';
+      var bioHtml   = o.bio   ? '<div class="officer-bio-tooltip"><strong>' + escHtml(o.name) + '</strong> &mdash; ' + escHtml(o.role_title) + '<br><br>' + escHtml(o.bio) + '</div>' : '';
+      html += '<div class="officer-card">' + bioHtml + photoHtml
+            + '<h3>' + escHtml(o.name) + '</h3>'
+            + '<p class="officer-role">' + escHtml(o.role_title) + '</p>'
+            + emailHtml + '</div>';
+    });
+    grid.innerHTML = html;
+  } catch(e) {
+    grid.innerHTML = '<p style="color:#5a6a7a">Leadership information loading&hellip;</p>';
+  }
+}
+loadLeadership();
+
+// ── Events loader ─────────────────────────────────────────────────────────
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function formatEventDate(ev) {
+  if (!ev.event_date) return {month:'TBA', day:'—'};
+  var d = new Date(ev.event_date + 'T12:00:00');
+  var mon = MONTHS[d.getMonth()];
+  var day = d.getDate().toString();
+  if (ev.event_date_end) {
+    var d2 = new Date(ev.event_date_end + 'T12:00:00');
+    if (d.getMonth() !== d2.getMonth()) {
+      return {month: mon + '<br>' + MONTHS[d2.getMonth()], day: d.getDate() + '–' + d2.getDate()};
+    }
+    day = d.getDate() + '–' + d2.getDate();
+  }
+  return {month: mon, day: day};
+}
+
+function tagClass(tag) {
+  var m = {'Social':'tag-social','Academy':'tag-social','Cadet Support':'tag-volunteer','Community':'tag-social'};
+  return m[tag] || 'tag-social';
+}
+
+function renderEvents(events) {
+  var list = document.getElementById('events-list');
+  if (!list) return;
+  var groups = [
+    {key:'past',  label:'Past Events',   style:'background:#f0f2f5;color:#5a6a7a;border-left:3px solid #c0c7cf;', opacity:'.7'},
+    {key:'upcoming', label:'Upcoming',   style:'', opacity:'1'},
+    {key:'planning', label:'Planning Ahead', style:'margin-top:1.5rem;background:#f0f4ff;color:#003594;border-left:3px solid #003594;', opacity:'1'}
+  ];
+  var html = '';
+  groups.forEach(function(g) {
+    var grpEvents = events.filter(function(e){ return e.group_label === g.key; });
+    if (!grpEvents.length) return;
+    html += '<div class="events-group-label" style="' + g.style + '">' + g.label + '</div>';
+    grpEvents.forEach(function(e) {
+      var dt = formatEventDate(e);
+      var info = '<h3>' + escHtml(e.title) + '</h3>';
+      var meta = '';
+      if (e.event_time) meta += escHtml(e.event_time);
+      if (e.location)   meta += (meta?' &bull; ':'') + escHtml(e.location);
+      if (meta) info += '<p>' + meta + '</p>';
+      if (e.description) info += '<p' + (meta?' style="margin-top:.4rem"':'') + '>' + escHtml(e.description) + '</p>';
+      // Countdown timer — store deadline in data attribute, started after DOM insertion
+      if (e.cta_deadline) {
+        var dl = new Date(e.cta_deadline);
+        if (dl > new Date()) {
+          var cdVerb = (e.countdown_type === 'starts') ? 'Starts in' : 'Ends in';
+          info += '<div class="ev-countdown" data-deadline="' + dl.getTime() + '" data-verb="' + cdVerb + '" style="display:inline-flex;align-items:center;gap:.5rem;background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:.4rem .8rem;margin:.5rem 0;font-size:.85rem;font-weight:700;color:#5f4c00">Loading…</div>';
+        }
+      }
+      if (e.cta_text && e.cta_url) {
+        info += '<div style="margin-top:.5rem"><a href="' + escHtml(safeHref(e.cta_url)) + '" style="display:inline-block;padding:.45rem 1.1rem;background:#A6192E;color:#fff;border-radius:4px;font-size:.85rem;font-weight:700;text-decoration:none;letter-spacing:.04em;">' + escHtml(e.cta_text) + ' &rarr;</a></div>';
+      }
+      if (e.cta_note) info += '<p style="font-size:.8rem;color:#6c757d;margin-top:.5rem">' + escHtml(e.cta_note) + '</p>';
+      if (e.tag) info += '<span class="event-tag ' + tagClass(e.tag) + '">' + escHtml(e.tag) + '</span>';
+      html += '<div class="event-card" style="opacity:' + g.opacity + '">'
+            + '<div class="event-date"><div class="month">' + dt.month + '</div><div class="day">' + dt.day + '</div></div>'
+            + '<div class="event-info">' + info + '</div></div>';
+    });
+  });
+  html += '<div style="margin-top:1rem;text-align:center"><a href="events-calendar.html" style="display:inline-block;padding:.5rem 1.5rem;background:var(--blue);color:#fff;border-radius:3px;font-family:var(--font-display);font-size:.75rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;">View Academy Calendar &amp; Key Dates &rarr;</a></div>';
+  list.innerHTML = html;
+
+  // Start countdowns now that divs are in the DOM
+  list.querySelectorAll('.ev-countdown').forEach(function(el) {
+    var deadline = parseInt(el.getAttribute('data-deadline'), 10);
+    var verb = el.getAttribute('data-verb') || 'Ends in';
+    function tick() {
+      var diff = deadline - Date.now();
+      if (diff <= 0) { el.style.display = 'none'; return; }
+      var d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000);
+      el.innerHTML = '⏰ ' + verb + ' <strong style="margin-left:.25rem">' + d + 'd ' + h + 'h ' + m + 'm</strong>';
+    }
+    tick(); setInterval(tick, 60000);
+  });
+}
+
+var EVENTS_CACHE_KEY = 'usafa_events_cache_v1';
+
+async function loadEvents() {
+  var list = document.getElementById('events-list');
+  var renderedFromCache = false;
+
+  // Render last-known events instantly from localStorage (stale-while-
+  // revalidate) so returning visitors never wait on a cold server or see the
+  // "coming soon" flash. Fresh data from the feed swaps in below.
+  try {
+    var cached = JSON.parse(localStorage.getItem(EVENTS_CACHE_KEY) || 'null');
+    if (cached && cached.length) { renderEvents(cached); renderedFromCache = true; }
+  } catch(e) {}
+
+  try {
+    var r = await fetchWithTimeout('/events-feed.php', 6000);
+    if (r.ok) {
+      var data = await r.json();
+      if (data.success && data.events && data.events.length > 0) {
+        renderEvents(data.events);
+        try { localStorage.setItem(EVENTS_CACHE_KEY, JSON.stringify(data.events)); } catch(e) {}
+        return;
+      }
+      // Feed reachable but genuinely empty — drop stale cache so we don't keep
+      // showing events that were removed, and show the placeholder.
+      if (data.success) {
+        try { localStorage.removeItem(EVENTS_CACHE_KEY); } catch(e) {}
+        if (list) list.innerHTML = '<p style="color:#5a6a7a">Events coming soon. Check back often.</p>';
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // Network/server failure: keep whatever we already rendered from cache; only
+  // fall back to the placeholder if we had nothing to show.
+  if (!renderedFromCache && list) {
+    list.innerHTML = '<p style="color:#5a6a7a">Events coming soon. Check back often.</p>';
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadEvents);
+} else {
+  loadEvents();
+}
+
+</script>
+
+
+
+
+
+<script>
+(function() {
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJgBxqksYcbPKnvCOMc7I1SZbgJbM-v6A1BaeSn0mr8aRRZMuSpJwuceOij4cAesct/exec';
+
+  var track    = document.getElementById('slideshow-track');
+  var dotsEl   = document.getElementById('slideshow-dots');
+  var counterEl= document.getElementById('slideshow-counter');
+  var msgEl    = document.getElementById('photos-msg');
+  var prevBtn  = document.getElementById('slide-prev');
+  var nextBtn  = document.getElementById('slide-next');
+  var viewport = document.getElementById('slideshow-viewport');
+  var current  = 0;
+  var ids      = [];
+  var autoTimer= null;
+  var initialized = false;
+
+  function buildSlideFromSrc(src) {
+    var slide = document.createElement('div');
+    slide.className = 'slide';
+    var bg = document.createElement('img');
+    bg.className = 'slide-bg';
+    bg.src = src;
+    bg.alt = '';
+    bg.setAttribute('aria-hidden', 'true');
+    bg.loading = 'lazy';
+    var fg = document.createElement('img');
+    fg.className = 'slide-fg';
+    fg.src = src;
+    fg.alt = 'Club community photo';
+    fg.loading = 'lazy';
+    slide.appendChild(bg);
+    slide.appendChild(fg);
+    return slide;
+  }
+
+  function buildSlide(id) {
+    return buildSlideFromSrc('https://drive.google.com/thumbnail?id=' + id + '&sz=w1200');
+  }
+
+  function goTo(index) {
+    if (ids.length === 0) return;
+    var dots = dotsEl.querySelectorAll('.slideshow-dot');
+    if (dots[current]) dots[current].classList.remove('active');
+    current = (index + ids.length) % ids.length;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    if (dots[current]) dots[current].classList.add('active');
+    counterEl.textContent = (current + 1) + ' – ' + ids.length;
+  }
+
+  function startAuto() { clearInterval(autoTimer); autoTimer = setInterval(function() { goTo(current + 1); }, 10000); }
+  function resetAuto()  { startAuto(); }
+
+  function init(imageIds) {
+    if (!imageIds || imageIds.length === 0) {
+      msgEl.textContent = 'No photos have been added yet — check back soon!';
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      return;
+    }
+    if (initialized) return;
+    initialized = true;
+    ids = imageIds;
+    msgEl.style.display = 'none';
+    ids.forEach(function(id, i) {
+      track.appendChild(buildSlide(id));
+      var dot = document.createElement('button');
+      dot.className = 'slideshow-dot';
+      dot.setAttribute('aria-label', 'Photo ' + (i + 1));
+      dot.addEventListener('click', function() { goTo(i); resetAuto(); });
+      dotsEl.appendChild(dot);
+    });
+    goTo(0);
+    startAuto();
+    viewport.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
+    viewport.addEventListener('mouseleave', startAuto);
+    var touchStartX = 0;
+    viewport.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, {passive:true});
+    viewport.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { goTo(dx < 0 ? current + 1 : current - 1); resetAuto(); }
+    }, {passive:true});
+  }
+
+  prevBtn.addEventListener('click', function() { goTo(current - 1); resetAuto(); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); resetAuto(); });
+
+  // Try server photos first; fall back to Google Drive
+  fetch('photos-feed.php').then(function(r){ return r.json(); }).then(function(data){
+    if (data && data.sectionVisible === false) {
+      // Admin has turned the section off — hide it and stop here, skip
+      // even attempting the Google Drive fallback script.
+      document.getElementById('photos').style.display = 'none';
+      return;
+    }
+    if (data.success && data.photos && data.photos.length > 0) {
+      // Use server-stored photos
+      var serverIds = data.photos.map(function(p){ return '__server__' + p.filename; });
+      // Override buildSlide to serve from /site-photos/ for server photos
+      var origBuild = buildSlide;
+      buildSlide = function(id) {
+        if (id.startsWith('__server__')) {
+          return buildSlideFromSrc('site-photos/' + id.replace('__server__',''));
+        }
+        return origBuild(id);
+      };
+      init(serverIds);
+    } else {
+      // Fall back to Google Drive
+      window._photosReady = function(imageIds) { delete window._photosReady; init(imageIds); };
+      var script = document.createElement('script');
+      script.src = SCRIPT_URL;
+      script.onerror = function() { msgEl.textContent='Photos unavailable — please check back later.'; prevBtn.style.display='none'; nextBtn.style.display='none'; };
+      document.head.appendChild(script);
+    }
+  }).catch(function() {
+    window._photosReady = function(imageIds) { delete window._photosReady; init(imageIds); };
+    var script = document.createElement('script');
+    script.src = SCRIPT_URL;
+    script.onerror = function() { msgEl.textContent='Photos unavailable.'; prevBtn.style.display='none'; nextBtn.style.display='none'; };
+    document.head.appendChild(script);
+  });
+})();
+</script>
+
+<script>
+// Leadership, Events, USAFA News, and Photos all replace short "Loading…"
+// placeholders with much taller real content after an async fetch. If this
+// page is opened fresh with a hash like #membership already in the URL
+// (rather than clicked while already on the page), the browser's native
+// jump-to-anchor fires before that content grows in — landing on whatever
+// section ends up at that original, too-short scroll position instead.
+// Re-scroll to the real target once things have had time to settle.
+(function() {
+  if (!location.hash) return;
+  var target;
+  try { target = document.querySelector(location.hash); } catch (e) { return; }
+  if (!target) return;
+  function rescroll() { target.scrollIntoView(); }
+  window.addEventListener('load', function() {
+    setTimeout(rescroll, 400);
+    setTimeout(rescroll, 1200);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Support - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%);
+      color: var(--white);
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 245, 240, 0.9);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-alt {
+      background: var(--light);
+    }
+
+    .section-alt .section {
+      padding: 3rem 2rem;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 60px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .section p {
+      color: var(--gray);
+      margin-bottom: 1.25rem;
+      font-size: 1rem;
+    }
+
+    /* INFO BOXES */
+    .info-box {
+      background: var(--white);
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(0,53,148,0.07);
+    }
+
+    .section-alt .info-box {
+      background: #fff;
+    }
+
+    .info-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+      color: var(--navy);
+    }
+
+    .info-box p {
+      color: var(--gray);
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .info-box p:last-child { margin-bottom: 0; }
+
+    /* PILLAR CARDS */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .pillar-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      border: 1px solid rgba(0, 53, 148, 0.12);
+      border-top: 4px solid var(--navy);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(0, 53, 148, 0.15);
+    }
+
+    .pillar-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pillar-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .pillar-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+      line-height: 1.6;
+    }
+
+    /* QUOTE BANNER */
+    .quote-banner {
+      background: var(--navy);
+      color: var(--white);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .quote-banner blockquote {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.25rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(245, 245, 240, 0.92);
+    }
+
+    .quote-banner cite {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--silver2);
+      font-style: normal;
+    }
+
+    /* CTA BOX */
+    .cta-box {
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .cta-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-box p {
+      color: rgba(245, 245, 240, 0.85);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      transition: background 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+
+    .btn-gold {
+      background: #C5A028;
+      color: #002554;
+    }
+
+    .btn-gold:hover {
+      background: #d4ae30;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(245, 245, 240, 0.5);
+      margin-left: 0.75rem;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* RESOURCE LIST */
+    .resource-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .resource-list li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(0,53,148,0.1);
+      color: var(--gray);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .resource-list li:last-child { border-bottom: none; }
+
+    .resource-list li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--topbar);
+      color: rgba(245, 245, 240, 0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: rgba(245, 245, 240, 0.8);
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--white); }
+    footer p { margin-bottom: 0.5rem; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .btn-outline { margin-left: 0; margin-top: 0.5rem; }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+      <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+        <rect width="60" height="40" fill="white"/>
+        <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+        <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+      </svg></small></span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li class="nav-dropdown">
+        <a href="index.html#about">About</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#leadership">Leadership</a></li>
+          <li><a href="president-letter.html">President's Letter</a></li>
+          <li><a href="index.html#photos">Member Photos</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="#">Programs</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="liaison.html">Liaison</a></li>
+          <li><a href="familyresources.html">Family Resources</a></li>
+          <li><a href="cadetconnection.html">Cadet Connection</a></li>
+          <li><a href="communitysupport.html">Community Support</a></li>
+          <li><a href="nominations.html">Alabama Delegation</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="index.html#membership">Get Involved</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#membership">Membership</a></li>
+          <li><a href="update.html">Update Your Information</a></li>
+          <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+          <li><a href="job-drop-night.html">Job Drop Night</a></li>
+          <li><a href="sponsorship.html">Sponsors</a></li>
+          <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="index.html#events">Events</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#events">Club Events</a></li>
+          <li><a href="events-calendar.html">Academy Calendar</a></li>
+          <li><a href="gallery.html">Event Photos</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="index.html#usafa-news">Resources</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#usafa-news">USAFA News</a></li>
+          <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+          <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+          <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+          <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+          <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+          <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+          <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+          <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+          <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#volunteer">Contact</a></li>
+      <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Community Support</h1>
+      <p>Building a strong network of Alabama families who understand the unique USAFA experience &mdash; because no parent should navigate this journey alone.</p>
+    </div>
+  </div>
+
+  <!-- YOU'RE NOT ALONE -->
+  <section class="section">
+    <h2>You're Not Alone</h2>
+    <p>The day your son or daughter walked through those gates at I-Day, you joined a community unlike any other. The pride, the worry, the silence during BCT, the milestones, the sleepless nights &mdash; every USAFA parent knows this journey in a way no one else quite can.</p>
+    <p>The USAFA Parents Club of Alabama exists precisely for this: to make sure Alabama families have each other. Whether you're a brand-new appointee family still absorbing the shock of "they got in," or a senior parent counting the weeks to graduation, there is a network of people here who have walked where you are walking &mdash; and want to walk it with you.</p>
+
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">&#129309;</div>
+        <h3>Parent Peer Network</h3>
+        <p>Connect with other Alabama cadet families by class year for shared experience, advice, and encouragement throughout the Academy journey.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">&#127968;</div>
+        <h3>New Family Support</h3>
+        <p>Orientation resources and experienced parent guides to help appointee families understand what to expect from I-Day through Recognition.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">&#127880;</div>
+        <h3>Events &amp; Gatherings</h3>
+        <p>Watch parties, care package drives, potlucks during BCT, and social events that turn a scattered statewide community into real friendships.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">&#128736;</div>
+        <h3>Emergency &amp; Wellness</h3>
+        <p>Financial assistance resources, mental health support, and a parent community that shows up when Alabama families face difficult moments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <div class="quote-banner">
+    <blockquote>
+      "The hardest part of BCT isn't watching your child leave. It's going home to people who don't understand why you're both devastated and the proudest you've ever been."
+    </blockquote>
+    <cite>A sentiment shared by nearly every USAFA parent</cite>
+  </div>
+
+  <!-- PARENT PEER NETWORK -->
+  <div class="section-alt">
+    <section class="section">
+      <h2>Parent Peer Network</h2>
+      <p>One of the most powerful things this club offers isn't a program or an event &mdash; it's connection to other parents who are in the same chapter of the same book. We're building a formal peer network pairing families by class year so newer parents always have an experienced guide nearby.</p>
+
+<div class="info-box">
+        <h3>&#128101; Alabama Cadet Families Facebook Group</h3>
+        <p>Join our Facebook group for current and incoming USAFA cadet families from Alabama. Share updates, ask questions, and stay connected with a community that understands exactly what you're going through.</p>
+        <p><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Join the Alabama USAFA Families Facebook Group</a></p>
+      </div>
+
+      <div class="info-box">
+        <h3>&#127758; National Parent Communities</h3>
+        <p>Beyond our club, several national communities welcome USAFA families:</p>
+        <ul class="resource-list" style="margin-top:0.5rem;">
+          <li><a href="https://www.usafa.edu/parents/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">USAFA Official Parents Page</a> &mdash; The Academy's hub for parent resources and club directory</li>
+          <li><a href="https://www.usafa.org/for-parents" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Association of Graduates (AOG) Parent Resources</a> &mdash; Parent/Family app, news, and community access</li>
+          <li><a href="https://www.serviceacademyforums.com/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Service Academy Forums</a> &mdash; Active class-year parent groups for all academies</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- NEW FAMILY SUPPORT -->
+  <section class="section">
+    <h2>New Family Support</h2>
+    <p>The period between appointment and I-Day is a whirlwind. There is more information than you can absorb, more emotions than you can name, and more questions than anyone can answer quickly. We've been there. Here's what helps.</p>
+
+    <div class="info-box">
+      <h3>&#127937; Before I-Day: What to Expect</h3>
+      <p>Inprocessing Day (I-Day) is one of the most surreal days of a parent's life. You'll drop off your son or daughter in the morning &mdash; in civilian clothes, nervous and excited &mdash; and watch from a distance as they begin their transformation. By the time you see them again at the oath ceremony that evening, something has already begun to change.</p>
+      <p>Tips from experienced Alabama parents:</p>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li>Arrive early and plan for a long, emotional day &mdash; bring snacks and comfortable shoes</li>
+        <li>Take photos during the morning before the appointment processes &mdash; it goes fast</li>
+        <li>Connect with other Alabama families in the crowd; you'll recognize each other</li>
+        <li>Prepare yourself emotionally for the drive home. It's harder than most parents expect.</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>&#128231; Communication During BCT</h3>
+      <p>For the first several weeks of Basic Cadet Training, your cadet will have extremely limited communication privileges. Here's the reality:</p>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li><strong>Write letters.</strong> Physical mail is the primary connection during BCT. Write often; even if they can't respond, they read every word.</li>
+        <li><strong>Do not expect calls or texts.</strong> Some brief phone access occurs, but it is not guaranteed or regular.</li>
+        <li><strong>Follow official USAFA channels</strong> for BCT updates &mdash; the Academy's social media and WebGuy photography provide glimpses into training.</li>
+        <li><strong>Lean on other parents</strong> in our network who are living the same silence at the same time.</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>&#128218; Appointee Preparation Resources</h3>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li><a href="https://www.usafa.edu/parents/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">USAFA Parents Page</a> &mdash; Official Academy resource for families</li>
+        <li><a href="familyresources.html" style="color:var(--blue);font-weight:600;">Family Resources</a> &mdash; Our club's guide covering admissions, BCT prep, financial aid, and medical</li>
+        <li><a href="liaison.html" style="color:var(--blue);font-weight:600;">Liaison &amp; I-Day Information</a> &mdash; Key dates, Parent Liaison Team contacts, and Class of 2030 timeline</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- EVENTS & GATHERINGS -->
+  <div class="section-alt">
+    <section class="section">
+      <h2>Events &amp; Gatherings</h2>
+      <p>Community is built in person &mdash; over shared food, a football game, or the quiet camaraderie of packing a care box for a cadet you've never met. We're building an annual calendar of events that brings Alabama USAFA families together throughout the year.</p>
+
+      <div class="info-box">
+        <h3>&#129307; Appointee Sendoff</h3>
+        <p>Before I-Day, we gather to celebrate Alabama's newest appointees and send them off with the full support of our cadet family community. It's a chance for appointees and their families to meet one another before the journey begins.</p>
+        <p><a href="sendoff.html" style="color:var(--blue);font-weight:600;">Learn more about the Appointee Sendoff</a></p>
+      </div>
+
+      <div class="info-box">
+        <h3>&#127944; Falcon Football Game Sections</h3>
+        <p>USAFA allocates a seating section for parent club members at home football games, giving Alabama families the chance to purchase tickets and sit together in the stands &mdash; right there cheering for your cadet alongside families who understand exactly what it means to have one on that field.</p>
+        <p>Announcements will be made several weeks ahead of select games, so check back here regularly for updates. <a href="index.html#membership" style="color:var(--blue);font-weight:600;">Join the club</a> to receive notices directly by email.</p>
+      </div>
+
+      <div class="info-box">
+        <h3>&#128230; Care Package Assembly Events</h3>
+        <p>We have plans to organize coordinated care package drives for Alabama cadets &mdash; where club members gather to pack and ship boxes together, making sure every cadet at the Academy knows their home state is cheering them on.</p>
+        <p>This is an initiative we're actively developing and we need volunteers to help make it happen. If you'd like to get involved, <a href="index.html#volunteer" style="color:var(--blue);font-weight:600;">reach out to us</a> &mdash; your help would make a real difference.</p>
+      </div>
+
+      <div class="info-box">
+        <h3>&#127881; Regional Gatherings</h3>
+        <p>We organize regional events across the state to make it easy for Alabama families to connect closer to home. Gatherings are typically held in three regions &mdash; Northern, Middle, and Southern Alabama &mdash; bringing together cadet families in each area for fellowship, updates, and community.</p>
+        <p>In addition, we host a yearly Appointee Sendoff event for incoming cadets and their families, held at Maxwell AFB in Montgomery, Alabama. It's a proud send-off tradition that marks the beginning of each new cadet's journey and gives families a chance to celebrate together before I-Day.</p>
+        <p>Watch for regional event announcements via email and on this page. <a href="index.html#membership" style="color:var(--blue);font-weight:600;">Join the club</a> to stay informed.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- EMERGENCY & WELLNESS -->
+  <section class="section">
+    <h2>Emergency &amp; Wellness Resources</h2>
+    <p>Sometimes this journey gets hard in ways that go beyond the expected. Medical situations, family emergencies, financial strain, or simply the cumulative weight of watching someone you love do something extraordinarily difficult &mdash; these resources exist for those moments.</p>
+
+    <div class="info-box">
+      <h3>&#128166; Air &amp; Space Forces Aid Society (AFAS)</h3>
+      <p>AFAS provides emergency financial assistance to active duty Air Force and Space Force members, including cadets, and their families &mdash; through no-interest loans and grants. This is the first call for financial emergencies involving your cadet.</p>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li><a href="https://afas.org/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">AFAS Website</a> &mdash; afas.org</li>
+        <li>Available 24/7 for emergency situations</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>&#128682; Red Cross Hero Care Network</h3>
+      <p>The Red Cross Hero Care Network provides 24/7 emergency communication and assistance for military families &mdash; including cadets at service academies. If a family emergency requires urgent communication with your cadet, the Red Cross can help.</p>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li>Phone: <strong>1-877-272-7337</strong> (available 24/7/365)</li>
+        <li><a href="https://www.redcross.org/get-help/military-families/hero-care-network.html" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Red Cross Hero Care Network</a> &mdash; Emergency communication and financial assistance</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>&#129504; Military OneSource &mdash; Parent Mental Wellness</h3>
+      <p>Having a child at a service academy is one of the proudest and most emotionally challenging experiences a parent can have. Military OneSource offers free, confidential counseling (up to 12 sessions per issue) available 24/7 to families of service members, including cadet families.</p>
+      <p>This resource is specifically for <em>you</em> &mdash; not just your cadet. The weight parents carry during BCT, during difficult academic stretches, or during any crisis at the Academy is real, and support is available.</p>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li>Phone: <strong>1-800-342-9647</strong> (24/7)</li>
+        <li><a href="https://www.militaryonesource.mil/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">militaryonesource.mil</a> &mdash; Counseling, financial support, and family resources</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>&#9997; USAFA Parent Liaison Team</h3>
+      <p>The Academy's official Parent Liaison Team serves as the bridge between USAFA leadership and cadet families. They monitor parent communications, verify information, and are the right first contact for official Academy matters.</p>
+      <ul class="resource-list" style="margin-top:0.5rem;">
+        <li>Phone: <strong>(719) 333-3828</strong> or toll-free <strong>(877) 268-3383</strong></li>
+        <li>Email: <a href="mailto:USAFA.Parent.Liaison@afacademy.af.edu" style="color:var(--blue);font-weight:600;">USAFA.Parent.Liaison@afacademy.af.edu</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CHAPLAIN & SPIRITUAL SUPPORT -->
+  <div class="section-alt">
+    <section class="section">
+      <h2>Chaplain &amp; Spiritual Support</h2>
+      <p>Faith and spiritual grounding are part of how many USAFA families navigate the demands of cadet life. The Academy's Chaplain Team is a resource for cadets &mdash; and many parents find comfort knowing that chaplains are present for their sons and daughters in difficult moments.</p>
+
+      <div class="info-box">
+        <h3>&#9961; USAFA Chaplain Team</h3>
+        <p>The Academy's Chaplain Team provides confidential spiritual counseling, guidance, and support for cadets of all faith backgrounds &mdash; and no faith background. Chaplains are trained to help cadets navigate stress, identity, purpose, and the demanding moral weight of military training.</p>
+        <ul class="resource-list" style="margin-top:0.5rem;">
+          <li><a href="https://www.usafa.edu/cadet-life/cadet-support-services/chaplain-team/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">USAFA Chaplain Team</a> &mdash; Official Academy chaplaincy information</li>
+          <li>Cadets can request chaplain appointments confidentially at any time</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>&#128591; For Parents</h3>
+        <p>Many parents in our community find that connecting with others who share their faith backgrounds &mdash; and understanding how their cadet can access spiritual support at the Academy &mdash; brings significant peace of mind. If you'd like to connect with other Alabama families who share your faith perspective, reach out to us at <a href="mailto:info@alabamafalcons.org" style="color:var(--blue);font-weight:600;">info@alabamafalcons.org</a>.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- SIBLINGS & WHOLE FAMILY -->
+  <section class="section">
+    <h2>The Whole Family Is Welcome</h2>
+    <p>A cadet at USAFA doesn't just affect their parents &mdash; the entire family is on this journey. Siblings grow up watching what service and sacrifice look like. Spouses and partners navigate the unique pressures of academy family life. Grandparents burst with pride they can barely contain.</p>
+    <p>Our community is for all of you.</p>
+
+    <div class="info-box">
+      <h3>&#128106; Siblings of Cadets</h3>
+      <p>Younger siblings watching an older brother or sister go through USAFA are often profoundly shaped by the experience &mdash; and may be future candidates themselves. Older siblings carry unique pride and sometimes unique worry. We welcome siblings at our events and are developing programming specifically for them.</p>
+    </div>
+
+    <div class="info-box">
+      <h3>&#128140; Spouses &amp; Extended Family</h3>
+      <p>The Academy experience affects everyone who loves a cadet. Spouses, grandparents, aunts, uncles, and close family friends are all part of the Alabama USAFA family and are always welcome at our events and in our community spaces.</p>
+    </div>
+
+    <div class="info-box">
+      <h3>&#127891; Alumni Parents</h3>
+      <p>Parents of USAFA graduates carry hard-won wisdom that can't be found in any guidebook. We're building an Alumni Parent Advisory network of families whose cadets have commissioned &mdash; available as mentors for families in the earlier stages of the journey. If you're a parent of a USAFA graduate and would like to give back, we'd love to hear from you.</p>
+      <p>Contact us: <a href="mailto:info@alabamafalcons.org" style="color:var(--blue);font-weight:600;">info@alabamafalcons.org</a></p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div style="background:var(--light);padding:3rem 2rem;">
+    <div class="cta-box" style="max-width:700px;margin:0 auto;">
+      <h3>Join the Alabama USAFA Family Community</h3>
+      <p>Membership connects you with every program, event, and resource on this page &mdash; and most importantly, with the Alabama families who will become some of your closest friends through this shared experience.</p>
+      <a href="index.html#membership" class="btn btn-gold">Become a Member</a>
+      <a href="index.html#volunteer" class="btn btn-outline">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  </body>
+</html>

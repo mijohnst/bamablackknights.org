@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership Payment - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero { margin-top: 64px; background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%); color: var(--white); padding: 4rem 2rem; text-align: center; min-height: 380px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%); pointer-events: none; }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; animation: fadeInUp 0.8s ease-out; }
+    .hero h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 1rem; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: rgba(245, 245, 240, 0.9); margin-bottom: 0; font-weight: 300; line-height: 1.6; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CONTENT */
+    .section { padding: 3rem 2rem; max-width: 1000px; margin: 0 auto; }
+    .section h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 700; letter-spacing: 0.02em; color: var(--navy); margin-bottom: 1.5rem; position: relative; padding-bottom: 0.75rem; }
+    .section h2::after { content: ''; position: absolute; bottom: 0; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px; }
+    .section p { color: var(--gray); margin-bottom: 1.25rem; font-size: 1rem; }
+
+    /* INFO BOX */
+    .info-box { background: var(--light); border-left: 4px solid var(--blue); border-radius: 4px; padding: 1.5rem 2rem; margin: 2rem 0; }
+    .info-box h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--navy); }
+    .info-box p { color: var(--gray); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+
+    /* PAYMENT METHODS HEADER */
+    .payment-methods-header {
+      text-align: center;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .payment-methods-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    .payment-methods-header .intro-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+    }
+    .payment-options-list {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .payment-options-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .payment-options-list .number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    /* PAY ONLINE (PAYPAL) LOOKUP FORM */
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row-3 { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 1rem; text-align: left; }
+    .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: var(--navy); font-size: 0.9rem; }
+    .form-group input { width: 100%; padding: 0.75rem; border: 1px solid var(--silver2); border-radius: 4px; font-family: var(--font-body); color: var(--navy); font-size: 0.95rem; background: var(--white); }
+    .form-group input:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 2px rgba(0, 53, 148, 0.15); }
+    #duesLookupStatus, #duesPayStatus, #donateStatus { margin: 1rem 0; padding: 1rem; border-radius: 4px; display: none; font-weight: 600; text-align: left; }
+    #duesLookupStatus.success, #duesPayStatus.success, #donateStatus.success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
+    #duesLookupStatus.error, #duesPayStatus.error, #donateStatus.error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+    .dues-years-list { text-align: left; margin: 1rem 0; }
+    .dues-years-list label { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.75rem; border: 1px solid var(--silver2); border-radius: 4px; margin-bottom: 0.5rem; cursor: pointer; font-size: 0.95rem; color: var(--navy); }
+    .dues-years-list label:hover { background: var(--light); }
+    .dues-years-list input { width: auto; }
+    .dues-years-total { font-weight: 700; color: var(--navy); font-size: 1.05rem; margin: 1rem 0; text-align: left; }
+    #duesPaypalButtons, #donatePaypalButtons { max-width: 400px; margin: 1rem auto 0; }
+    .cta-button { display: inline-block; background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%); color: var(--white); padding: 0.9rem 2rem; border-radius: 4px; font-family: var(--font-body); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem; transition: all 0.15s ease; border: none; cursor: pointer; box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,.25); position: relative; top: 0; }
+    .cta-button:hover { background: linear-gradient(180deg, #2166cc 0%, #003080 100%); box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,.2); top: 2px; }
+    .cta-button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* PAYMENT METHOD BOX */
+    .payment-method-box {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 4px 12px rgba(0, 53, 148, 0.1);
+      border: 2px solid var(--light);
+    }
+    .payment-method-box .box-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--light);
+    }
+    .payment-method-box .box-header .icon {
+      font-size: 1.75rem;
+    }
+    .payment-method-box .box-header h4 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0;
+    }
+    .payment-method-box .box-content {
+      text-align: center;
+    }
+    .payment-method-box .box-content p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    /* IMPORTANT NOTICE BOX - Standardized */
+    .important-notice {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+    .important-notice .notice-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .important-notice .notice-header .icon {
+      font-size: 1.25rem;
+    }
+    .important-notice .notice-header h5 {
+      color: #856404;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .important-notice p {
+      color: #856404;
+      font-size: 0.9rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .important-notice p + p {
+      margin-top: 0.5rem;
+    }
+
+    /* PAYMENT BUTTONS */
+    .payment-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin: 1.5rem auto;
+    }
+    .payment-btn {
+      display: inline-block;
+      color: #ffffff;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      position: relative;
+      top: 0;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+    .payment-btn-primary {
+      background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%);
+      box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,0.25);
+    }
+    .payment-btn-primary:hover {
+      background: linear-gradient(180deg, #2166cc 0%, #003080 100%);
+      box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,0.2);
+      top: 2px;
+    }
+    .payment-btn-secondary {
+      background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%);
+      box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,0.25);
+    }
+    .payment-btn-secondary:hover {
+      background: linear-gradient(180deg, #2166cc 0%, #003080 100%);
+      box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,0.2);
+      top: 2px;
+    }
+    .payment-btn .btn-amount {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin-top: 0.25rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    /* ZELLE QR SECTION */
+    .zelle-qr-section {
+      background: #e8edf4;
+      padding: 1.5rem;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .zelle-qr-section h5 {
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .zelle-qr-section img {
+      max-width: 220px;
+      margin: 0 auto 1rem;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .zelle-recipient {
+      background: var(--white);
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+    .zelle-recipient p {
+      margin: 0.25rem 0;
+    }
+    .zelle-recipient .email {
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: monospace;
+      color: var(--navy);
+    }
+
+    /* CHECK EMAIL BUTTON */
+    .email-btn {
+      display: inline-block;
+      background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%);
+      color: #ffffff;
+      border: none;
+      padding: 0.85rem 2.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      position: relative;
+      top: 0;
+      transition: all 0.15s ease;
+    }
+    .email-btn:hover {
+      background: linear-gradient(180deg, #2166cc 0%, #003080 100%);
+      box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,0.2);
+      top: 2px;
+    }
+
+    /* DONATION SECTION */
+    .donation-section {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 3rem 0 2rem;
+      box-shadow: 0 4px 12px rgba(0, 53, 148, 0.1);
+      border: 2px solid var(--light);
+      border-left: 4px solid var(--accent);
+    }
+    .donation-section h4 {
+      color: var(--navy);
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .donation-btn {
+      display: inline-block;
+      background: linear-gradient(180deg, #c41e3a 0%, #8b1528 100%);
+      color: #ffffff;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 4px 0 #6b0f1a, 0 6px 12px rgba(196,30,58,0.25);
+      border-radius: 4px;
+      position: relative;
+      top: 0;
+      transition: all 0.15s ease;
+    }
+    .donation-btn:hover {
+      background: linear-gradient(180deg, #d62d47 0%, #a01a2e 100%);
+      box-shadow: 0 2px 0 #6b0f1a, 0 4px 8px rgba(196,30,58,0.2);
+      top: 2px;
+    }
+
+    /* FOOTER */
+    footer { background: var(--topbar); color: rgba(245, 245, 240, 0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+    footer a { color: rgba(245, 245, 240, 0.8); transition: color 0.2s; }
+    footer a:hover { color: var(--white); }
+    footer p { margin-bottom: 0.5rem; }
+
+    @media (max-width: 768px) { 
+      .hero h1 { font-size: 2rem; }
+      .payment-options-list { flex-direction: column; align-items: center; gap: 0.75rem; }
+      .payment-methods-header h3 { font-size: 1.4rem; }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Complete Your Payment</h1>
+      <p>Thank you for submitting your membership application! Finalize your membership with the USAFA Parents Club of Alabama by completing your payment below.</p>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <section class="section">
+    <h2>Payment Information</h2>
+    <p>Select your payment method below and complete your dues to activate your membership.</p>
+
+    <div class="info-box" id="dues-info-box">
+      <h3>&#128197; Membership Dues</h3>
+      <p><strong>Prep School</strong> &mdash; <span class="dues-amount">$75</span>/year &mdash; For families with cadets at the USAFA Preparatory School.</p>
+      <p><strong>1-Year</strong> &mdash; <span class="dues-amount">$75</span> &mdash; Annual membership for one year.</p>
+      <p><strong>4-Year</strong> &mdash; $275 &mdash; Full Academy membership covering all four years.</p>
+    </div>
+    <script>
+    fetch('settings-feed.php').then(function(r){return r.json();}).then(function(d){
+      if (d.success && d.settings && d.settings.membership_dues) {
+        document.querySelectorAll('.dues-amount').forEach(function(el){ el.textContent = d.settings.membership_dues; });
+      }
+    }).catch(function(){});
+    </script>
+  </section>
+
+  <!-- PAYMENT METHODS SECTION -->
+  <section class="section" style="padding-top: 0;">
+    
+    <!-- PAYMENT METHODS HEADER - Prominent, above all boxes -->
+    <div class="payment-methods-header">
+      <h3>Payment Methods</h3>
+      <p class="intro-text">We offer two convenient ways to pay your membership dues:</p>
+      <ul class="payment-options-list">
+        <li><span class="number">1</span> Pay Online</li>
+        <li><span class="number">2</span> Check</li>
+      </ul>
+    </div>
+
+    <!-- PAYMENT METHOD 0: PAY DUES ONLINE (PAYPAL) -->
+    <div class="payment-method-box">
+      <div class="box-header">
+        <span class="icon">🅿️</span>
+        <h4>Pay Dues Online</h4>
+      </div>
+      <div class="box-content">
+        <p>Look up your cadet below to pay online instantly by card, PayPal balance, or Venmo &mdash; no need to email a receipt, your membership updates automatically.</p>
+
+        <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+          <label for="duesWebsite">Leave this field empty</label>
+          <input type="text" id="duesWebsite" name="duesWebsite" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- LOOKUP -->
+        <div id="duesLookupSection">
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="duesLastName">Cadet Last Name *</label>
+              <input type="text" id="duesLastName" required />
+            </div>
+            <div class="form-group">
+              <label for="duesBirthday">Cadet Birthday *</label>
+              <input type="date" id="duesBirthday" required />
+            </div>
+            <div class="form-group">
+              <label for="duesEmail">Either Parent's Email on File *</label>
+              <input type="email" id="duesEmail" required />
+            </div>
+          </div>
+          <div id="duesLookupStatus" role="status" aria-live="polite"></div>
+          <button type="button" id="duesLookupBtn" class="cta-button">Find My Cadet</button>
+          <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble? Contact <a href="mailto:treasurer@alabamafalcons.org" style="color:var(--blue)">treasurer@alabamafalcons.org</a>.</p>
+        </div>
+
+        <!-- PAY -->
+        <div id="duesPaySection" style="display:none">
+          <h5 id="duesPayHeading" style="color:var(--navy);margin-bottom:.75rem"></h5>
+          <div id="duesNothingDue" style="display:none">
+            <p>Great news &mdash; this cadet's membership dues are fully paid up. Thank you!</p>
+          </div>
+          <div id="duesYearsBody" style="display:none">
+            <p>Select the year(s) you'd like to pay for:</p>
+            <div class="dues-years-list" id="duesYearsList"></div>
+            <div class="dues-years-total" id="duesYearsTotal"></div>
+            <div id="duesPayStatus" role="status" aria-live="polite"></div>
+            <div id="duesPaypalButtons"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT METHOD 2: ZELLE (hidden for now) -->
+    <div class="payment-method-box" style="display:none">
+      <div class="box-header">
+        <span class="icon">📱</span>
+        <h4>Pay by Zelle</h4>
+      </div>
+      <div class="box-content">
+        
+        <!-- Important Notice -->
+        <div class="important-notice">
+          <div class="notice-header">
+            <span class="icon">⚠️</span>
+            <h5>Important: How to Pay with Zelle</h5>
+          </div>
+          <p><strong>Zelle payments must be sent FROM YOUR OWN BANK'S mobile app or online banking.</strong></p>
+          <p>
+            <strong>Step 1:</strong> Open your bank's mobile app or log into your online banking<br>
+            <strong>Step 2:</strong> Find "Send Money with Zelle" (usually in the transfer or payments section)<br>
+            <strong>Step 3:</strong> Send payment to: <strong>usafapcofal@gmail.com</strong><br>
+            <strong>Step 4:</strong> Or scan the QR code below from within your bank's Zelle feature
+          </p>
+          <p style="font-style: italic; margin-top: 0.75rem;">Note: You cannot pay with Zelle by clicking a link or button on this website. You must initiate the payment from your own banking app.</p>
+          <p style="font-style: italic; margin-top: 0.75rem;">Note: Certain financial institutions may restrict or decline Zelle withdrawals due to concerns about fraud or scams. If your withdrawal is rejected, please choose an alternative payment method or contact our treasurer for assistance.</p>
+        </div>
+
+        <!-- Zelle QR Code Section -->
+        <div class="zelle-qr-section">
+          <h5>Zelle QR Code</h5>
+          <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem;">Open your bank's Zelle feature and scan this QR code:</p>
+          <img src="zelle.jpg" alt="Zelle Payment QR Code">
+          <div class="zelle-recipient">
+            <p style="color: var(--navy); font-size: 0.9rem;"><strong>Send payment to:</strong></p>
+            <p class="email">usafapcofal@gmail.com</p>
+            <p style="color: var(--gray); font-size: 0.85rem;">Recipient: USAFA CLUBOFALABAMA</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT METHOD 3: CHECK -->
+    <div class="payment-method-box">
+      <div class="box-header">
+        <span class="icon">✉️</span>
+        <h4>Pay by Check</h4>
+      </div>
+      <div class="box-content">
+        <p>If you prefer to pay by check, please contact our Treasurer for mailing instructions:</p>
+        
+        <!-- Important Notice -->
+        <div class="important-notice">
+          <div class="notice-header">
+            <span class="icon">⚠️</span>
+            <h5>Important: When mailing your check</h5>
+          </div>
+          <p>Please include your <strong>Cadet's full name</strong> in the memo line so we can properly match your payment to your membership application.</p>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <a href="mailto:treasurer@alabamafalcons.org?subject=Check%20Payment%20-%20Membership%20Dues" class="email-btn">📧 Email Treasurer</a>
+          <p style="margin-top:.6rem;font-size:.82rem;color:#5a6a7a;text-align:center">
+            Or email directly: <a href="mailto:treasurer@alabamafalcons.org" style="color:var(--blue);font-weight:600">treasurer@alabamafalcons.org</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DONATION SECTION -->
+    <div class="donation-section" id="donateSection">
+      <h4>💝 Additional Donations Welcome</h4>
+      <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem; line-height: 1.6;">
+        Beyond membership dues, we welcome donations of any amount. Your generosity directly supports our cadets and families throughout their Academy journey.
+      </p>
+      <p style="color: var(--navy); margin-bottom: 1.5rem; font-size: 0.95rem; font-weight: 600;">
+        Donate securely below with PayPal — card, PayPal balance, or Venmo all work, and you'll get an emailed receipt automatically.
+      </p>
+
+      <div id="donateFormWrap" style="max-width: 480px; margin: 0 auto;">
+        <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+          <label for="donateWebsite">Leave this field empty</label>
+          <input type="text" id="donateWebsite" name="donateWebsite" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="donateAmount">Donation Amount (USD) *</label>
+          <input type="number" id="donateAmount" min="1" step="0.01" placeholder="25.00" />
+        </div>
+        <div class="form-group">
+          <label for="donateName">Your Name (optional)</label>
+          <input type="text" id="donateName" placeholder="Jane Doe" />
+        </div>
+        <div class="form-group">
+          <label for="donateEmail">Your Email *</label>
+          <input type="email" id="donateEmail" placeholder="you@example.com" />
+        </div>
+        <div id="donateStatus" role="status" aria-live="polite"></div>
+        <div id="donatePaypalButtons"></div>
+      </div>
+
+      <p style="color: var(--gray); margin-top: 1.5rem; font-size: 0.9rem; text-align: center;">
+        Or use Zelle (<strong>usafapcofal@gmail.com</strong>) to send any amount you wish to contribute. Thank you for supporting the USAFA Parents Club of Alabama!
+      </p>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var verifyToken = '';
+      var duesOptions = [];
+      var duesCadetYears = [];
+      var duesPaidYears = [];
+      var sdkReady = false;
+      var buttonsRendered = false;
+
+      // Mirrors dues_years_price() in admin/lib.php: $75/year, except a
+      // $275 bundle once all 4 of the cadet's undergrad years are paid.
+      // Kept in sync with that function's business rule (not its own
+      // source of truth — the server always recomputes and validates the
+      // real charge in dues-pay-create-order.php) so the total shown here
+      // matches whatever combination of years is actually checked, instead
+      // of a per-checkbox estimate that only held up in one specific order.
+      function duesPrice(paidYears, cadetYears) {
+        if (!cadetYears.length) {
+          return uniq(paidYears).length * 75;
+        }
+        var undergrad = cadetYears.slice(-4);
+        var hasFullUndergrad = undergrad.length === 4 && undergrad.every(function(y) { return paidYears.indexOf(y) !== -1; });
+        if (!hasFullUndergrad) {
+          return cadetYears.filter(function(y) { return paidYears.indexOf(y) !== -1; }).length * 75;
+        }
+        var price = 275;
+        var prepYear = cadetYears.length === 5 ? cadetYears[0] : null;
+        if (prepYear !== null && paidYears.indexOf(prepYear) !== -1) price += 75;
+        return price;
+      }
+      function uniq(arr) {
+        return arr.filter(function(v, i) { return arr.indexOf(v) === i; });
+      }
+
+      // Load the PayPal JS SDK eagerly (client id is not a secret) so the
+      // Smart Buttons are ready to render as soon as a cadet is found.
+      fetch('paypal-client-id.php').then(function(r) { return r.json(); }).then(function(d) {
+        if (!d.success || !d.clientId) return;
+        var s = document.createElement('script');
+        s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(d.clientId) + '&currency=USD&intent=capture&disable-funding=paylater';
+        s.onload = function() { sdkReady = true; renderPaypalButtonsIfReady(); renderDonatePaypalButtonsIfReady(); };
+        document.head.appendChild(s);
+      }).catch(function() {});
+
+      function duesEnterKey(e) {
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('duesLookupBtn').click(); }
+      }
+      document.getElementById('duesLastName').addEventListener('keydown', duesEnterKey);
+      document.getElementById('duesBirthday').addEventListener('keydown', duesEnterKey);
+      document.getElementById('duesEmail').addEventListener('keydown', duesEnterKey);
+
+      document.getElementById('duesLookupBtn').addEventListener('click', async function() {
+        var btn = this;
+        var statusEl = document.getElementById('duesLookupStatus');
+        var last     = document.getElementById('duesLastName').value.trim();
+        var birthday = document.getElementById('duesBirthday').value;
+        var email    = document.getElementById('duesEmail').value.trim();
+
+        statusEl.style.display = 'none';
+        statusEl.className = '';
+
+        if (!last || !birthday || !email) {
+          statusEl.textContent = "Please enter the cadet's last name, birthday, and the email on file.";
+          statusEl.className = 'error';
+          statusEl.style.display = 'block';
+          return;
+        }
+
+        btn.textContent = 'Searching…';
+        btn.disabled = true;
+
+        try {
+          var resp = await fetch('dues-pay-lookup.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              cadetLastName: last,
+              cadetBirthday: birthday,
+              email: email,
+              website: document.getElementById('duesWebsite').value
+            })
+          });
+          var result = await resp.json();
+
+          if (result.success) {
+            verifyToken = result.verifyToken;
+            duesOptions = result.options || [];
+            duesCadetYears = result.cadetYears || [];
+            duesPaidYears = result.paidYears || [];
+            document.getElementById('duesLookupSection').style.display = 'none';
+            document.getElementById('duesPaySection').style.display = 'block';
+            document.getElementById('duesPayHeading').textContent = 'Paying dues for ' + (result.cadetName || 'your cadet');
+
+            if (!duesOptions.length) {
+              document.getElementById('duesNothingDue').style.display = 'block';
+            } else {
+              document.getElementById('duesYearsBody').style.display = 'block';
+              var list = document.getElementById('duesYearsList');
+              list.innerHTML = '';
+              duesOptions.forEach(function(opt) {
+                // Per-box price if that single year were paid on its own —
+                // matches what dues-pay-create-order.php would actually
+                // charge for checking just this box; the accurate combined
+                // total (which reflects the 4-year bundle discount) is
+                // shown separately below, computed by updateDuesTotal().
+                var solo = duesPrice(duesPaidYears.concat([opt.year]), duesCadetYears) - duesPrice(duesPaidYears, duesCadetYears);
+                var label = document.createElement('label');
+                var cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.value = opt.year;
+                cb.className = 'dues-year-checkbox';
+                cb.addEventListener('change', updateDuesTotal);
+                label.appendChild(cb);
+                label.appendChild(document.createTextNode(' ' + opt.year + ' — $' + solo));
+                list.appendChild(label);
+              });
+              updateDuesTotal();
+              renderPaypalButtonsIfReady();
+            }
+          } else {
+            statusEl.textContent = result.error || "We couldn't find a matching record.";
+            statusEl.className = 'error';
+            statusEl.style.display = 'block';
+          }
+        } catch (err) {
+          statusEl.textContent = 'Something went wrong. Please try again or email treasurer@alabamafalcons.org.';
+          statusEl.className = 'error';
+          statusEl.style.display = 'block';
+        }
+
+        btn.textContent = 'Find My Cadet';
+        btn.disabled = false;
+      });
+
+      function selectedYears() {
+        return Array.prototype.slice.call(document.querySelectorAll('.dues-year-checkbox:checked')).map(function(cb) { return cb.value; });
+      }
+
+      function updateDuesTotal() {
+        var years = selectedYears();
+        var total = duesPrice(duesPaidYears.concat(years), duesCadetYears) - duesPrice(duesPaidYears, duesCadetYears);
+        var totalEl = document.getElementById('duesYearsTotal');
+        totalEl.textContent = years.length
+          ? 'Total: $' + total + ' (multi-year discounts are applied automatically)'
+          : '';
+      }
+
+      function renderPaypalButtonsIfReady() {
+        if (!sdkReady || buttonsRendered || !duesOptions.length || typeof paypal === 'undefined') return;
+        buttonsRendered = true;
+        paypal.Buttons({
+          createOrder: function() {
+            var statusEl = document.getElementById('duesPayStatus');
+            statusEl.style.display = 'none';
+            statusEl.className = '';
+            var years = selectedYears();
+            if (!years.length) {
+              statusEl.textContent = 'Please select at least one year to pay for.';
+              statusEl.className = 'error';
+              statusEl.style.display = 'block';
+              return Promise.reject(new Error('No years selected'));
+            }
+            return fetch('dues-pay-create-order.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ verifyToken: verifyToken, years: years })
+            }).then(function(r) { return r.json(); }).then(function(result) {
+              if (!result.success) {
+                statusEl.textContent = result.error || 'Could not start checkout. Please try again.';
+                statusEl.className = 'error';
+                statusEl.style.display = 'block';
+                throw new Error(result.error || 'create order failed');
+              }
+              return result.orderId;
+            });
+          },
+          onApprove: function(data) {
+            var statusEl = document.getElementById('duesPayStatus');
+            return fetch('dues-pay-capture-order.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ verifyToken: verifyToken, orderId: data.orderID })
+            }).then(function(r) { return r.json(); }).then(function(result) {
+              if (result.success) {
+                document.getElementById('duesYearsBody').innerHTML =
+                  '<p style="color:#2e7d32;font-weight:600">Payment received — thank you! Your membership has been updated for ' + (result.years || []).join(', ') + '.</p>';
+              } else {
+                statusEl.textContent = result.error || 'Payment could not be completed. Please try again.';
+                statusEl.className = 'error';
+                statusEl.style.display = 'block';
+              }
+            });
+          },
+          onCancel: function() {
+            var statusEl = document.getElementById('duesPayStatus');
+            statusEl.textContent = 'Checkout cancelled — you can select your year(s) and try again anytime.';
+            statusEl.className = '';
+            statusEl.style.display = 'block';
+          },
+          onError: function() {
+            var statusEl = document.getElementById('duesPayStatus');
+            statusEl.textContent = 'Something went wrong with PayPal. Please try again or use another payment method below.';
+            statusEl.className = 'error';
+            statusEl.style.display = 'block';
+          }
+        }).render('#duesPaypalButtons');
+      }
+
+      var donateButtonsRendered = false;
+
+      function renderDonatePaypalButtonsIfReady() {
+        if (!sdkReady || donateButtonsRendered || typeof paypal === 'undefined') return;
+        donateButtonsRendered = true;
+        paypal.Buttons({
+          createOrder: function() {
+            var statusEl = document.getElementById('donateStatus');
+            statusEl.style.display = 'none';
+            statusEl.className = '';
+            var amount = parseFloat(document.getElementById('donateAmount').value);
+            var email  = document.getElementById('donateEmail').value.trim();
+            var name   = document.getElementById('donateName').value.trim();
+
+            if (!amount || amount <= 0) {
+              statusEl.textContent = 'Please enter a donation amount.';
+              statusEl.className = 'error';
+              statusEl.style.display = 'block';
+              return Promise.reject(new Error('No amount entered'));
+            }
+            if (!email) {
+              statusEl.textContent = 'Please enter your email so we can send you a receipt.';
+              statusEl.className = 'error';
+              statusEl.style.display = 'block';
+              return Promise.reject(new Error('No email entered'));
+            }
+
+            return fetch('donate-create-order.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                amount: amount,
+                donorName: name,
+                donorEmail: email,
+                website: document.getElementById('donateWebsite').value
+              })
+            }).then(function(r) { return r.json(); }).then(function(result) {
+              if (!result.success) {
+                statusEl.textContent = result.error || 'Could not start checkout. Please try again.';
+                statusEl.className = 'error';
+                statusEl.style.display = 'block';
+                throw new Error(result.error || 'create order failed');
+              }
+              return result.orderId;
+            });
+          },
+          onApprove: function(data) {
+            var statusEl = document.getElementById('donateStatus');
+            return fetch('donate-capture-order.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ orderId: data.orderID })
+            }).then(function(r) { return r.json(); }).then(function(result) {
+              if (result.success) {
+                document.getElementById('donateFormWrap').innerHTML =
+                  '<p style="color:#2e7d32;font-weight:600">Thank you for your donation of $' + result.amount + '! A receipt has been sent to your email.</p>';
+              } else {
+                statusEl.textContent = result.error || 'Payment could not be completed. Please try again.';
+                statusEl.className = 'error';
+                statusEl.style.display = 'block';
+              }
+            });
+          },
+          onCancel: function() {
+            var statusEl = document.getElementById('donateStatus');
+            statusEl.textContent = 'Donation cancelled — feel free to try again anytime.';
+            statusEl.className = '';
+            statusEl.style.display = 'block';
+          },
+          onError: function() {
+            var statusEl = document.getElementById('donateStatus');
+            statusEl.textContent = 'Something went wrong with PayPal. Please try again or use Zelle below.';
+            statusEl.className = 'error';
+            statusEl.style.display = 'block';
+          }
+        }).render('#donatePaypalButtons');
+      }
+    })();
+  </script>
+
+  </body>
+</html>
