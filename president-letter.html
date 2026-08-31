@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Message from Our President - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero{margin-top:64px;background:linear-gradient(135deg,var(--navy) 0%,#001e52 100%);color:var(--white);padding:4rem 2rem;text-align:center;min-height:320px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 50%,rgba(138,141,143,0.1) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(138,141,143,0.05) 0%,transparent 50%);pointer-events:none;}
+    .hero-content{position:relative;z-index:2;max-width:800px;animation:fadeInUp 0.8s ease-out;}
+    .hero h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:0.03em;margin-bottom:0.5rem;line-height:1.2;}
+    .hero .subtitle{font-size:1.1rem;color:rgba(245,245,240,0.85);margin-bottom:0;font-weight:300;line-height:1.6;}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+    /* LETTER CONTENT */
+    .letter-section{padding:4rem 2rem;max-width:900px;margin:0 auto;}
+    .letter-section.gray-bg{background:var(--light);}
+    .letter-intro{font-size:1.05rem;color:var(--gray);margin-bottom:2rem;font-style:italic;border-left:3px solid var(--blue);padding-left:1.5rem;}
+    .letter-body{color:var(--gray);font-size:1rem;}
+    .letter-body h2{font-family:var(--font-display);font-size:1.6rem;color:var(--navy);margin:2.5rem 0 1rem;position:relative;padding-bottom:0.5rem;}
+    .letter-body h2::after{content:'';position:absolute;bottom:0;left:0;width:48px;height:3px;background:var(--accent);border-radius:2px;}
+    .letter-body h3{font-family:var(--font-display);font-size:1.2rem;color:var(--navy);margin:1.5rem 0 0.75rem;}
+    .letter-body p{margin-bottom:1.25rem;line-height:1.8;}
+    .letter-body p:empty,.letter-body p>br:only-child{margin:0;height:0;display:none;}
+    .letter-body ul,.letter-body ol{margin:0 0 1.25rem 2rem;}
+    .letter-body li{margin-bottom:0.5rem;}
+    .signature{margin-top:3rem;font-style:italic;color:var(--navy);}
+    .signature p{margin-bottom:.3rem;line-height:1.5;}
+    .signature .name{font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-top:.4rem;margin-bottom:.25rem;font-style:normal;}
+
+    .btn{display:inline-block;padding:0.9rem 2rem;border-radius:4px;font-family:var(--font-body);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;font-size:0.85rem;transition:all .15s ease;cursor:pointer;text-decoration:none;}
+    .btn-primary{background:linear-gradient(180deg,#1a5cbf 0%,#002554 100%);color:#ffffff;border:none;box-shadow:0 4px 0 #001535,0 6px 12px rgba(0,0,0,.25);position:relative;top:0;}
+    .btn-primary:hover{background:linear-gradient(180deg,#2166cc 0%,#003080 100%);box-shadow:0 2px 0 #001535,0 4px 8px rgba(0,0,0,.2);top:2px;}
+
+    /* FOOTER */
+    footer{background:var(--topbar);color:rgba(245,245,240,.6);padding:3rem 2rem 1.5rem;}
+    .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2.5rem;max-width:1100px;margin:0 auto 2rem;}
+    .footer-brand img{width:48px;margin-bottom:1rem;}
+    .footer-brand p{font-size:.85rem;line-height:1.6;}
+    .footer-col h4{color:var(--white);font-family:var(--font-display);font-size:.9rem;margin-bottom:1rem;letter-spacing:.05em;}
+    .footer-col ul{list-style:none;}
+    .footer-col li{margin-bottom:.5rem;}
+    .footer-col a{color:rgba(245,245,240,.7);font-size:.8rem;transition:color .2s;}
+    .footer-col a:hover{color:var(--white);}
+    .footer-bottom{border-top:1px solid rgba(245,245,240,.15);padding-top:1.5rem;text-align:center;font-size:.75rem;display:flex;justify-content:space-between;max-width:1100px;margin:0 auto;flex-wrap:wrap;gap:1rem;}
+    @media(max-width:768px){.footer-bottom{flex-direction:column;text-align:center;}}
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>A Message from Our President</h1>
+      <p class="subtitle">Welcome to the USAFA Parents Club of Alabama</p>
+    </div>
+  </div>
+
+  <!-- LETTER -->
+  <section class="letter-section">
+    <p class="letter-intro">Dear USAFA Alabama Families,</p>
+    <div class="letter-body" id="letter-body">
+      <p>Loading letter&hellip;</p>
+    </div>
+    <div class="letter-body" style="margin-top:2rem">
+      <div class="signature">
+        <p>Sincerely,</p>
+        <p class="name" id="president-name">Kari Johnston</p>
+        <p id="president-title">President, USAFA Parents Club of Alabama</p>
+        <p style="margin-top:.35rem;font-style:normal;font-size:.9rem"><a href="https://alabamafalcons.org" style="color:var(--blue)">alabamafalcons.org</a></p>
+      </div>
+    </div>
+    <div style="text-align:center;margin:2rem 0">
+      <a href="index.html" class="btn btn-primary" style="display:inline-block;text-decoration:none;">Back to Homepage →</a>
+    </div>
+  </section>
+
+  <script>
+  fetch('settings-feed.php?v=' + Date.now()).then(function(r){return r.json();}).then(function(data){
+    if (!data.success || !data.settings) return;
+    var s = data.settings;
+    if (s.president_letter) {
+      var body = document.getElementById('letter-body');
+      // Render rich HTML from editor directly
+      body.innerHTML = s.president_letter;
+    }
+    if (s.president_name)  document.getElementById('president-name').textContent  = s.president_name;
+    if (s.president_title) document.getElementById('president-title').textContent = s.president_title;
+  }).catch(function(){
+    document.getElementById('letter-body').innerHTML = '<p>Letter content unavailable. Please check back later.</p>';
+  });
+  </script>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  </body>
+</html>

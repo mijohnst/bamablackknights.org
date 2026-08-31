@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Resources - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%);
+      color: var(--white);
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 245, 240, 0.9);
+      margin-bottom: 0;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* CONTENT SECTION */
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .section p {
+      color: var(--gray);
+      margin-bottom: 1.25rem;
+      font-size: 1rem;
+    }
+
+    /* INFO HIGHLIGHT */
+    .info-box {
+      background: var(--light);
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+    }
+
+    .info-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--navy);
+    }
+
+    .info-box p {
+      color: var(--gray);
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--topbar);
+      color: rgba(245, 245, 240, 0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: rgba(245, 245, 240, 0.8);
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--white);
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Family Resources</h1>
+      <p>Essential resources and support for Alabama families throughout the USAFA journey — from application to graduation and beyond.</p>
+    </div>
+  </div>
+
+  <!-- ADMISSIONS RESOURCES -->
+  <section class="section">
+    <h2>USAFA Admissions Resources</h2>
+    <p>The Academy provides several key resources for candidates and families navigating the admissions process:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#9993;&#65039;</span> USAFA Admissions Liaison Officers (ALOs)</h3>
+      <p>ALOs are active duty, reserve, or retired Air Force officers assigned to each region who guide candidates through the admissions process. To find or contact your ALO, log in to your <a href="https://usafacrm.experience.crmforce.mil/usafacademy/s/login/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">USAFA application portal</a>. For issues reaching your ALO, contact your assigned admissions team.</p>
+      <p>We have a dedicated page with more information about the ALO program and our local liaisons &mdash; visit our <a href="liaison.html" style="color:var(--blue);font-weight:600;">Liaison Officers page</a> to learn more.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128218;</span> Helpful Links</h3>
+      <p><a href="https://www.academyadmissions.com/apply/cycle/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Admissions Cycle</a> &mdash; Timeline and milestones for the full application process</p>
+      <p><a href="https://www.academyadmissions.com/contact/admissions-resources/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Admissions Resources</a> &mdash; Additional resources to help you through the application</p>
+      <p><a href="https://www.academyadmissions.com/contact/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Contact USAFA Admissions</a> &mdash; Have a representative contact you directly</p>
+      <p><a href="liaison.html" style="color:var(--blue);font-weight:600;">Congressional Nominations &amp; Alabama Contacts</a> &mdash; Nomination process, categories, and Alabama delegation contacts</p>
+    </div>
+
+    <p>If you need help connecting with your local ALO or navigating the nomination process, contact our club at <a href="mailto:info@alabamafalcons.org" style="color:var(--blue);font-weight:600;">info@alabamafalcons.org</a> and we'll help point you in the right direction.</p>
+  </section>
+
+  <!-- BCT PREPARATION -->
+  <section class="section">
+    <h2>Basic Cadet Training (BCT) Preparation</h2>
+    <p>Basic Cadet Training is six weeks of intensive military training that begins on I-Day (In-processing Day). BCT consists of two phases: "First Beast" in the cadet area focused on military fundamentals and physical conditioning, and "Second Beast" at Jacks Valley for field training. Here are key resources:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128218;</span> Key Resources</h3>
+      <p><a href="https://www.academyadmissions.com/the-experience/military/basic-training/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">BCT Overview</a> &mdash; What to expect during both phases of Basic Cadet Training</p>
+      <p><a href="https://www.academyadmissions.com/faq/training/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Training FAQ</a> &mdash; Answers to common questions about BCT and cadet training</p>
+      <p><a href="https://www.academyadmissions.com/requirements/physical/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Candidate Fitness Assessment (CFA)</a> &mdash; Physical fitness requirements and how to prepare</p>
+      <p><a href="https://www.usafa.edu/in-processing-day/appointee-handbook/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">In-processing Day</a> &mdash; Appointee handbook with packing list and I-Day instructions</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128231;</span> Communication During BCT</h3>
+      <p>During BCT, cadets have limited communication privileges. Families typically receive updates through official USAFA channels and can send letters. Our Parents Club coordinates care package drives so your cadet knows Alabama is supporting them.</p>
+    </div>
+  </section>
+
+  <!-- FINANCIAL AID -->
+  <section class="section">
+    <h2>Financial Aid & Scholarships</h2>
+    <p>While tuition at USAFA is fully covered, families should understand the financial aspects of the Academy experience:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128181;</span> What's Covered</h3>
+      <p>The Academy provides full tuition, room and board, medical and dental care, and a monthly stipend for cadets. However, there are initial out-of-pocket costs for uniforms, computers, and other supplies that are deducted from the cadet's pay during their first year.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128179;</span> Initial Costs</h3>
+      <p>Appointees should expect approximately $3,000-$4,000 in initial expenses during their first year, deducted from their monthly pay. This covers:</p>
+      <p>• Uniforms and military equipment<br>
+      • Computer and software<br>
+      • Textbooks and academic supplies<br>
+      • Miscellaneous fees</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#127891;</span> External Scholarships</h3>
+      <p>Cadets cannot accept external scholarships that would pay them directly. However, some organizations offer one-time gifts or support. Contact <a href="https://www.usafa.edu/about/financials/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">USAFA Financial Services</a> with questions about specific scholarship offers.</p>
+    </div>
+  </section>
+
+  <!-- HEALTH & MEDICAL -->
+  <section class="section">
+    <h2>Health & Medical Resources</h2>
+    <p>Understanding the medical qualification process and ongoing health support:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128657;</span> DoDMERB</h3>
+      <p><a href="https://dodmerb.tricare.osd.mil/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Department of Defense Medical Examination Review Board</a> — Handles all medical qualification exams</p>
+      <p>All service academy candidates must pass a medical examination administered by DoDMERB. The process begins after you receive your candidate number. If you receive a disqualification, you may be eligible for a waiver.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#127973;</span> Cadet Health Care</h3>
+      <p>All cadets receive comprehensive medical and dental care at the Academy. The <a href="https://www.usafa.edu/life-at-the-academy/health-wellness/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">10th Medical Group</a> provides on-site care, and cadets have access to mental health services and counseling.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#129658;</span> Medical Waivers</h3>
+      <p>If you receive a medical disqualification, work closely with your Regional Admissions Counselor and medical providers to gather supporting documentation for a waiver request. Many common conditions are waiverable.</p>
+    </div>
+  </section>
+
+  <!-- PARENT SUPPORT -->
+  <section class="section">
+    <h2>Parent & Family Support</h2>
+    <p>You're not alone on this journey. Here are resources to connect with other USAFA families:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#129309;</span> USAFA Parents</h3>
+      <p><a href="https://www.usafa.org/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Association of Graduates (AOG)</a> — Official alumni and parent organization</p>
+      <p><a href="https://www.facebook.com/groups/USAFAParents" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">USAFA Parents Facebook Group</a> — Active community of current cadet parents</p>
+      <p>Connect with thousands of current and former cadet families for support, advice, and community.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#127881;</span> Key Events for Families</h3>
+      <p>• <strong>Inprocessing Day (I-Day)</strong> — Drop off your appointee and witness the oath of office<br>
+      • <strong>Acceptance Day</strong> — End of BCT, cadets formally join the Cadet Wing<br>
+      • <strong>Parents' Weekend</strong> — Annual fall weekend for families to visit<br>
+      • <strong>Recognition</strong> — Fourth-class cadets (freshmen) earn their shoulder boards<br>
+      • <strong>Ring Dance</strong> — Junior year milestone celebrating class rings<br>
+      • <strong>Graduation Week</strong> — Culmination of four years at the Academy</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#127968;</span> Visiting the Academy</h3>
+      <p><a href="https://www.usafa.af.mil/News/Photos/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Visitor Information</a> — Plan your trip to Colorado Springs</p>
+      <p>The Academy welcomes visitors year-round. The <a href="https://www.usafa.af.mil/About/Visitor-Information/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Barry Goldwater Visitor Center</a> offers tours and exhibits. Note that access to cadet areas requires proper credentials and coordination.</p>
+    </div>
+  </section>
+
+  <!-- ACADEMIC SUPPORT -->
+  <section class="section">
+    <h2>Academic Support & Success</h2>
+    <p>The Academy's rigorous academic program challenges even the strongest students:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128215;</span> Academic Programs</h3>
+      <p><a href="https://www.usafa.edu/academics/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Academic Programs Overview</a> — Majors and curriculum information</p>
+      <p><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Academic Calendar</a> — Important dates and breaks</p>
+      <p>All cadets complete a core curriculum plus their chosen major. The Academy offers 32 majors across sciences, engineering, humanities, and social sciences.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#129299;</span> Academic Support Services</h3>
+      <p>Cadets have access to tutoring, academic coaching, writing centers, and faculty office hours. The Academy wants cadets to succeed and provides robust support systems for those who seek help.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3><span aria-hidden="true">&#128187;</span> Validation & Advanced Placement</h3>
+      <p>Cadets may validate (test out of) courses based on AP scores, IB credits, or validation testing. Successfully validating courses allows cadets to pursue advanced coursework or additional majors/minors.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parents Mentorship - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%);
+      color: var(--white);
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 245, 240, 0.9);
+      margin-bottom: 0;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* CONTENT SECTION */
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+      color: var(--navy);
+      border-bottom: 2px solid var(--navy);
+      padding-bottom: 0.75rem;
+    }
+
+    .section p {
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+      color: var(--gray);
+    }
+
+    /* NEEDS BY YEAR GRID */
+    .needs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .year-card {
+      background: var(--light);
+      border-top: 4px solid var(--navy);
+      padding: 1.75rem;
+      border-radius: 4px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .year-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 53, 148, 0.15);
+    }
+
+    .year-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.01em;
+    }
+
+    .year-card ul {
+      list-style: none;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .year-card li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .year-card li::before {
+      content: '▪';
+      position: absolute;
+      left: 0;
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    /* TESTIMONIAL SECTION */
+    .testimonials {
+      background: var(--light);
+      padding: 3rem 2rem;
+      margin: 3rem -2rem 0 -2rem;
+    }
+
+    .testimonials-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .testimonials-content h2 {
+      border-bottom: 2px solid var(--navy);
+      padding-bottom: 0.75rem;
+      margin-bottom: 2rem;
+      color: var(--navy);
+    }
+
+    .testimonial {
+      background: var(--white);
+      padding: 2rem;
+      border-left: 4px solid var(--accent);
+      margin-bottom: 1.5rem;
+      border-radius: 2px;
+    }
+
+    .testimonial p {
+      font-style: italic;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+
+    .testimonial-author {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--gray);
+      letter-spacing: 0.01em;
+    }
+
+    /* FAQ SECTION */
+    .faq-item {
+      border-bottom: 1px solid var(--silver2);
+      padding: 1.5rem 0;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-question {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--navy);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      font-size: 1rem;
+      letter-spacing: 0.01em;
+    }
+
+    .faq-question:hover {
+      color: var(--gray);
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      color: var(--navy);
+      transition: transform 0.3s;
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 1rem;
+      color: var(--gray);
+      line-height: 1.8;
+    }
+
+    .faq-answer.open {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* CTA BUTTON */
+    .cta-button {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--white);
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      border: 2px solid var(--navy);
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--navy);
+    }
+
+    /* FORM SECTION */
+    .form-section {
+      background: var(--light);
+      padding: 2rem;
+      border-radius: 4px;
+      margin: 2rem 0;
+    }
+
+    .form-section h3 {
+      font-family: var(--font-display);
+      color: var(--navy);
+      margin-bottom: 1rem;
+      letter-spacing: 0.01em;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--silver2);
+      border-radius: 4px;
+      font-family: var(--font-body);
+      color: var(--navy);
+      font-size: 0.95rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 2px rgba(0, 53, 148, 0.1);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--topbar);
+      color: var(--white);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 4rem;
+    }
+
+    footer a {
+      color: var(--silver2);
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--white);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .section {
+        padding: 2rem 1rem;
+      }
+
+      .section h2 {
+        font-size: 1.5rem;
+      }
+
+      .needs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials {
+        margin: 3rem -1rem 0 -1rem;
+        padding: 2rem 1rem;
+      }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+  <!-- NAVIGATION -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Parents Mentorship Program</h1>
+      <p>The Air Force Academy journey is transformative—and you don't have to navigate it alone. Connect with experienced parents who've been through it all.</p>
+    </div>
+  </section>
+
+  <!-- ABOUT THE PROGRAM -->
+  <section class="section">
+    <h2>About the Program</h2>
+    <p>The Academy experience is demanding, rewarding, and unlike anything else. From the anxiety of Beast Basics to the pride of Acceptance Day, from managing the "roller coaster" of freshman year to celebrating graduation—our mentors have walked this path.</p>
+    <p>This program matches new families with experienced Academy parents who provide honest, practical guidance. Our mentors understand the unique challenges: limited communication during Beast, the no-contact period, managing expectations, navigating military culture, supporting academic pressures, and everything in between.</p>
+    <p>Whether you're an appointee family preparing for I-Day or parents with a cadet in their final year, our mentorship community is here to answer your questions, ease your concerns, and help you make the most of this extraordinary four-year experience.</p>
+  </section>
+
+  <!-- WHAT PARENTS NEED BY YEAR -->
+  <section class="section">
+    <h2>What Parents Typically Need Support With</h2>
+    <div class="needs-grid">
+      <div class="year-card">
+        <h3>Fourth Class (Freshman)</h3>
+        <ul>
+          <li>Beast Basics preparation & expectations</li>
+          <li>No-contact period coping</li>
+          <li>Interpreting BCT letters</li>
+          <li>Parents' Weekend logistics</li>
+          <li>Academic adjustment support</li>
+          <li>SAMI inspections & room standards</li>
+          <li>Recognition challenges</li>
+        </ul>
+      </div>
+      <div class="year-card">
+        <h3>Third Class (Sophomore)</h3>
+        <ul>
+          <li>Course load & major selection</li>
+          <li>Summer training experiences</li>
+          <li>Increased leadership roles</li>
+          <li>Social life & pass privileges</li>
+          <li>Financial management tips</li>
+          <li>Building confidence & independence</li>
+        </ul>
+      </div>
+      <div class="year-card">
+        <h3>Second Class (Junior)</h3>
+        <ul>
+          <li>Leadership responsibilities</li>
+          <li>Advanced academic courses</li>
+          <li>Summer assignments & internships</li>
+          <li>Flight training milestones</li>
+          <li>Mentoring younger cadets</li>
+          <li>Career field selection</li>
+        </ul>
+      </div>
+      <div class="year-card">
+        <h3>First Class (Senior)</h3>
+        <ul>
+          <li>Commissioning preparation</li>
+          <li>Officer development focus</li>
+          <li>First duty station planning</li>
+          <li>Military family logistics</li>
+          <li>Graduation & celebration</li>
+          <li>Active duty transition</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testimonials-content">
+      <h2>What Parents Are Saying</h2>
+      
+      <div class="testimonial">
+        <p>"When our daughter arrived at the Academy, we had so many questions. Our mentor helped us understand what to expect during Beast and reassured us that the letters that sounded concerning were completely normal. Having someone who'd been through it made all the difference."</p>
+        <div class="testimonial-author">— Parents of Class of 2027</div>
+      </div>
+
+      <div class="testimonial">
+        <p>"The most helpful thing was learning that 'it's like a roller coaster'—our cadet would write a tough letter, and we'd panic. But by the time we got it, he'd already bounced back. Our mentor helped us stay calm and trust the process."</p>
+        <div class="testimonial-author">— Parents of Class of 2026</div>
+      </div>
+
+      <div class="testimonial">
+        <p>"I never knew how strict room inspections would be, or what SAMI meant, or how much military knowledge they had to memorize. Our mentor explained all of it and helped us be more informed and supportive."</p>
+        <div class="testimonial-author">— Parents of Class of 2028</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <h2>Frequently Asked Questions</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>How does mentorship work?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Your mentor will reach out within a week of matching. Communication is flexible—you can connect via email, phone, text, or video call, as often as you need. Most mentors provide their contact information and welcome questions at any time, though some prefer scheduled check-ins.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Do I need to be a club member to participate?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        While membership in the USAFA Parents Club of Alabama is encouraged, mentorship support is available to all Alabama families with cadets at the Academy. We want every family to have access to experienced guidance.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Can I become a mentor?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Absolutely! We're always looking for experienced parents willing to share their knowledge. You can have a cadet at any stage—freshman through recent graduate—and you don't need to be an expert. We just ask that you're willing to listen, share your honest experience, and help new families navigate the journey.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>What if I have concerns about my cadet?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Mentors provide peer support and guidance, not professional counseling. If you have serious concerns about your cadet's wellbeing, contact the USAFA Parent Liaison at 1-877-268-3383 or (719) 333-3828. The Academy has resources including counselors, chaplains, and medical staff to support cadets.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Is there a cost?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        No. The USAFA Parents Club of Alabama mentorship program is completely free. It's our way of supporting families and strengthening our community.
+      </div>
+    </div>
+  </section>
+
+  <!-- MENTORSHIP FORM -->
+  <section class="section">
+    <div class="form-section">
+      <h3>Join the Mentorship Program</h3>
+      <p>Whether you're seeking guidance or ready to mentor, we'd love to connect with you. Fill out this form and we'll match you with the right mentor or mentees.</p>
+      <form id="mentorshipForm">
+        <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+          <label for="website">Leave this field empty</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" />
+        </div>
+        <div class="form-group">
+          <label for="cadetYear">Cadet Class Year *</label>
+          <input type="text" id="cadetYear" name="cadetYear" placeholder="e.g., 2025, 2026" required />
+        </div>
+        <div class="form-group">
+          <label for="type">I'm interested as a... *</label>
+          <select id="type" name="type" required>
+            <option value="">Select an option</option>
+            <option value="mentee">Mentee (seeking guidance)</option>
+            <option value="mentor">Mentor (offering guidance)</option>
+            <option value="both">Both (want to receive & give guidance)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell us about your situation or what you can offer *</label>
+          <textarea id="message" name="message" required placeholder="e.g., 'My son just got his appointment and we're nervous about Beast,' or 'Our daughter just commissioned and we'd love to help new families'"></textarea>
+        </div>
+        <button type="submit" class="cta-button">Submit Interest</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  <script>
+
+    // FAQ toggle — keyboard-accessible: focusable via tabindex, activatable
+    // with Enter/Space (not just a mouse click), and announces open/closed
+    // state via aria-expanded for screen readers.
+    document.querySelectorAll('.faq-question').forEach(question => {
+      const answer = question.nextElementSibling;
+      question.setAttribute('role', 'button');
+      question.setAttribute('tabindex', '0');
+      question.setAttribute('aria-expanded', 'false');
+      function toggleFaq() {
+        const toggle = question.querySelector('.faq-toggle');
+        const open = answer.classList.toggle('open');
+        toggle.textContent = open ? '−' : '+';
+        question.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      question.addEventListener('click', toggleFaq);
+      question.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFaq(); }
+      });
+    });
+
+    // Form submission
+    document.getElementById('mentorshipForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const form = this;
+      const statusEl = document.getElementById('formStatus') || createStatusElement();
+      const btn = form.querySelector('button[type="submit"]');
+      
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+      statusEl.style.display = 'none';
+      statusEl.className = '';
+      
+      try {
+        const payload = {
+          name: form.querySelector('#name').value.trim(),
+          email: form.querySelector('#email').value.trim(),
+          iam: form.querySelector('#type').value,
+          classYear: form.querySelector('#cadetYear').value.trim(),
+          message: form.querySelector('#message').value.trim() + '\n\nMentorship Type: ' + form.querySelector('#type').value + '\nPhone: ' + (form.querySelector('#phone').value.trim() || 'Not provided'),
+          website: form.querySelector('#website').value
+        };
+        
+        const resp = await fetch('contact-form.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          statusEl.textContent = data.message || 'Thank you for your interest! We will contact you soon.';
+          statusEl.className = 'success';
+          statusEl.style.display = 'block';
+          form.reset();
+          setTimeout(function() { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 2000);
+        } else {
+          throw new Error(data.message || 'Submission failed');
+        }
+      } catch(err) {
+        statusEl.textContent = err.message || 'Something went wrong. Please email us directly at info@alabamafalcons.org';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+      } finally {
+        btn.textContent = 'Submit Interest';
+        btn.disabled = false;
+      }
+    });
+    
+    function createStatusElement() {
+      const el = document.createElement('div');
+      el.id = 'formStatus';
+      el.style.cssText = 'margin: 1rem 0; padding: 1rem; border-radius: 4px; display: none; font-weight: 600;';
+      document.getElementById('mentorshipForm').parentElement.insertBefore(el, document.getElementById('mentorshipForm'));
+      return el;
+    }
+    
+    // Add status styles if not already present
+    if (!document.querySelector('style[data-form-status]')) {
+      const style = document.createElement('style');
+      style.setAttribute('data-form-status', 'true');
+      style.textContent = `
+        #formStatus.success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
+        #formStatus.error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+      `;
+      document.head.appendChild(style);
+    }
+  </script>
+</body>
+</html>

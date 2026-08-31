@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letters to Your Cadet - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero { margin-top: 64px; background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%); color: var(--white); padding: 4rem 2rem; text-align: center; min-height: 380px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%); pointer-events: none; }
+    .hero-banner { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 2.5rem; max-width: 1000px; animation: fadeInUp 0.8s ease-out; }
+    .hero-banner-logo { height: 120px; width: auto; flex-shrink: 0; }
+    .hero-banner-flag { height: 100px; width: auto; flex-shrink: 0; border-radius: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    .hero-content { max-width: 620px; }
+    .hero-club-name { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.5rem; line-height: 1.15; }
+    .hero h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: 0.02em; color: rgba(245, 245, 240, 0.85); margin-bottom: 0.75rem; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: rgba(245, 245, 240, 0.9); margin-bottom: 0; font-weight: 300; line-height: 1.6; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) {
+      .hero-banner { flex-direction: column; gap: 1.25rem; }
+      .hero-banner-logo { height: 90px; }
+      .hero-banner-flag { height: 70px; }
+      .hero-club-name { font-size: 1.8rem; }
+    }
+
+    /* CONTENT */
+    .section { padding: 3rem 2rem; max-width: 800px; margin: 0 auto; }
+    .section h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 700; letter-spacing: 0.02em; color: var(--navy); margin-bottom: 1.5rem; position: relative; padding-bottom: 0.75rem; }
+    .section h2::after { content: ''; position: absolute; bottom: 0; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px; }
+    .section p { color: var(--gray); margin-bottom: 1.25rem; font-size: 1rem; }
+
+    /* FORM */
+    .form-section { background: var(--light); padding: 2rem; border-radius: 4px; margin: 2rem 0; }
+    .form-section h3 { font-family: var(--font-display); color: var(--navy); margin-bottom: 0.5rem; letter-spacing: 0.01em; }
+    .form-section > p { color: var(--gray); margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row-3 { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: var(--navy); font-size: 0.9rem; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--silver2); border-radius: 4px; font-family: var(--font-body); color: var(--navy); font-size: 0.95rem; background: var(--white); }
+    .form-group textarea { resize: vertical; min-height: 260px; line-height: 1.6; }
+    .form-group textarea::placeholder { color: #b0b8c4; font-style: italic; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 2px rgba(0, 53, 148, 0.15); }
+
+    .cta-button { display: inline-block; background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%); color: var(--white); padding: 0.9rem 2rem; border-radius: 4px; font-family: var(--font-body); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem; transition: all 0.15s ease; border: none; cursor: pointer; box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,.25); position: relative; top: 0; }
+    .cta-button:hover { background: linear-gradient(180deg, #2166cc 0%, #003080 100%); box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,.2); top: 2px; }
+    .cta-button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .cta-button.full-width { width: 100%; }
+    .btn-secondary-sm { background: #fff; color: var(--navy); border: 1px solid var(--silver2); padding: .4rem .8rem; border-radius: 4px; font-size: .78rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); text-decoration: none; display: inline-block; }
+    .btn-secondary-sm:hover { background: var(--light); }
+    .btn-danger-sm { background: #fff; color: #A6192E; border: 1px solid #f0c4cb; padding: .4rem .8rem; border-radius: 4px; font-size: .78rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .btn-danger-sm:hover { background: #fff3f3; }
+
+    .info-notice { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 1rem 1.25rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.92rem; color: #2e7d32; line-height: 1.5; }
+    .info-notice strong { color: #1b5e20; }
+
+    #formStatus, #lookupStatus { margin: 1rem 0; padding: 1rem; border-radius: 4px; display: none; font-weight: 600; }
+    #formStatus.success, #lookupStatus.success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
+    #formStatus.error, #lookupStatus.error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+
+    /* SAVED LETTERS LIST */
+    .letters-list { margin-top: 2.5rem; }
+    .letter-card { background: var(--white); border: 1px solid #e4e9f0; border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; padding: 1rem 1.25rem; margin-bottom: .75rem; }
+    .letter-card .letter-meta { font-size: .78rem; color: var(--gray); margin-bottom: .4rem; }
+    .letter-card .letter-snippet { font-size: .9rem; color: var(--navy); margin-bottom: .75rem; white-space: pre-wrap; max-height: 4.5em; overflow: hidden; }
+    .letter-card .letter-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer { background: var(--topbar); color: rgba(245, 245, 240, 0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+    footer a { color: rgba(245, 245, 240, 0.8); transition: color 0.2s; }
+    footer a:hover { color: var(--white); }
+    footer p { margin-bottom: 0.5rem; }
+
+    @media (max-width: 768px) { .hero h1 { font-size: 2rem; } }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-banner">
+      <img src="logo01.png" alt="USAFA Parents Club of Alabama" class="hero-banner-logo" />
+      <div class="hero-content">
+        <div class="hero-club-name">USAFA Parents Club of Alabama</div>
+        <h1>Letters to Your Cadet</h1>
+        <p>Write your cadet a letter and save it — that's all you need to do. The club collects every family's letters together and sends them out for printing.</p>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" class="hero-banner-flag" title="Alabama" aria-hidden="true">
+        <rect width="60" height="40" fill="white"/>
+        <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+        <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- LOOKUP + LETTER -->
+  <section class="section">
+    <h2>Write a Letter</h2>
+
+    <!-- Open/closed is controlled from admin/parent-letters.php's toggle
+         button (site_settings key parent_letters_open), fetched below via
+         settings-feed.php -- both start hidden to avoid flashing the wrong
+         one before that fetch resolves. -->
+    <div id="lettersClosedNotice" class="info-notice" style="display:none;background:#fff3e0;border-left-color:#f57c00;color:#8a5000;">
+      <strong>Letter submissions are now closed for this cycle.</strong> Thank you to everyone who wrote a letter for their cadet! We're collecting all the saved letters now and sending them out for printing. Watch our Facebook group and club emails for when submissions reopen.
+    </div>
+
+    <div id="lettersOpenWrap" style="display:none">
+    <p>Find your family's record below to get started.</p>
+
+    <div class="form-section">
+      <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+        <label for="website">Leave this field empty</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- FIND YOUR RECORD -->
+      <div id="lookupSection">
+        <h3>Find Your Record</h3>
+        <p>Enter your cadet's last name, birthday, and a parent email address already on file.</p>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="lookupLastName">Cadet Last Name *</label>
+            <input type="text" id="lookupLastName" required />
+          </div>
+          <div class="form-group">
+            <label for="lookupBirthday">Cadet Birthday *</label>
+            <input type="date" id="lookupBirthday" required />
+          </div>
+          <div class="form-group">
+            <label for="lookupEmail">Either Parent's Email on File *</label>
+            <input type="email" id="lookupEmail" required />
+          </div>
+        </div>
+        <div id="lookupStatus"></div>
+        <button type="button" id="lookupBtn" class="cta-button">Find My Record</button>
+        <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact site support at <a href="mailto:mijohnst@alabamafalcons.org" style="color:var(--blue)">mijohnst@alabamafalcons.org</a>.</p>
+      </div>
+
+      <!-- LETTER COMPOSE -->
+      <div id="letterBody" style="display:none">
+        <h3 id="composeHeading">Write a Letter</h3>
+        <div class="info-notice">
+          <strong>You're all set once you save.</strong> There's no need to download or forward your letter — the Parents Club collects everyone's letters together and sends them out for printing. (Want a personal copy for yourself? You can still download a PDF anytime from "Your Saved Letters" below.)
+        </div>
+        <div class="form-group">
+          <textarea id="letterText"></textarea>
+        </div>
+        <div id="formStatus"></div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button type="button" id="saveBtn" class="cta-button">Save Letter</button>
+          <button type="button" id="newLetterBtn" class="btn-secondary-sm" style="display:none">+ Start a New Letter</button>
+        </div>
+
+        <div class="letters-list">
+          <h3>Your Saved Letters</h3>
+          <div id="lettersContainer"><p style="color:var(--gray);font-size:.9rem">No letters saved yet.</p></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  <script>
+    // Show the write-a-letter form or the closed notice depending on the
+    // officer-controlled toggle (admin/parent-letters.php). Both start
+    // hidden in the HTML so there's no flash of the wrong one while this
+    // loads; a failed/slow fetch fails open (shows the form) since the
+    // backend endpoints enforce the same setting independently regardless.
+    fetch('settings-feed.php').then(function(r) { return r.json(); }).then(function(d) {
+      var open = true;
+      if (d && d.success && d.settings && Object.prototype.hasOwnProperty.call(d.settings, 'parent_letters_open')) {
+        open = d.settings.parent_letters_open !== '0';
+      }
+      document.getElementById(open ? 'lettersOpenWrap' : 'lettersClosedNotice').style.display = 'block';
+    }).catch(function() {
+      document.getElementById('lettersOpenWrap').style.display = 'block';
+    });
+
+    var verifyToken   = '';
+    var cadetFirst    = '';
+    var currentLetterId = 0;
+
+    function escHtml(s) {
+      return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function lookupEnterKey(e) {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('lookupBtn').click(); }
+    }
+    document.getElementById('lookupLastName').addEventListener('keydown', lookupEnterKey);
+    document.getElementById('lookupBirthday').addEventListener('keydown', lookupEnterKey);
+    document.getElementById('lookupEmail').addEventListener('keydown', lookupEnterKey);
+
+    document.getElementById('lookupBtn').addEventListener('click', async function() {
+      var btn = this;
+      var statusEl = document.getElementById('lookupStatus');
+      var last     = document.getElementById('lookupLastName').value.trim();
+      var birthday = document.getElementById('lookupBirthday').value;
+      var email    = document.getElementById('lookupEmail').value.trim();
+
+      statusEl.style.display = 'none';
+      statusEl.className = '';
+
+      if (!last || !birthday || !email) {
+        statusEl.textContent = 'Please enter the cadet last name, birthday, and the email on file.';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+        return;
+      }
+
+      btn.textContent = 'Searching…';
+      btn.disabled = true;
+
+      try {
+        var resp = await fetch('parent-letters-lookup.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cadetLastName: last,
+            cadetBirthday: birthday,
+            email: email,
+            website: document.getElementById('website').value
+          })
+        });
+        var result = await resp.json();
+
+        if (result.success) {
+          verifyToken = result.verifyToken;
+          cadetFirst  = result.cadetFirstName || 'your cadet';
+          document.getElementById('lookupSection').style.display = 'none';
+          document.getElementById('letterBody').style.display = 'block';
+          startNewLetter();
+          lettersCache = result.letters;
+          renderLetters(result.letters);
+          window.scrollTo({ top: document.getElementById('letterBody').offsetTop - 100, behavior: 'smooth' });
+        } else {
+          statusEl.textContent = result.error || "We couldn't find a matching record.";
+          statusEl.className = 'error';
+          statusEl.style.display = 'block';
+        }
+      } catch (err) {
+        statusEl.textContent = 'Error looking up your record. Please try again or contact secretary@alabamafalcons.org';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+      } finally {
+        btn.textContent = 'Find My Record';
+        btn.disabled = false;
+      }
+    });
+
+    function exampleLetterText() {
+      return 'Dear ' + cadetFirst + ',\n\n'
+        + "We are so proud of everything you're accomplishing at the Academy. Every day brings new challenges, and every day you rise to meet them.\n\n"
+        + "Remember why you started this journey, and know that your family is cheering you on from home. Keep your chin up on the tough days — they don't last, but the strength you're building does.\n\n"
+        + "We can't wait to see you again and hear all about it.\n\n"
+        + "Love,\nMom & Dad";
+    }
+
+    function startNewLetter() {
+      currentLetterId = 0;
+      document.getElementById('composeHeading').textContent = 'Write a Letter';
+      var letterText = document.getElementById('letterText');
+      letterText.value = '';
+      letterText.placeholder = exampleLetterText();
+      document.getElementById('newLetterBtn').style.display = 'none';
+      letterText.focus();
+    }
+    document.getElementById('newLetterBtn').addEventListener('click', startNewLetter);
+
+    function renderLetters(letters) {
+      var container = document.getElementById('lettersContainer');
+      if (!letters || letters.length === 0) {
+        container.innerHTML = '<p style="color:var(--gray);font-size:.9rem">No letters saved yet.</p>';
+        return;
+      }
+      container.innerHTML = letters.map(function(l) {
+        var d = new Date(l.updated_at.replace(' ', 'T'));
+        var dateStr = d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+        var pdfUrl = 'parent-letters-pdf.php?id=' + l.id + '&token=' + encodeURIComponent(verifyToken);
+        return '<div class="letter-card">' +
+          '<div class="letter-meta">Saved ' + dateStr + '</div>' +
+          '<div class="letter-snippet">' + escHtml(l.letter_body) + '</div>' +
+          '<div class="letter-actions">' +
+            '<button type="button" class="btn-secondary-sm" onclick="editLetter(' + l.id + ')">Edit</button>' +
+            '<a href="' + pdfUrl + '" target="_blank" class="btn-secondary-sm">Download PDF</a>' +
+            '<button type="button" class="btn-danger-sm" onclick="deleteLetter(' + l.id + ')">Delete</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    var lettersCache = [];
+
+    function editLetter(id) {
+      var letter = lettersCache.find(function(l) { return String(l.id) === String(id); });
+      if (!letter) return;
+      currentLetterId = id;
+      document.getElementById('composeHeading').textContent = 'Editing Letter';
+      document.getElementById('letterText').value = letter.letter_body;
+      document.getElementById('newLetterBtn').style.display = 'inline-block';
+      window.scrollTo({ top: document.getElementById('letterBody').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    async function deleteLetter(id) {
+      if (!confirm('Delete this letter? This cannot be undone.')) return;
+      try {
+        var resp = await fetch('parent-letters-save.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ verifyToken: verifyToken, action: 'delete', letterId: id })
+        });
+        var result = await resp.json();
+        if (result.success) {
+          lettersCache = result.letters;
+          renderLetters(result.letters);
+          if (String(currentLetterId) === String(id)) startNewLetter();
+        } else {
+          alert(result.error || 'Could not delete that letter.');
+        }
+      } catch (err) {
+        alert('Error deleting letter. Please try again.');
+      }
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async function() {
+      var btn = this;
+      var statusEl = document.getElementById('formStatus');
+      var body = document.getElementById('letterText').value.trim();
+
+      statusEl.style.display = 'none';
+      statusEl.className = '';
+
+      if (!body) {
+        statusEl.textContent = 'Write something before saving.';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+        return;
+      }
+
+      btn.textContent = 'Saving…';
+      btn.disabled = true;
+
+      try {
+        var resp = await fetch('parent-letters-save.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ verifyToken: verifyToken, action: 'save', letterId: currentLetterId, letterBody: body })
+        });
+        var result = await resp.json();
+
+        if (result.success) {
+          currentLetterId = result.letterId;
+          lettersCache = result.letters;
+          renderLetters(result.letters);
+          document.getElementById('newLetterBtn').style.display = 'inline-block';
+          document.getElementById('composeHeading').textContent = 'Editing Letter';
+          statusEl.textContent = 'Letter saved!';
+          statusEl.className = 'success';
+          statusEl.style.display = 'block';
+        } else {
+          statusEl.textContent = result.error || 'Something went wrong. Please try again.';
+          statusEl.className = 'error';
+          statusEl.style.display = 'block';
+        }
+      } catch (err) {
+        statusEl.textContent = 'Error saving your letter. Please try again.';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+      } finally {
+        btn.textContent = 'Save Letter';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

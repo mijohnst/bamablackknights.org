@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Congressional Nominations - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%);
+      color: var(--white);
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 245, 240, 0.9);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: rgba(245,245,240,0.85);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* LAYOUT */
+    .section {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section + .section {
+      padding-top: 0;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .section p {
+      color: var(--gray);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--light);
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .info-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+      color: var(--navy);
+    }
+
+    .info-box p {
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .info-box p:last-child { margin-bottom: 0; }
+
+    .info-box a {
+      color: var(--blue);
+      font-weight: 600;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .info-box a:hover { border-bottom-color: var(--blue); }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(0, 53, 148, 0.12);
+      margin: 0 2rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* CONGRESS CARDS */
+    .congress-group-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--navy);
+      margin-bottom: 1.25rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    h2.congress-group-title::after {
+      content: none;
+    }
+
+    .congress-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .congress-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(166, 25, 46, 0.25);
+      border-top: 4px solid #A6192E;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .congress-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(0, 53, 148, 0.2);
+      background: #b8cce8;
+    }
+
+    .congress-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .congress-card .role {
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .congress-card .phone {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin: 0.5rem 0;
+    }
+
+    .congress-card .website-link {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--blue);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .congress-card .website-link:hover {
+      border-bottom-color: var(--blue);
+    }
+
+    /* FAQ */
+    .faq-item {
+      border-bottom: 1px solid rgba(0, 53, 148, 0.15);
+      padding: 1rem 0;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--navy);
+      padding: 0.5rem 0;
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0.5rem 0 1rem;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    .faq-answer.open {
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--topbar);
+      color: rgba(245, 245, 240, 0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: rgba(245, 245, 240, 0.8);
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--white); }
+    footer p { margin-bottom: 0.5rem; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+      <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+        <rect width="60" height="40" fill="white"/>
+        <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+        <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+      </svg></small></span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li class="nav-dropdown">
+        <a href="index.html#about">About</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#leadership">Leadership</a></li>
+          <li><a href="president-letter.html">President's Letter</a></li>
+          <li><a href="index.html#photos">Member Photos</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="#">Programs</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="liaison.html">Liaison</a></li>
+          <li><a href="familyresources.html">Family Resources</a></li>
+          <li><a href="cadetconnection.html">Cadet Connection</a></li>
+          <li><a href="communitysupport.html">Community Support</a></li>
+          <li><a href="nominations.html">Alabama Delegation</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="index.html#membership">Get Involved</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#membership">Membership</a></li>
+          <li><a href="update.html">Update Your Information</a></li>
+          <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+          <li><a href="job-drop-night.html">Job Drop Night</a></li>
+          <li><a href="sponsorship.html">Sponsors</a></li>
+          <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="index.html#events">Events</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#events">Club Events</a></li>
+          <li><a href="events-calendar.html">Academy Calendar</a></li>
+          <li><a href="gallery.html">Event Photos</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown">
+        <a href="index.html#usafa-news">Resources</a>
+        <ul class="nav-dropdown-menu">
+          <li><a href="index.html#usafa-news">USAFA News</a></li>
+          <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+          <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+          <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+          <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+          <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+          <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+          <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+          <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+          <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#volunteer">Contact</a></li>
+      <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Prospective Cadets</div>
+      <h1>Congressional Nominations</h1>
+      <p>A nomination is the essential first step toward an appointment to the United States Air Force Academy. Here&rsquo;s what Alabama families need to know and who to contact.</p>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <h2>Congressional Nominations</h2>
+    <p>Securing an appointment to the United States Air Force Academy requires a nomination. This is a competitive process, and candidates should seek a nomination in each of the categories for which they are eligible. The majority of applicants obtain nominations through congressional or Vice Presidential channels.</p>
+    <p>Each Member of Congress can have up to five cadets attending each service academy at any given time. For each vacancy that occurs, the Member may nominate up to 15 candidates to compete for appointment. The nomination process typically begins in the spring of a candidate's junior year of high school, and deadlines are generally in the fall of the senior year.</p>
+    <p>We encourage prospective cadet families to reach out to <strong>all three</strong> of their nominating sources &mdash; both U.S. Senators and their U.S. Representative &mdash; to maximize their chances.</p>
+
+    <div class="info-box">
+      <h3>&#128197; Key Deadline</h3>
+      <p>The Academy must receive notice of your nomination by <strong>January 31</strong>. If a nomination is not received by this deadline, the candidate will be disqualified. Nominations do not carry over from year to year. Since the process of securing a nomination is lengthy, it is recommended you request them during the spring semester of your junior year.</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- NOMINATION CATEGORIES -->
+  <section class="section">
+    <h2>Nomination Categories</h2>
+    <p>When seeking a nomination, first determine the categories for which you are eligible:</p>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3>Congressional Nominations</h3>
+      <p>The most common path. You may seek nominations from both of your state's U.S. Senators and your U.S. Representative. Each nominating authority has its own application process and deadlines &mdash; contact their offices directly for materials.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3>Vice Presidential Nomination</h3>
+      <p>The Vice President may nominate candidates from the nation at large and is allowed to have a maximum of five cadets attending the Academy at one time. All pre-candidates are eligible. The Academy will make recommendations to the Vice President based upon your admissions file. You may also complete the <a href="https://www.whitehouse.gov/service-academy-nomination/" target="_blank" rel="noopener">online application at whitehouse.gov</a>. The deadline is January 31.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <h3>Military-Affiliated Nominations</h3>
+      <p>The Academy reserves a select number of appointments for children of career military personnel (active duty, reserve, or retired with at least eight years of service), children of deceased or disabled veterans, children of Medal of Honor recipients, and honor graduates of military preparatory schools. If you fall into one of these categories, check with USAFA Admissions for specific eligibility requirements.</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONGRESSIONAL CONTACTS -->
+  <section class="section">
+    <h2>Alabama Congressional Contacts</h2>
+    <p>Below are contact details for Alabama's congressional delegation. Each office handles nomination requests independently and sets its own application timeline and requirements. We recommend contacting all three offices early in your candidate's junior year.</p>
+  </section>
+
+  <!-- SENATORS -->
+  <section class="section">
+    <h2 class="congress-group-title">U.S. Senators</h2>
+    <div class="congress-grid">
+      <div class="congress-card">
+        <h3>Sen. Tommy Tuberville</h3>
+        <p class="role">U.S. Senator (R)</p>
+        <p class="phone">DC Phone: (202) 224-4124</p>
+        <p class="phone">Mobile: (251) 308-7233</p>
+        <p class="phone">Huntsville: (256) 692-7500</p>
+        <a href="https://www.tuberville.senate.gov/contact/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Sen. Katie Britt</h3>
+        <p class="role">U.S. Senator (R)</p>
+        <p class="phone">DC Phone: (202) 224-5744</p>
+        <p class="phone">Montgomery: (334) 777-1150</p>
+        <a href="https://www.britt.senate.gov/contact/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPRESENTATIVES -->
+  <section class="section">
+    <h2 class="congress-group-title">U.S. House of Representatives</h2>
+    <div class="congress-grid">
+      <div class="congress-card">
+        <h3>Rep. Barry Moore</h3>
+        <p class="role">1st District (R)</p>
+        <p class="phone">DC Phone: (202) 225-2901</p>
+        <a href="https://barrymoore.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Rep. Shomari Figures</h3>
+        <p class="role">2nd District (D)</p>
+        <p class="phone">DC Phone: (202) 225-4931</p>
+        <a href="https://figures.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Rep. Mike Rogers</h3>
+        <p class="role">3rd District (R)</p>
+        <p class="phone">DC Phone: (202) 225-3261</p>
+        <a href="https://mikerogers.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Rep. Robert Aderholt</h3>
+        <p class="role">4th District (R)</p>
+        <p class="phone">DC Phone: (202) 225-4876</p>
+        <a href="https://aderholt.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Rep. Dale Strong</h3>
+        <p class="role">5th District (R)</p>
+        <p class="phone">DC Phone: (202) 225-4801</p>
+        <a href="https://strong.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Rep. Gary Palmer</h3>
+        <p class="role">6th District (R)</p>
+        <p class="phone">DC Phone: (202) 225-4921</p>
+        <a href="https://palmer.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+      <div class="congress-card">
+        <h3>Rep. Terri Sewell</h3>
+        <p class="role">7th District (D)</p>
+        <p class="phone">DC Phone: (202) 225-2665</p>
+        <a href="https://sewell.house.gov/" target="_blank" rel="noopener" class="website-link">Visit Official Website &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOMINATIONS FAQ -->
+  <section class="section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>How many nominations should my student apply for?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        We recommend applying to all three of your available nominating sources: both U.S. Senators and your U.S. Representative. Each source evaluates candidates independently, so applying to all three maximizes your chances of receiving a nomination. There is no penalty for applying to multiple sources.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>When should we start the nomination process?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        Most congressional offices open their nomination application process in the spring of the candidate's junior year of high school. Deadlines typically fall between October and November of the senior year, but each office sets its own schedule. We recommend contacting all three offices early in the spring of junior year to request application materials and deadlines.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>What does the nomination process involve?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        While each office has its own process, most require a written application, letters of recommendation, a personal essay, transcripts, and test scores. Many offices also conduct in-person interviews with their selection committees. The process is competitive but straightforward &mdash; your ALO and our club can help you prepare.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Is a nomination the same as an appointment?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        No. A nomination is a required step, but not a guarantee of appointment. After receiving a nomination, the candidate must also be found qualified by the Academy through their separate admissions process, which evaluates academics, fitness, leadership, and character. Both a nomination and a finding of qualification are required to receive an appointment (offer of admission).
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>What if my student doesn't receive a nomination?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        There are other paths to the Academy beyond congressional nominations, including Vice Presidential nominations, military-affiliated nominations (for children of career military, Medal of Honor recipients, etc.), and the USAFA Preparatory School. Your ALO can help explore all available options. Many successful cadets applied more than once before receiving an appointment.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>How can the Parents Club help with nominations?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-answer">
+        While the club does not have influence over nomination decisions, we can connect your family with experienced parents who have been through the process, help you understand timelines and expectations, and put you in touch with your local ALO. Contact us at <a href="mailto:info@alabamafalcons.org" style="color:var(--blue);">info@alabamafalcons.org</a> for guidance.
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  <script>
+
+    // FAQ toggle — keyboard-accessible: focusable via tabindex, activatable
+    // with Enter/Space (not just a mouse click), and announces open/closed
+    // state via aria-expanded for screen readers.
+    document.querySelectorAll('.faq-question').forEach(question => {
+      const answer = question.nextElementSibling;
+      question.setAttribute('role', 'button');
+      question.setAttribute('tabindex', '0');
+      question.setAttribute('aria-expanded', 'false');
+      function toggleFaq() {
+        const toggle = question.querySelector('.faq-toggle');
+        const open = answer.classList.toggle('open');
+        toggle.textContent = open ? '−' : '+';
+        question.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      question.addEventListener('click', toggleFaq);
+      question.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFaq(); }
+      });
+    });
+  </script>
+</body>
+</html>

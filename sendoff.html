@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointee Class of 2030 Sendoff Registration – USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* PAGE HEADER */
+    .page-header{background:linear-gradient(135deg,#002554 0%,#003594 100%);padding:7rem 2rem 4rem;text-align:center;color:var(--white);}
+    .page-header h1{font-family:var(--font-display);font-size:2.4rem;letter-spacing:.05em;margin-bottom:.5rem;}
+    .page-header p{color:rgba(245,245,240,.7);font-size:1.05rem;max-width:580px;margin:0 auto;}
+
+    /* FORM SECTION */
+    .form-section{max-width:720px;margin:3rem auto 4rem;padding:0 1.5rem;}
+    .form-card{background:#fff;border:1px solid rgba(0,53,148,.12);border-radius:10px;padding:2.5rem 2.5rem 2rem;box-shadow:0 4px 24px rgba(0,37,84,.08);}
+    .form-card h2{font-family:var(--font-display);font-size:1.15rem;color:var(--navy);letter-spacing:.06em;margin-bottom:1.75rem;padding-bottom:.75rem;border-bottom:2px solid var(--light);}
+
+    @media(max-width:560px){
+      .form-card{padding:1.75rem 1.25rem 1.5rem;}
+    }
+
+    /* FOOTER */
+    footer{background:#002554;border-top:1px solid rgba(138,141,143,.2);padding:4rem 2rem 2rem;}
+    .footer-grid{max-width:1100px;margin:0 auto 3rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;}
+    .footer-brand img{width:80px;margin-bottom:1rem;border-radius:4px;}
+    .footer-brand p{font-size:.85rem;color:rgba(245,245,240,.75);line-height:1.8;max-width:280px;}
+    .footer-col h4{font-family:var(--font-display);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--silver2);margin-bottom:1rem;}
+    .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+    .footer-col li a{font-size:.85rem;color:rgba(245,245,240,.75);transition:color .2s;}
+    .footer-col li a:hover{color:var(--silver2);}
+    .footer-bottom{max-width:1100px;margin:0 auto;padding-top:1.5rem;border-top:1px solid rgba(245,245,240,.08);display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:rgba(245,245,240,.35);flex-wrap:wrap;gap:.5rem;}
+    @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:560px){.footer-grid{grid-template-columns:1fr;}}
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1>Appointee Class of 2030 Sendoff Registration</h1>
+  <p>Complete the form below to register for the USAFA Parents Club of Alabama sendoff event. <strong style="color:#f5c842;">This event is for new appointees and their families only.</strong></p>
+</div>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="form-card">
+    <h2 style="text-align:center;">Registration Closed</h2>
+    <div style="background:#fde8e8;border:1px solid #f5b7b7;border-radius:6px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:.95rem;color:#9b2226;line-height:1.7;text-align:center;">
+      <strong style="font-size:1.05rem;">The RSVP deadline of May 22, 2026 has passed.</strong><br/>
+      Online registration is now closed.
+    </div>
+    <div style="background:#e8edf4;border:1px solid #c8d0dc;border-radius:6px;padding:1.25rem 1.5rem;font-size:.92rem;color:#003594;line-height:1.75;text-align:center;">
+      If you missed the deadline and would still like to attend, please contact our club Secretary directly:<br/>
+      <a href="mailto:secretary@alabamafalcons.org" style="color:#003594;font-weight:600;text-decoration:underline;">secretary@alabamafalcons.org</a>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTIONS -->
+<div style="text-align:center;margin:0 auto 3rem;padding:0 1.5rem;">
+  <p style="font-size:.75rem;font-family:'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;color:#6B6E70;margin-bottom:.5rem;">Getting to the Event</p>
+  <a href="New_Appointee_Lunch_2026.pdf" target="_blank" rel="noopener"
+     style="display:inline-flex;align-items:center;gap:.4rem;border:1px solid #003594;color:#003594;font-size:.78rem;font-family:'Cinzel',serif;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .9rem;border-radius:5px;transition:background .2s,color .2s;"
+     onmouseover="this.style.background='#003594';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#003594'">
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download Directions PDF
+  </a>
+</div>
+
+<p style="text-align:center;font-size:.78rem;color:#6B6E70;margin:-1.5rem auto 3rem;padding:0 1.5rem;">
+  Questions? Contact Shelley Kavlick at <a href="mailto:secretary@alabamafalcons.org" style="color:#003594;">secretary@alabamafalcons.org</a>.
+</p>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+    <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+  </div>
+</footer>
+
+</body>
+</html>

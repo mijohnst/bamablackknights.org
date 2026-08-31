@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership Application - USAFA Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* HERO */
+    .hero { margin-top: 64px; background: linear-gradient(135deg, var(--navy) 0%, #001e52 100%); color: var(--white); padding: 4rem 2rem; text-align: center; min-height: 380px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 50%, rgba(138, 141, 143, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(138, 141, 143, 0.05) 0%, transparent 50%); pointer-events: none; }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; animation: fadeInUp 0.8s ease-out; }
+    .hero h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 1rem; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: rgba(245, 245, 240, 0.9); margin-bottom: 0; font-weight: 300; line-height: 1.6; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CONTENT */
+    .section { padding: 3rem 2rem; max-width: 1000px; margin: 0 auto; }
+    .section h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 700; letter-spacing: 0.02em; color: var(--navy); margin-bottom: 1.5rem; position: relative; padding-bottom: 0.75rem; }
+    .section h2::after { content: ''; position: absolute; bottom: 0; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px; }
+    .section p { color: var(--gray); margin-bottom: 1.25rem; font-size: 1rem; }
+
+    /* FORM */
+    .form-section { background: var(--light); padding: 2rem; border-radius: 4px; margin: 2rem 0; }
+    .form-section h3 { font-family: var(--font-display); color: var(--navy); margin-bottom: 0.5rem; letter-spacing: 0.01em; }
+    .form-section > p { color: var(--gray); margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 0.6fr; gap: 1rem; }
+    @media (max-width: 600px) {
+      .form-row, .form-row-3, .form-row-4 { grid-template-columns: 1fr; }
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: var(--navy); font-size: 0.9rem; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--silver2); border-radius: 4px; font-family: var(--font-body); color: var(--navy); font-size: 0.95rem; background: var(--white); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 2px rgba(0, 53, 148, 0.15); }
+    .form-group .hint { font-size: 0.78rem; color: var(--gray); margin-top: 0.25rem; }
+
+    .radio-group { display: flex; gap: 1.5rem; margin-top: 0.25rem; }
+    .radio-group label { font-weight: 400; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+    .radio-group input[type="radio"] { width: auto; accent-color: var(--navy); }
+
+    .form-divider { border: none; border-top: 2px solid rgba(0, 53, 148, 0.15); margin: 2rem 0 1.5rem; }
+    .form-divider-label { font-family: var(--font-display); font-size: 1.1rem; color: var(--navy); margin-bottom: 1rem; }
+
+    .cta-button { display: inline-block; background: linear-gradient(180deg, #1a5cbf 0%, #002554 100%); color: var(--white); padding: 0.9rem 2rem; border-radius: 4px; font-family: var(--font-body); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem; transition: all 0.15s ease; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 0 #001535, 0 6px 12px rgba(0,0,0,.25); position: relative; top: 0; }
+    .cta-button:hover { background: linear-gradient(180deg, #2166cc 0%, #003080 100%); box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,.2); top: 2px; }
+    .cta-button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    #formStatus { margin: 1rem 0; padding: 1rem; border-radius: 4px; display: none; font-weight: 600; }
+    #formStatus.success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
+    #formStatus.error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+
+    /* INFO BOX */
+    .info-box { background: var(--light); border-left: 4px solid var(--blue); border-radius: 4px; padding: 1.5rem 2rem; margin: 2rem 0; }
+    .info-box h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--navy); }
+    .info-box p { color: var(--gray); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+
+    /* FOOTER */
+    footer { background: var(--topbar); color: rgba(245, 245, 240, 0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+    footer a { color: rgba(245, 245, 240, 0.8); transition: color 0.2s; }
+    footer a:hover { color: var(--white); }
+    footer p { margin-bottom: 0.5rem; }
+
+    @media (max-width: 768px) { .hero h1 { font-size: 2rem; } }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo01.png" alt="USAFA Parents Club of Alabama" />
+    <span>USAFA Parents Club<small>of Alabama <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" height="11" width="16" style="display:inline-block;vertical-align:middle;margin-left:.15rem;" title="Alabama" aria-hidden="true">
+      <rect width="60" height="40" fill="white"/>
+      <line x1="0" y1="0" x2="60" y2="40" stroke="#A6192E" stroke-width="9"/>
+      <line x1="60" y1="0" x2="0" y2="40" stroke="#A6192E" stroke-width="9"/>
+    </svg></small></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html#about">About</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#leadership">Leadership</a></li>
+        <li><a href="president-letter.html">President's Letter</a></li>
+        <li><a href="index.html#photos">Member Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="#">Programs</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="liaison.html">Liaison</a></li>
+        <li><a href="familyresources.html">Family Resources</a></li>
+        <li><a href="cadetconnection.html">Cadet Connection</a></li>
+        <li><a href="communitysupport.html">Community Support</a></li>
+        <li><a href="nominations.html">Alabama Delegation</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#membership">Get Involved</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#membership">Membership</a></li>
+        <li><a href="update.html">Update Your Information</a></li>
+        <li><a href="index.html#volunteer">Volunteer with Us</a></li>
+        <li><a href="job-drop-night.html">Job Drop Night</a></li>
+        <li><a href="sponsorship.html">Sponsors</a></li>
+        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#events">Events</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#events">Club Events</a></li>
+        <li><a href="events-calendar.html">Academy Calendar</a></li>
+        <li><a href="gallery.html">Event Photos</a></li>
+      </ul>
+    </li>
+    <li class="nav-dropdown">
+      <a href="index.html#usafa-news">Resources</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#usafa-news">USAFA News</a></li>
+        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
+        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
+        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
+        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
+        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
+        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
+        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
+        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
+        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#volunteer">Contact</a></li>
+    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
+  </ul>
+</nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Membership Application</h1>
+      <p>New to the club? Join us! Already a member? Use this form to renew and keep your information current. Connect with families across Alabama who share the pride and journey of having a cadet at the Air Force Academy.</p>
+    </div>
+  </div>
+
+  <!-- MEMBERSHIP APPLICATION -->
+  <section class="section">
+    <h2>Membership Application</h2>
+    <p>Membership in the USAFA Parents Club of Alabama provides access to our community of cadet families, mentorship programs, care package drives, event invitations, and a network of parents who understand the unique USAFA experience.</p>
+
+    <div style="background: #e3f2fd; border: 2px solid #1976d2; border-radius: 6px; padding: 1.25rem 1.5rem; margin: 1.5rem 0;">
+      <p style="color: #0d47a1; font-size: 1rem; font-weight: 600; margin: 0; display: flex; align-items: flex-start; gap: 0.75rem;">
+        <span style="font-size: 1.25rem;">🔄</span>
+        <span><strong>Current members:</strong> Please complete this form each year to keep your contact information up to date and ensure you receive all club communications.</span>
+      </p>
+    </div>
+
+    <div class="form-section">
+      <h3>Member Information</h3>
+      <p>Please fill in the information below to complete your membership application.</p>
+
+      <!-- Progress indicator -->
+      <div style="display:flex;gap:0;margin-bottom:1.75rem;overflow:hidden;border-radius:4px">
+        <div id="form-progress" style="display:flex;width:100%">
+          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#003594;color:#fff;border-right:1px solid rgba(255,255,255,.2)">① Cadet</div>
+          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a;border-right:1px solid rgba(255,255,255,.4)">② Consent</div>
+          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a;border-right:1px solid rgba(255,255,255,.4)">③ Parents</div>
+          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a;border-right:1px solid rgba(255,255,255,.4)">④ Address</div>
+          <div style="flex:1;padding:.45rem .5rem;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#e1e5eb;color:#5a6a7a">⑤ Contact</div>
+        </div>
+      </div>
+
+      <form id="membershipForm">
+        <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+          <label for="website">Leave this field empty</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <!-- CADET INFORMATION -->
+        <div class="form-divider-label" id="fs-cadet">Cadet Information</div>
+
+        <div class="form-row-4">
+          <div class="form-group">
+            <label for="cadetFirstName">Cadet First Name *</label>
+            <input type="text" id="cadetFirstName" name="cadetFirstName" required />
+          </div>
+          <div class="form-group">
+            <label for="cadetMiddleName">Cadet Middle Name</label>
+            <input type="text" id="cadetMiddleName" name="cadetMiddleName" />
+          </div>
+          <div class="form-group">
+            <label for="cadetLastName">Cadet Last Name *</label>
+            <input type="text" id="cadetLastName" name="cadetLastName" required />
+          </div>
+          <div class="form-group">
+            <label for="cadetSuffix">Suffix</label>
+            <input type="text" id="cadetSuffix" name="cadetSuffix" maxlength="20" placeholder="Jr., III" />
+          </div>
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="nickname">Nickname</label>
+            <input type="text" id="nickname" name="nickname" />
+          </div>
+          <div class="form-group">
+            <label for="cadetEmail">Cadet Email *</label>
+            <input type="email" id="cadetEmail" name="cadetEmail" required />
+            <div class="hint">Valid email format (e.g., name@example.com)</div>
+          </div>
+          <div class="form-group">
+            <label for="cadetGender">Gender</label>
+            <select id="cadetGender" name="cadetGender">
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="graduationYear">Graduation Year *</label>
+            <select id="graduationYear" name="graduationYear" required>
+              <option value="">Select graduation year</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="Prep School">Prep School</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cadetDOB">Date of Birth</label>
+            <input type="date" id="cadetDOB" name="cadetDOB" />
+          </div>
+          <div class="form-group">
+            <label for="poBox">PO Box</label>
+            <input type="text" id="poBox" name="poBox" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="squadron">Squadron</label>
+            <input type="text" id="squadron" name="squadron" />
+          </div>
+          <div class="form-group">
+            <label for="cadetPhone">Cadet Cell Phone</label>
+            <input type="tel" id="cadetPhone" name="cadetPhone" />
+          </div>
+        </div>
+
+        <!-- CONSENT -->
+        <hr class="form-divider" />
+        <div class="form-divider-label" id="fs-consent">Photo &amp; Directory Consent</div>
+
+        <div class="form-group">
+          <label>May we use cadet photos on our website and publications?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="photoConsent" value="Yes" /> Yes</label>
+            <label><input type="radio" name="photoConsent" value="No" /> No</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>May we include your family information in our member directory?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="directoryConsent" value="Yes" /> Yes</label>
+            <label><input type="radio" name="directoryConsent" value="No" /> No</label>
+          </div>
+        </div>
+
+        <!-- PARENT/FAMILY INFORMATION -->
+        <hr class="form-divider" />
+        <div class="form-divider-label" id="fs-parents">Parent/Family Information</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parent1FirstName">Primary Contact First Name *</label>
+            <input type="text" id="parent1FirstName" name="parent1FirstName" required />
+          </div>
+          <div class="form-group">
+            <label for="parent1LastName">Primary Contact Last Name *</label>
+            <input type="text" id="parent1LastName" name="parent1LastName" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parent2FirstName">Secondary Contact First Name</label>
+            <input type="text" id="parent2FirstName" name="parent2FirstName" />
+          </div>
+          <div class="form-group">
+            <label for="parent2LastName">Secondary Contact Last Name</label>
+            <input type="text" id="parent2LastName" name="parent2LastName" />
+          </div>
+        </div>
+
+        <!-- ADDRESS INFORMATION -->
+        <hr class="form-divider" />
+        <div class="form-divider-label" id="fs-address">Primary Contact Address</div>
+
+        <div class="form-group">
+          <label for="streetAddress">Street Address *</label>
+          <input type="text" id="streetAddress" name="streetAddress" required />
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input type="text" id="city" name="city" required />
+          </div>
+          <div class="form-group">
+            <label for="state">State *</label>
+            <input type="text" id="state" name="state" placeholder="AL" required />
+          </div>
+          <div class="form-group">
+            <label for="zipCode">Zip Code *</label>
+            <input type="text" id="zipCode" name="zipCode" required />
+          </div>
+        </div>
+
+        <hr class="form-divider" />
+        <div class="form-divider-label">Secondary Contact Address</div>
+
+        <div class="form-group">
+          <label>Does the Secondary Contact share the same address?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="parent2AddressSame" value="Yes" checked onchange="toggleParent2Address(this)"> Yes, same address</label>
+            <label><input type="radio" name="parent2AddressSame" value="No" onchange="toggleParent2Address(this)"> No, different address</label>
+          </div>
+        </div>
+
+        <div id="parent2-address" style="display:none">
+          <div class="form-group">
+            <label for="parent2Street">Street Address</label>
+            <input type="text" id="parent2Street" name="parent2Street" />
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="parent2City">City</label>
+              <input type="text" id="parent2City" name="parent2City" />
+            </div>
+            <div class="form-group">
+              <label for="parent2State">State</label>
+              <input type="text" id="parent2State" name="parent2State" placeholder="AL" />
+            </div>
+            <div class="form-group">
+              <label for="parent2Zip">Zip Code</label>
+              <input type="text" id="parent2Zip" name="parent2Zip" />
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT INFORMATION -->
+        <hr class="form-divider" />
+        <div class="form-divider-label" id="fs-contact">Contact Information</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parent1Phone">Primary Contact Phone *</label>
+            <input type="tel" id="parent1Phone" name="parent1Phone" required />
+            <div class="hint">Numbers only (10+ digits)</div>
+          </div>
+          <div class="form-group">
+            <label for="parent2Phone">Secondary Contact Phone</label>
+            <input type="tel" id="parent2Phone" name="parent2Phone" />
+            <div class="hint">Numbers only (10+ digits)</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="parent1Email">Primary Contact Email *</label>
+            <input type="email" id="parent1Email" name="parent1Email" required />
+            <div class="hint">Valid email format (e.g., name@example.com)</div>
+          </div>
+          <div class="form-group">
+            <label for="parent2Email">Secondary Contact Email</label>
+            <input type="email" id="parent2Email" name="parent2Email" />
+            <div class="hint">Valid email format (e.g., name@example.com)</div>
+          </div>
+        </div>
+
+        <div id="formStatus"></div>
+        <button type="submit" class="cta-button">Proceed to Payment Options</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 USAFA Parents Club of Alabama. All rights reserved.</span>
+      <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
+    </div>
+  </footer>
+
+  <script>
+
+    // Form validation helper functions
+    function validateEmail(email) {
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function validatePhoneNumber(phone) {
+      // Remove all non-digit characters
+      var digitsOnly = phone.replace(/\D/g, '');
+      // Must be at least 10 digits
+      return digitsOnly.length >= 10;
+    }
+
+    function validateSquadron(squadron) {
+      // Must be at least 3 characters
+      return squadron.trim().length >= 3;
+    }
+
+    // Progress indicator — highlight active step on scroll
+    (function() {
+      var steps = [
+        {id:'fs-cadet',   idx:0},
+        {id:'fs-consent', idx:1},
+        {id:'fs-parents', idx:2},
+        {id:'fs-address', idx:3},
+        {id:'fs-contact', idx:4}
+      ];
+      var bars = document.querySelectorAll('#form-progress > div');
+      function updateProgress() {
+        var active = 0;
+        steps.forEach(function(s) {
+          var el = document.getElementById(s.id);
+          if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.6) active = s.idx;
+        });
+        bars.forEach(function(b, i) {
+          b.style.background = i <= active ? '#003594' : '#e1e5eb';
+          b.style.color      = i <= active ? '#fff'    : '#5a6a7a';
+        });
+      }
+      window.addEventListener('scroll', updateProgress, {passive:true});
+      updateProgress();
+    })();
+
+    function toggleParent2Address(radio) {
+      document.getElementById('parent2-address').style.display =
+        radio.value === 'No' ? 'block' : 'none';
+    }
+
+    function validateForm(formData) {
+      var errors = [];
+
+      // Validate primary email
+      var parent1Email = formData.get('parent1Email');
+      if (parent1Email && !validateEmail(parent1Email)) {
+        errors.push('Primary Contact Email must be a valid email address (e.g., user@example.com)');
+      }
+
+      // Validate secondary email if provided
+      var parent2Email = formData.get('parent2Email');
+      if (parent2Email && !validateEmail(parent2Email)) {
+        errors.push('Secondary Contact Email must be a valid email address (e.g., user@example.com)');
+      }
+
+      // Validate cadet email if provided
+      var cadetEmail = formData.get('cadetEmail');
+      if (cadetEmail && !validateEmail(cadetEmail)) {
+        errors.push('Cadet Email must be a valid email address (e.g., user@example.com)');
+      }
+
+      // Validate primary phone
+      var parent1Phone = formData.get('parent1Phone');
+      if (parent1Phone && !validatePhoneNumber(parent1Phone)) {
+        errors.push('Primary Contact Phone must contain at least 10 digits (numbers only)');
+      }
+
+      // Validate secondary phone if provided
+      var parent2Phone = formData.get('parent2Phone');
+      if (parent2Phone && !validatePhoneNumber(parent2Phone)) {
+        errors.push('Secondary Contact Phone must contain at least 10 digits (numbers only)');
+      }
+
+      return errors;
+    }
+
+    // Form submission
+    document.getElementById('membershipForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      var form = this;
+      var statusEl = document.getElementById('formStatus');
+      var btn = form.querySelector('button[type="submit"]');
+
+      statusEl.style.display = 'none';
+      statusEl.className = '';
+
+      // Get all form values
+      var formData = new FormData(form);
+
+      // Validate form before submission
+      var validationErrors = validateForm(formData);
+      if (validationErrors.length > 0) {
+        statusEl.innerHTML = '<strong>Please fix the following errors:</strong><ul style="margin: 0.5rem 0 0 1.5rem;"><li>' + validationErrors.join('</li><li>') + '</li></ul>';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+        window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
+        return;
+      }
+
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+
+      // Convert FormData to JSON object
+      var jsonData = {};
+      for (let [key, value] of formData.entries()) {
+        jsonData[key] = value;
+      }
+
+      try {
+        // Submit to PHP backend
+        var resp = await fetch('membership-handler.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        });
+
+        var result = await resp.json();
+
+        if (result.success) {
+          statusEl.textContent = result.message;
+          statusEl.className = 'success';
+          statusEl.style.display = 'block';
+          btn.textContent = 'Submit Application';
+          btn.disabled = false;
+
+          // Redirect to payment page after 2 seconds
+          setTimeout(function() {
+            window.location.href = 'payment.html';
+          }, 2000);
+        } else {
+          statusEl.textContent = 'Error: ' + (result.error || 'Unknown error') + '. Please try again or contact info@alabamafalcons.org';
+          statusEl.className = 'error';
+          statusEl.style.display = 'block';
+          btn.textContent = 'Submit Application';
+          btn.disabled = false;
+          window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        statusEl.textContent = 'Error submitting form. Please try again or contact info@alabamafalcons.org';
+        statusEl.className = 'error';
+        statusEl.style.display = 'block';
+        btn.textContent = 'Submit Application';
+        btn.disabled = false;
+        window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
+      }
+    });
+  </script>
+</body>
+</html>
