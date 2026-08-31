@@ -6,7 +6,7 @@ require_login();
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Club Portal — Staff Guide · USAFA Parents Club of Alabama</title>
+<title>Club Portal — Staff Guide · Alabama West Point Parents Club</title>
 <link rel="icon" type="image/png" href="../logo01.png" />
 <style>
 /* ── Tokens ── */
@@ -197,7 +197,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
 
 <!-- 0: Title -->
 <div class="slide s-title active" id="s0">
-  <p class="pre">USAFA Parents Club of Alabama &nbsp;·&nbsp; Staff Orientation</p>
+  <p class="pre">Alabama West Point Parents Club &nbsp;·&nbsp; Staff Orientation</p>
   <h1>Club Portal Guide</h1>
   <p class="sub">Everything you need to know about managing the portal</p>
   <div class="accent-bar"></div>
@@ -906,7 +906,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
 <div class="slide s-close" id="s22">
   <div class="accent-bar" style="margin:0 auto 1.5rem"></div>
   <h1>Questions?</h1>
-  <p class="cs">USAFA Parents Club of Alabama &nbsp;·&nbsp; Club Portal</p>
+  <p class="cs">Alabama West Point Parents Club &nbsp;·&nbsp; Club Portal</p>
   <p class="cmail">mijohnst@alabamafalcons.org</p>
   <p class="cmail" style="margin-top:.5rem">alabamafalcons.org/admin</p>
 </div>

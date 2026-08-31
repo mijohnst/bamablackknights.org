@@ -67,7 +67,7 @@ $members = $stmt->fetchAll();
 ?>
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Member Directory — USAFA Parents Club of Alabama</title>
+<title>Member Directory — Alabama West Point Parents Club</title>
 <link rel="icon" type="image/png" href="../logo01.png" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -112,7 +112,7 @@ h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
 <div class="no-print" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1rem">
   <div>
     <h1>Member Directory</h1>
-    <div class="subtitle">USAFA Parents Club of Alabama &mdash; <?= date('F Y') ?> &mdash; <?= can_view_member_pii() ? 'excludes families who opted out of directory listing' : 'shows only families who opted in to directory listing' ?></div>
+    <div class="subtitle">Alabama West Point Parents Club &mdash; <?= date('F Y') ?> &mdash; <?= can_view_member_pii() ? 'excludes families who opted out of directory listing' : 'shows only families who opted in to directory listing' ?></div>
   </div>
   <div style="display:flex;gap:.5rem">
     <button onclick="window.print()" style="padding:.5rem 1.1rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.85rem;cursor:pointer">Print / Save PDF</button>

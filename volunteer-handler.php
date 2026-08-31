@@ -69,7 +69,7 @@ try {
 
 // Email notification
 $subject  = sanitize_hdr('New Volunteer Interest: ' . $name);
-$body     = "USAFA Parents Club of Alabama\nNew Volunteer Interest Submission\n" . str_repeat('─',48) . "\n\n"
+$body     = "Alabama West Point Parents Club\nNew Volunteer Interest Submission\n" . str_repeat('─',48) . "\n\n"
            . "Name:         $name\n"
            . "Email:        $email\n"
            . ($phone        ? "Phone:        $phone\n"        : '')
@@ -96,20 +96,20 @@ foreach (['secretary@alabamafalcons.org', 'president@alabamafalcons.org'] as $no
 }
 
 // Confirmation to volunteer
-$conf = "Thank you for your interest in volunteering with the USAFA Parents Club of Alabama!\n\n"
+$conf = "Thank you for your interest in volunteering with the Alabama West Point Parents Club!\n\n"
       . "We've received your information and a club officer will be in touch soon.\n\n"
       . "Your submission:\n"
       . "  Areas of interest: " . ($areas ?: 'Not specified') . "\n"
       . "  Availability: " . ($availability ?: 'Not specified') . "\n\n"
       . "Aim High · Fly · Fight · Win\n"
-      . "USAFA Parents Club of Alabama\nalabamafalcons.org";
+      . "Alabama West Point Parents Club\nalabamafalcons.org";
 $conf_mail = new PHPMailer(true);
 try {
     configure_smtp_relay($conf_mail);
     $conf_mail->setFrom(CLUB_FROM_EMAIL, CLUB_NAME);
     $conf_mail->addAddress($email);
     $conf_mail->isHTML(false);
-    $conf_mail->Subject = 'Volunteer Interest Received — USAFA Parents Club of Alabama';
+    $conf_mail->Subject = 'Volunteer Interest Received — Alabama West Point Parents Club';
     $conf_mail->Body    = $conf;
     $conf_mail->send();
 } catch (PHPMailerException $e) {

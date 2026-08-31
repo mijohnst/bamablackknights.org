@@ -96,10 +96,10 @@ $title = $opp['title'];
 send_notification(
     $email,
     'You\'re Signed Up — ' . $title,
-    "Thanks for volunteering with the USAFA Parents Club of Alabama!\n\n"
+    "Thanks for volunteering with the Alabama West Point Parents Club!\n\n"
     . "You're signed up for: $title\n\n"
     . "A club officer may follow up with details beforehand. If your plans change, just reply to this email and let us know.\n\n"
-    . "Aim High \xC2\xB7 Fly \xC2\xB7 Fight \xC2\xB7 Win\nUSAFA Parents Club of Alabama\nalabamafalcons.org"
+    . "Aim High \xC2\xB7 Fly \xC2\xB7 Fight \xC2\xB7 Win\nAlabama West Point Parents Club\nalabamafalcons.org"
 );
 
 foreach (['secretary@alabamafalcons.org', 'president@alabamafalcons.org'] as $notify_to) {

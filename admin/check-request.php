@@ -21,7 +21,7 @@ $setting = function(string $key) use ($pdo): string {
     $r->execute([$key]);
     return (string)($r->fetchColumn() ?: '');
 };
-$club_name = $setting('club_name') ?: 'USAFA Parents Club of Alabama';
+$club_name = $setting('club_name') ?: 'Alabama West Point Parents Club';
 
 admin_header('Check Request #' . $id);
 ?>

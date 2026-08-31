@@ -15,7 +15,7 @@ $setting = function(string $key, string $default = '') use ($pdo): string {
     return $cache[$key];
 };
 
-$club_name = $setting('club_name', 'USAFA Parents Club of Alabama');
+$club_name = $setting('club_name', 'Alabama West Point Parents Club');
 $club_website = $setting('website_url', 'alabamafalcons.org');
 
 // ── Member search ──────────────────────────────────────────────────────────
