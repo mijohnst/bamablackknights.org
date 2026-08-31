@@ -320,12 +320,12 @@ $parent_email = $g('parent1_email');
 if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     $parent_name  = $g('parent1_first_name') ?: 'there';
     $cadet_name   = trim(preg_replace('/\s+/', ' ', $g('cadet_first_name') . ' ' . $g('cadet_middle_name') . ' ' . $g('cadet_last_name') . ' ' . $g('cadet_suffix'))) ?: 'your cadet';
-    $conf_subject = 'Your Information Has Been Updated — USAFA Parents Club of Alabama';
+    $conf_subject = 'Your Information Has Been Updated — Alabama West Point Parents Club';
     $conf_body    = "Dear $parent_name,\n\n"
                   . "Your family's information for $cadet_name has been updated in our records.\n\n"
                   . "If any of this wasn't intentional, or you have questions, please contact us at secretary@alabamafalcons.org.\n\n"
                   . "Aim High · Fly · Fight · Win\n"
-                  . "USAFA Parents Club of Alabama\n"
+                  . "Alabama West Point Parents Club\n"
                   . "alabamafalcons.org";
     $conf_mail = new PHPMailer(true);
     try {

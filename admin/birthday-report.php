@@ -50,7 +50,7 @@ try {
 // Build email body
 $subject = "Cadet Birthdays — $month_name $year";
 
-$body  = "USAFA Parents Club of Alabama\n";
+$body  = "Alabama West Point Parents Club\n";
 $body .= "Cadet Birthdays for $month_name $year\n";
 $body .= str_repeat('=', 48) . "\n\n";
 
@@ -77,7 +77,7 @@ if (empty($cadets)) {
     $body .= count($cadets) . " cadet(s) have birthdays in $month_name $year.\n";
 }
 
-$body .= "\n— USAFA Parents Club of Alabama Admin System\n";
+$body .= "\n— Alabama West Point Parents Club Admin System\n";
 $body .= "   alabamafalcons.org\n";
 
 $sent = false;
