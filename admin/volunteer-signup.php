@@ -71,7 +71,7 @@ echo show_flash();
   ?>
   <div class="vs-card <?= $is_full && !$signed_up ? 'vs-full' : '' ?>">
     <div style="flex:1;min-width:0">
-      <strong style="color:#002554"><?= h($o['title']) ?></strong>
+      <strong style="color:#000000"><?= h($o['title']) ?></strong>
       <div class="vs-meta">
         <?php if ($o['event_date']): ?><?= date('M j, Y', strtotime($o['event_date'])) ?><?php endif; ?>
         <?php if ($o['location']): ?><?= $o['event_date'] ? ' &bull; ' : '' ?><?= h($o['location']) ?><?php endif; ?>

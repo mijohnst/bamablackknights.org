@@ -40,7 +40,7 @@ echo show_flash();
 ?>
 <style>
 .ticket-row{border-left:4px solid #e1e5eb;transition:border-color .2s}
-.ticket-row:hover{border-left-color:#003594}
+.ticket-row:hover{border-left-color:#000000}
 .t-badge{display:inline-block;padding:.15rem .55rem;border-radius:3px;font-size:.7rem;font-weight:700;white-space:nowrap}
 </style>
 
@@ -117,13 +117,13 @@ echo show_flash();
     $age_label = $days_open === 0 ? 'Today' : $days_open . 'd';
   ?>
     <tr class="ticket-row" style="<?= $mine_row?'background:#fafbff':'' ?>">
-      <td style="font-family:monospace;font-weight:700;color:#002554"><?= h($t['ticket_number']) ?></td>
+      <td style="font-family:monospace;font-weight:700;color:#000000"><?= h($t['ticket_number']) ?></td>
       <td style="font-size:.78rem;color:#5a6a7a"><?= h($t['category']) ?></td>
       <td><strong><?= h($t['subject']) ?></strong></td>
       <td><span class="t-badge" style="background:<?= $sc['bg'] ?>;color:<?= $sc['text'] ?>;border:1px solid <?= $sc['border'] ?>"><?= TICKET_STATUSES[$t['status']] ?></span></td>
       <td><span style="font-size:.75rem;font-weight:700;color:<?= $priority_colors[$t['priority']] ?>"><?= ucfirst($t['priority']) ?></span></td>
       <td style="font-size:.8rem;font-weight:700;color:<?= $age_color ?>;white-space:nowrap"><?= $age_label ?></td>
-      <td style="font-size:.78rem"><?= h($t['submitter_name'] ?? '—') ?><?= $mine_row?' <span style="color:#003594;font-size:.68rem">(you)</span>':'' ?></td>
+      <td style="font-size:.78rem"><?= h($t['submitter_name'] ?? '—') ?><?= $mine_row?' <span style="color:#000000;font-size:.68rem">(you)</span>':'' ?></td>
       <td style="font-size:.78rem;color:#5a6a7a"><?= h($t['assigned_name'] ?? '—') ?></td>
       <td style="text-align:center;color:#5a6a7a"><?= $t['comment_count'] ?: '—' ?></td>
       <td class="actions">

@@ -34,9 +34,9 @@ admin_header('Check Request #' . $id);
 }
 .cr-wrapper{max-width:720px;background:#fff;border:1px solid #d0d8e4;border-radius:8px;padding:2.25rem;box-shadow:0 2px 12px rgba(0,0,0,.08)}
 .cr-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;gap:1rem;flex-wrap:wrap}
-.cr-org{font-size:1.1rem;font-weight:700;color:#002554;letter-spacing:.02em}
+.cr-org{font-size:1.1rem;font-weight:700;color:#000000;letter-spacing:.02em}
 .cr-org-sub{font-size:.78rem;color:#5a6a7a;margin-top:.2rem}
-.cr-title{font-size:1.35rem;font-weight:700;color:#002554;margin:0 0 .15rem}
+.cr-title{font-size:1.35rem;font-weight:700;color:#000000;margin:0 0 .15rem}
 .cr-num{font-size:.75rem;color:#9aa5b4;letter-spacing:.04em}
 .cr-divider{border:none;border-top:2px solid #e1e8f0;margin:1.25rem 0}
 .cr-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1.75rem;margin-bottom:1.25rem}
@@ -45,7 +45,7 @@ admin_header('Check Request #' . $id);
 .cr-val{font-size:.92rem;color:#1a2332}
 .cr-amount-box{background:#f7f9fc;border:1px solid #e1e8f0;border-radius:6px;padding:1rem 1.25rem;margin-bottom:1.25rem}
 .cr-amount-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;font-size:.88rem}
-.cr-amount-row.total{border-top:2px solid #003594;margin-top:.4rem;padding-top:.65rem;font-weight:700;font-size:1.05rem}
+.cr-amount-row.total{border-top:2px solid #000000;margin-top:.4rem;padding-top:.65rem;font-weight:700;font-size:1.05rem}
 .cr-sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem}
 .cr-sig{border-top:1px solid #1a2332;padding-top:.5rem;font-size:.78rem;color:#5a6a7a}
 .cr-sig span{display:block;margin-bottom:.3rem;color:#9aa5b4;font-size:.7rem;letter-spacing:.04em;text-transform:uppercase}
@@ -63,7 +63,7 @@ admin_header('Check Request #' . $id);
 </div>
 
 <?php
-$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#003594'];
+$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#000000'];
 $sc = $status_colors[$p['status']] ?? '#5a6a7a';
 $line_items = [];
 if ($p['amount_pretax']  > 0) $line_items[] = ['Subtotal (pre-tax)', $p['amount_pretax']];
@@ -145,7 +145,7 @@ if ($p['amount_shipping']> 0) $line_items[] = ['Shipping',           $p['amount_
   <div style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem">
     <?php if (!empty($p['receipt_filename'])): ?>
     ✅ Receipt attached &nbsp;
-    <a href="receipt-view.php?id=<?= $p['id'] ?>" target="_blank" style="font-size:.78rem;color:#003594" class="no-print">View Receipt</a>
+    <a href="receipt-view.php?id=<?= $p['id'] ?>" target="_blank" style="font-size:.78rem;color:#000000" class="no-print">View Receipt</a>
     <?php else: ?>
     ⚠️ <span style="color:#856404">No receipt on file</span>
     <?php endif; ?>

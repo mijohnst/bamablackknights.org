@@ -56,7 +56,7 @@ echo show_flash();
 <?php else: ?>
   <?php foreach ($events as $e): $rsvped = array_key_exists($e['id'], $my_rsvps); ?>
   <div class="rsvp-card">
-    <strong style="color:#002554"><?= h($e['title']) ?></strong>
+    <strong style="color:#000000"><?= h($e['title']) ?></strong>
     <div class="rsvp-meta">
       <?php if ($e['event_date']): ?><?= date('M j, Y', strtotime($e['event_date'])) ?><?php if ($e['event_date_end']): ?> – <?= date('M j, Y', strtotime($e['event_date_end'])) ?><?php endif; ?><?php endif; ?>
       <?php if ($e['event_time']): ?> &bull; <?= h($e['event_time']) ?><?php endif; ?>

@@ -73,7 +73,7 @@ echo show_flash();
 .ev-row{border-left:3px solid #e1e5eb;padding:.6rem .85rem;margin-bottom:.4rem;background:#fff;border-radius:0 4px 4px 0;display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap}
 .ev-row.hidden{opacity:.45}
 .ev-meta{font-size:.75rem;color:#5a6a7a;margin-top:.15rem}
-.group-head{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5a6a7a;margin:.75rem 0 .3rem;padding-left:.85rem;border-left:3px solid #003594}
+.group-head{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5a6a7a;margin:.75rem 0 .3rem;padding-left:.85rem;border-left:3px solid #000000}
 </style>
 
 <div class="page-head">
@@ -201,11 +201,11 @@ echo show_flash();
   <?php foreach ($grp_events as $e): ?>
   <div class="ev-row <?= $e['visible']?'':'hidden' ?>">
     <div style="flex:1;min-width:0">
-      <strong style="color:#002554"><?= h($e['title']) ?></strong>
+      <strong style="color:#000000"><?= h($e['title']) ?></strong>
       <div class="ev-meta">
         <?php if ($e['event_date']): echo date('M j, Y', strtotime($e['event_date'])); if ($e['event_date_end']) echo ' – ' . date('M j, Y', strtotime($e['event_date_end'])); endif; ?>
         <?php if ($e['event_time']): ?> &bull; <?= h($e['event_time']) ?><?php endif; ?>
-        <?php if ($e['tag']): ?> &bull; <span style="color:#003594"><?= h($e['tag']) ?></span><?php endif; ?>
+        <?php if ($e['tag']): ?> &bull; <span style="color:#000000"><?= h($e['tag']) ?></span><?php endif; ?>
         <?php if (!$e['visible']): ?> &bull; <span style="color:#9aa5b4">Hidden</span><?php endif; ?>
       </div>
     </div>

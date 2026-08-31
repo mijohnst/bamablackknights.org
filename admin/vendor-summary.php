@@ -114,7 +114,7 @@ echo show_flash();
   <?php foreach ($vendors as $vname => $vd): ?>
   <tr>
     <td>
-      <a href="purchases.php?q=<?= urlencode($vname) ?>" style="color:#003594;font-weight:600;text-decoration:none"><?= h($vname) ?></a>
+      <a href="purchases.php?q=<?= urlencode($vname) ?>" style="color:#000000;font-weight:600;text-decoration:none"><?= h($vname) ?></a>
       <div style="font-size:.7rem;color:#9aa5b4"><?= (int)$vd['grand_count'] ?> purchase<?= $vd['grand_count']!=1?'s':'' ?></div>
     </td>
     <?php foreach ($show_years as $y): $yd = $vd['years'][$y] ?? null; ?>

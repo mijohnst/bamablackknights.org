@@ -85,7 +85,7 @@ admin_header('My Profile');
 .pw-wrap{position:relative;margin-bottom:.9rem}
 .pw-wrap input{margin-bottom:0;padding-right:2.75rem}
 .pw-toggle{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9aa5b4;font-size:1.1rem;padding:0;line-height:1}
-.avatar-circle{width:88px;height:88px;border-radius:50%;object-fit:cover;background:#003594;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:700;flex-shrink:0}
+.avatar-circle{width:88px;height:88px;border-radius:50%;object-fit:cover;background:#000000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:700;flex-shrink:0}
 .avatar-row{display:flex;gap:1.25rem;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap}
 </style>
 
@@ -104,7 +104,7 @@ admin_header('My Profile');
 <?php endif; ?>
 
 <div class="pw-card">
-  <h2 style="font-size:.95rem;color:#002554;margin-bottom:1rem">Profile Picture</h2>
+  <h2 style="font-size:.95rem;color:#000000;margin-bottom:1rem">Profile Picture</h2>
   <div class="avatar-row">
     <?php if ($me['avatar_filename']): ?>
       <img class="avatar-circle" src="/avatar-serve.php?id=<?= (int)$_SESSION['user_id'] ?>&v=<?= time() ?>" alt="">
@@ -143,7 +143,7 @@ admin_header('My Profile');
 <?php endif; ?>
 
 <div class="pw-card">
-  <h2 style="font-size:.95rem;color:#002554;margin-bottom:1rem">Change Password</h2>
+  <h2 style="font-size:.95rem;color:#000000;margin-bottom:1rem">Change Password</h2>
   <p style="font-size:.85rem;color:#5a6a7a;margin-bottom:1.25rem">
     Changing password for <strong><?= h(current_user_name()) ?></strong>
   </p>

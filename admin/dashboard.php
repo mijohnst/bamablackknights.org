@@ -109,7 +109,7 @@ if (!is_member()) {
 // Role display label and color
 $role_display = ['admin'=>'Admin','tech'=>'Tech Support','officer'=>'Officer',
                  'secretary'=>'Secretary','treasurer'=>'Treasurer','member'=>'Member'];
-$role_colors  = ['admin'=>'#002554','tech'=>'#bf360c','officer'=>'#1a237e',
+$role_colors  = ['admin'=>'#000000','tech'=>'#bf360c','officer'=>'#1a237e',
                  'secretary'=>'#5c007a','treasurer'=>'#1b5e20','member'=>'#7b3f00'];
 $role_label = $role_display[$role] ?? ucfirst($role);
 $role_color = $role_colors[$role] ?? '#5a6a7a';
@@ -127,7 +127,7 @@ $sponsors_tile_added = false;
 // the consent-filtered "Directory" tile below for the same purpose.
 if (can_view_member_pii()) {
     $mem_total = $stats['members']['total'] ?? null;
-    $sections['For You'][] = ['icon'=>'👥','label'=>'Members','sub'=>$mem_total!==null?$mem_total.' active':'View roster','href'=>'index.php','color'=>'#002554'];
+    $sections['For You'][] = ['icon'=>'👥','label'=>'Members','sub'=>$mem_total!==null?$mem_total.' active':'View roster','href'=>'index.php','color'=>'#000000'];
 }
 
 // My Membership — only for accounts linked to (or email-matched to) a
@@ -200,13 +200,13 @@ $sections['For You'][] = ['icon'=>'🤝','label'=>'My Committees','sub'=>'Flag w
 $sections['For You'][] = ['icon'=>'📖','label'=>'Directory','sub'=>'Printable roster','href'=>'directory.php','color'=>'#1b5e20'];
 
 if (can_manage_members()) {
-    $sections['Member Management'][] = ['icon'=>'➕','label'=>'Add Member','sub'=>'Add new cadet','href'=>'add.php','color'=>'#003594'];
+    $sections['Member Management'][] = ['icon'=>'➕','label'=>'Add Member','sub'=>'Add new cadet','href'=>'add.php','color'=>'#000000'];
     $sections['Site Management'][] = ['icon'=>'⚙️','label'=>'Site Settings','sub'=>'Hero, dues, letter, links','href'=>'settings.php','color'=>'#37474f'];
     $sections['Site Management'][] = ['icon'=>'🔁','label'=>'Automated Emails','sub'=>'Birthdays, dues, reminders','href'=>'automated-emails.php','color'=>'#00695c'];
     $sections['Site Management'][] = ['icon'=>'📅','label'=>'Events','sub'=>'Manage site events','href'=>'events.php','color'=>'#1565c0'];
     try { $vcount_v = (int)get_pdo()->query('SELECT COUNT(*) FROM volunteers')->fetchColumn(); } catch(Exception $e) { $vcount_v=0; }
     $sections['Member Management'][] = ['icon'=>'🙋','label'=>'Volunteers','sub'=>$vcount_v>0?"$vcount_v submission".($vcount_v>1?'s':''):'View signups','href'=>'volunteers.php','color'=>'#1b5e20','badge'=>$vcount_v>0?$vcount_v:0];
-    $sections['Member Management'][] = ['icon'=>'👥','label'=>'Leadership','sub'=>'Update officer profiles','href'=>'leadership.php','color'=>'#002554'];
+    $sections['Member Management'][] = ['icon'=>'👥','label'=>'Leadership','sub'=>'Update officer profiles','href'=>'leadership.php','color'=>'#000000'];
     // Counts parent slots (not members) still needing a badge, matching the
     // "Needs a badge" filter on badges.php — paid members with no member_badges
     // row, or one with done=0, for that parent slot.
@@ -270,9 +270,9 @@ if (can_manage_finances()) {
         $sections['Finance'][] = ['icon'=>'💰','label'=>'Finance','sub'=>$pending>0?"$pending need approval":'View purchases','href'=>'purchases.php','color'=>$pending>0?'#A6192E':'#1b5e20','badge'=>$pending>0?$pending:0];
     }
     $my_pending = $stats['my_pending'] ?? 0;
-    $sections['For You'][] = ['icon'=>'🧾','label'=>'Add Purchase','sub'=>$my_pending>0?"$my_pending pending":'Submit an expense','href'=>'purchase-form.php','color'=>'#003594','badge'=>$my_pending>0?$my_pending:0];
+    $sections['For You'][] = ['icon'=>'🧾','label'=>'Add Purchase','sub'=>$my_pending>0?"$my_pending pending":'Submit an expense','href'=>'purchase-form.php','color'=>'#000000','badge'=>$my_pending>0?$my_pending:0];
     if (is_treasurer()) {
-        $sections['Finance'][] = ['icon'=>'💳','label'=>'Payments','sub'=>$approved>0?"$approved awaiting payment":'Nothing pending','href'=>'pending-reimbursements.php','color'=>$approved>0?'#003594':'#5a6a7a','badge'=>$approved>0?$approved:0];
+        $sections['Finance'][] = ['icon'=>'💳','label'=>'Payments','sub'=>$approved>0?"$approved awaiting payment":'Nothing pending','href'=>'pending-reimbursements.php','color'=>$approved>0?'#000000':'#5a6a7a','badge'=>$approved>0?$approved:0];
         $sections['Finance'][] = ['icon'=>'📊','label'=>'Reports','sub'=>'Year-end & budgets','href'=>'report.php','color'=>'#37474f'];
         $sections['Finance'][] = ['icon'=>'🗂️','label'=>'Receipts','sub'=>'Browse by event or vendor','href'=>'receipts-by.php','color'=>'#37474f'];
         $sections['Finance'][] = ['icon'=>'📥','label'=>'Income','sub'=>'Record & review income','href'=>'income.php','color'=>'#1b5e20'];
@@ -289,7 +289,7 @@ if (can_manage_finances()) {
     // stuck inside the is_treasurer()-only block above, so officers/admins
     // never saw a tile to reach the page even after it started allowing them in.
     if (is_treasurer() || is_super_admin() || is_officer()) {
-        $sections['Finance'][] = ['icon'=>'🅿️','label'=>'PayPal Activity','sub'=>'Online dues & donations','href'=>'paypal-dues-orders.php','color'=>'#003594'];
+        $sections['Finance'][] = ['icon'=>'🅿️','label'=>'PayPal Activity','sub'=>'Online dues & donations','href'=>'paypal-dues-orders.php','color'=>'#000000'];
     }
 }
 
@@ -307,7 +307,7 @@ if (can_manage_members() || is_treasurer()) {
     $sections['Site Management'][] = ['icon'=>'🔒','label'=>'Document Vault','sub'=>$vcount>0?"$vcount document".($vcount>1?'s':''):'Secure file storage','href'=>'vault.php','color'=>'#37474f'];
 }
 $sections['For You'][] = ['icon'=>'👤','label'=>'My Profile','sub'=>'Photo & password','href'=>'change-password.php','color'=>'#546e7a'];
-$sections['Site Management'][] = ['icon'=>'📚','label'=>'Staff Guide','sub'=>'Portal orientation','href'=>'staff-guide.php','color'=>'#002554'];
+$sections['Site Management'][] = ['icon'=>'📚','label'=>'Staff Guide','sub'=>'Portal orientation','href'=>'staff-guide.php','color'=>'#000000'];
 
 if (is_super_admin()) {
     $sections['Site Management'][] = ['icon'=>'👤','label'=>'Users','sub'=>'Manage accounts','href'=>'users.php','color'=>'#37474f'];
@@ -319,7 +319,7 @@ $section_order = ['For You', 'Member Management', 'Secretary Tools', 'Finance', 
 admin_header('Dashboard');
 ?>
 <style>
-.welcome-banner{background:linear-gradient(135deg,#002554 0%,#003594 60%,#1565c0 100%);border-radius:8px;padding:1.5rem 2rem;color:#fff;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.welcome-banner{background:linear-gradient(135deg,#000000 0%,#000000 60%,#1565c0 100%);border-radius:8px;padding:1.5rem 2rem;color:#fff;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .welcome-name{font-size:1.6rem;font-weight:700;line-height:1.2}
 .welcome-sub{font-size:.85rem;opacity:.7;margin-top:.25rem}
 .role-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:.3rem .9rem;font-size:.78rem;font-weight:700;letter-spacing:.04em;white-space:nowrap}
@@ -327,7 +327,7 @@ admin_header('Dashboard');
 .welcome-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;flex-shrink:0}
 .action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.85rem;margin-bottom:1.5rem}
 .action-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:1.25rem 1rem;text-decoration:none;color:#1a2332;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.4rem;transition:all .2s;border:2px solid transparent;position:relative}
-.action-card:hover{border-color:#003594;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-2px);text-decoration:none;color:#002554}
+.action-card:hover{border-color:#000000;box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-2px);text-decoration:none;color:#000000}
 .action-icon{font-size:2rem;line-height:1}
 .action-label{font-size:.82rem;font-weight:700;letter-spacing:.02em}
 .action-sub{font-size:.7rem;color:#5a6a7a;line-height:1.3}
@@ -440,12 +440,12 @@ if ($stats['my_open_tickets'] > 0 && !can_manage_tickets())
 <p style="font-size:.72rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem">Finance — <?= date('Y') ?> Detail</p>
 <div class="mini-stats" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
   <?php if (!empty($stats['dues'])): $d = $stats['dues']; ?>
-  <div class="mini-stat" style="border-left:3px solid #003594">
-    <div class="mini-stat-val" style="color:#003594">$<?= number_format($d['grand_total'], 2) ?></div>
+  <div class="mini-stat" style="border-left:3px solid #000000">
+    <div class="mini-stat-val" style="color:#000000">$<?= number_format($d['grand_total'], 2) ?></div>
     <div class="mini-stat-lbl">Dues Collected <?= h($d['year']) ?></div>
   </div>
-  <div class="mini-stat" style="border-left:3px solid #003594">
-    <div class="mini-stat-val" style="color:#003594"><?= (int)$d['paid_count'] ?></div>
+  <div class="mini-stat" style="border-left:3px solid #000000">
+    <div class="mini-stat-val" style="color:#000000"><?= (int)$d['paid_count'] ?></div>
     <div class="mini-stat-lbl">Members Currently Paid</div>
     <div style="font-size:.65rem;color:#9aa5b4;margin-top:.2rem">for <?= h($d['year']) ?></div>
   </div>
@@ -458,8 +458,8 @@ if ($stats['my_open_tickets'] > 0 && !can_manage_tickets())
     <div class="mini-stat-val" style="color:#1b5e20">$<?= number_format($tf['reimbursed_ytd']??0,2) ?></div>
     <div class="mini-stat-lbl">Paid YTD (<?= (int)($tf['reimbursed_count']??0) ?>)</div>
   </div>
-  <div class="mini-stat" style="border-left:3px solid #003594">
-    <div class="mini-stat-val" style="color:#003594">$<?= number_format($tf['approved_amt']??0,2) ?></div>
+  <div class="mini-stat" style="border-left:3px solid #000000">
+    <div class="mini-stat-val" style="color:#000000">$<?= number_format($tf['approved_amt']??0,2) ?></div>
     <div class="mini-stat-lbl">Approved/Submitted — Unpaid</div>
   </div>
   <div class="mini-stat" style="border-left:3px solid #f57c00">

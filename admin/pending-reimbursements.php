@@ -28,7 +28,7 @@ echo show_flash();
 .reimb-card{background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:1.1rem 1.25rem;margin-bottom:.75rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start;justify-content:space-between}
 .reimb-main{flex:1;min-width:220px}
 .reimb-meta{font-size:.78rem;color:#5a6a7a;margin-top:.25rem;line-height:1.7}
-.reimb-amount{font-size:1.3rem;font-weight:700;color:#002554;white-space:nowrap}
+.reimb-amount{font-size:1.3rem;font-weight:700;color:#000000;white-space:nowrap}
 .reimb-actions{display:flex;flex-direction:column;gap:.4rem;align-items:flex-end}
 .total-bar{background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:1rem 1.5rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center}
 </style>
@@ -59,7 +59,7 @@ echo show_flash();
 ?>
 <div class="reimb-card">
   <div class="reimb-main">
-    <strong style="color:#002554;font-size:1rem"><?= h($p['vendor']) ?></strong>
+    <strong style="color:#000000;font-size:1rem"><?= h($p['vendor']) ?></strong>
     <span class="status-badge" style="background:<?= $status_colors[$p['status']] ?>22;color:<?= $status_colors[$p['status']] ?>;margin-left:.5rem;font-size:.68rem">
       <?= h(PURCHASE_STATUSES[$p['status']]) ?>
     </span>
@@ -76,7 +76,7 @@ echo show_flash();
       <?php if ($p['submitted_by_name']): ?>
         <br>Submitted by: <?= h($p['submitted_by_name']) ?>
         <?php if ($p['submitted_by_email']): ?>
-          · <a href="mailto:<?= h($p['submitted_by_email']) ?>" style="color:#003594"><?= h($p['submitted_by_email']) ?></a>
+          · <a href="mailto:<?= h($p['submitted_by_email']) ?>" style="color:#000000"><?= h($p['submitted_by_email']) ?></a>
         <?php endif; ?>
       <?php endif; ?>
       <?php if ($p['approved_note']): ?>
@@ -131,7 +131,7 @@ echo show_flash();
         <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
         <input type="hidden" name="action" value="paid">
         <input type="hidden" name="note" id="pn-pr-<?= (int)$p['id'] ?>">
-        <button type="button" class="btn btn-sm" style="background:#003594;color:#fff"
+        <button type="button" class="btn btn-sm" style="background:#000000;color:#fff"
           onclick="doAction('pf-pr-<?= (int)$p['id'] ?>','pn-pr-<?= (int)$p['id'] ?>','Note (optional):','Confirm this purchase has been paid?')">
           ✓ Mark Paid
         </button>
@@ -145,7 +145,7 @@ echo show_flash();
 <!-- Reimburse modal (reused from purchases.php) -->
 <div id="pr-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,.25);padding:1.75rem;max-width:420px;width:90%;margin:1rem">
-    <h2 style="font-size:1rem;color:#002554;margin-bottom:.25rem">Submit Payment</h2>
+    <h2 style="font-size:1rem;color:#000000;margin-bottom:.25rem">Submit Payment</h2>
     <p id="pr-modal-desc" style="font-size:.85rem;color:#5a6a7a;margin-bottom:1.25rem"></p>
     <div style="margin-bottom:.9rem">
       <label style="display:block;font-size:.78rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem">Payment Method *</label>
@@ -172,7 +172,7 @@ echo show_flash();
       <input type="text" id="pr-modal-note" placeholder="Optional note…" style="width:100%;padding:.6rem .75rem;border:1px solid #d0d5dd;border-radius:4px;font-family:inherit;font-size:.9rem">
     </div>
     <div style="display:flex;gap:.75rem;margin-top:1.25rem">
-      <button onclick="confirmPrReimburse()" style="flex:1;padding:.7rem;background:#003594;color:#fff;border:none;border-radius:4px;font-size:.9rem;font-weight:700;cursor:pointer">Confirm Payment Submitted</button>
+      <button onclick="confirmPrReimburse()" style="flex:1;padding:.7rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.9rem;font-weight:700;cursor:pointer">Confirm Payment Submitted</button>
       <button onclick="document.getElementById('pr-modal').style.display='none'" style="padding:.7rem 1.25rem;background:#f0f2f5;color:#333;border:1px solid #d0d5dd;border-radius:4px;font-size:.9rem;cursor:pointer">Cancel</button>
     </div>
   </div>

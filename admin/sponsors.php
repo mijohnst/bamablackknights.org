@@ -140,7 +140,7 @@ echo show_flash();
   <td><?php if ($s['logo_filename'] && preg_match('/^[a-zA-Z0-9._-]+$/', $s['logo_filename'])): $src=file_exists(__DIR__.'/../sponsor-logos/'.$s['logo_filename'])?'/sponsor-logos/'.h($s['logo_filename']):''; if ($src): ?><img src="<?= $src ?>" style="height:36px;max-width:80px;object-fit:contain"><?php endif; endif; ?></td>
   <td><strong><?= h($s['name']) ?></strong></td>
   <td><span style="font-size:.75rem;font-weight:700;color:#5a6a7a;text-transform:uppercase"><?= $levels[$s['level']]??$s['level'] ?></span></td>
-  <td style="font-size:.78rem"><?php if ($s['website_url']): ?><a href="<?= h($s['website_url']) ?>" target="_blank" rel="noopener" style="color:#003594"><?= h(parse_url($s['website_url'],PHP_URL_HOST)?:'Link') ?></a><?php endif; ?></td>
+  <td style="font-size:.78rem"><?php if ($s['website_url']): ?><a href="<?= h($s['website_url']) ?>" target="_blank" rel="noopener" style="color:#000000"><?= h(parse_url($s['website_url'],PHP_URL_HOST)?:'Link') ?></a><?php endif; ?></td>
   <td style="text-align:center"><?= $s['active']?'✅':'—' ?></td>
   <td class="actions"><div class="btn-group">
     <a href="sponsors.php?edit=<?= $s['id'] ?>" class="btn btn-secondary btn-sm">Edit</a>

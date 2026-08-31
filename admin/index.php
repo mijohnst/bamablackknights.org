@@ -303,7 +303,7 @@ if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a
 <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:.6rem">
   <?php
   $summary_cards = [
-    ['label'=>'Total Members',  'value'=>$stat_total,     'sub'=>'active roster',   'pct'=>100,      'color'=>'#002554'],
+    ['label'=>'Total Members',  'value'=>$stat_total,     'sub'=>'active roster',   'pct'=>100,      'color'=>'#000000'],
     ['label'=>'Dues Paid',      'value'=>$stat_paid,       'sub'=>membership_year(), 'pct'=>$dues_pct,'color'=>'#1b5e20'],
     ['label'=>'Dues Unpaid',    'value'=>$stat_unpaid,     'sub'=>'need to renew',   'pct'=>$active_total>0?round($stat_unpaid/$active_total*100):0,'color'=>'#c62828'],
   ];
@@ -320,10 +320,10 @@ if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a
   <!-- Cadet gender split card -->
   <div class="card" style="padding:.75rem 1rem;margin:0;display:flex;flex-direction:column;justify-content:space-between;gap:.4rem;min-width:0">
     <div style="font-size:.65rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.05em">Cadet Gender</div>
-    <div style="font-size:1.1rem;font-weight:700;line-height:1"><span style="color:#003594"><?= $male_pct ?>% M</span> <span style="color:#9aa5b4;font-weight:400">/</span> <span style="color:#A6192E"><?= $female_pct ?>% F</span></div>
+    <div style="font-size:1.1rem;font-weight:700;line-height:1"><span style="color:#000000"><?= $male_pct ?>% M</span> <span style="color:#9aa5b4;font-weight:400">/</span> <span style="color:#A6192E"><?= $female_pct ?>% F</span></div>
     <div style="font-size:.65rem;color:#9aa5b4"><?= $stat_male ?> male, <?= $stat_female ?> female<?= $stat_total > $stat_gender_known ? ', ' . ($stat_total - $stat_gender_known) . ' unset' : '' ?></div>
     <div style="background:#e1e5eb;border-radius:99px;height:4px;overflow:hidden;display:flex">
-      <div style="height:100%;width:<?= $male_pct ?>%;background:#003594"></div>
+      <div style="height:100%;width:<?= $male_pct ?>%;background:#000000"></div>
       <div style="height:100%;width:<?= $female_pct ?>%;background:#A6192E"></div>
     </div>
   </div>
@@ -371,7 +371,7 @@ if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.5rem">
       <?php foreach ($upcoming_bdays as $b): ?>
       <div style="background:#f0f4ff;border:1px solid #c7d4f5;border-radius:4px;padding:.5rem .85rem;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
-        <div><strong style="color:#002554"><?= h($b['name']) ?></strong><br>
+        <div><strong style="color:#000000"><?= h($b['name']) ?></strong><br>
           <span style="color:#5a6a7a"><?= h($b['fmt']) ?></span>
           <?php if ($b['box']): ?><span style="color:#9aa5b4"> · PO <?= h($b['box']) ?></span><?php endif; ?></div>
         <div style="white-space:nowrap;padding-left:.5rem">
@@ -403,12 +403,12 @@ function openBirthdays() {
 .cd{position:relative}
 .cd-btn{width:100%;text-align:left;background:#fff;border:1px solid #d0d5dd;border-radius:4px;padding:.55rem .75rem;cursor:pointer;font-size:.9rem;color:#1a2332;display:flex;justify-content:space-between;align-items:center;font-family:inherit}
 .cd-btn::after{content:'▾';font-size:.8rem;color:#5a6a7a;flex-shrink:0}
-.cd-btn:focus{outline:none;border-color:#003594;box-shadow:0 0 0 2px rgba(0,53,148,.15)}
+.cd-btn:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
 .cd-panel{display:none;position:absolute;top:calc(100% + 3px);left:0;right:0;background:#fff;border:1px solid #d0d5dd;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.12);z-index:200;padding:.4rem 0;min-width:160px}
 .cd.open .cd-panel{display:block}
 .cd-panel label{display:flex;align-items:center;gap:.55rem;padding:.38rem .8rem;cursor:pointer;font-size:.875rem;color:#1a2332;font-weight:400;text-transform:none;letter-spacing:0;white-space:nowrap}
 .cd-panel label:hover{background:#f5f7fa}
-.cd-panel input[type=checkbox]{width:auto;accent-color:#003594;cursor:pointer}
+.cd-panel input[type=checkbox]{width:auto;accent-color:#000000;cursor:pointer}
 .cd-footer{border-top:1px solid #e1e5eb;padding:.4rem .8rem 0;display:flex;gap:.5rem;margin-top:.25rem}
 .cd-group-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9aa5b4;padding:.5rem .8rem .2rem}
 /* Cap filter field growth so the Search/Clear buttons fit on the same row instead of wrapping alone beneath six full-width fields */
@@ -538,7 +538,7 @@ function setCurrentYrs() {
   <thead>
     <tr>
       <?php if (can_mark_dues()): ?>
-      <th style="width:36px"><input type="checkbox" id="select-all" style="width:auto;accent-color:#003594" title="Select all"></th>
+      <th style="width:36px"><input type="checkbox" id="select-all" style="width:auto;accent-color:#000000" title="Select all"></th>
       <?php endif; ?>
       <th><?= sort_link('class_year',    'Year',    $sort, $dir, $next_dir, $get_params) ?></th>
       <th><?= sort_link('cadet_last_name','Cadet',   $sort, $dir, $next_dir, $get_params) ?></th>
@@ -564,11 +564,11 @@ function setCurrentYrs() {
     ?>
     <tr>
       <?php if (can_mark_dues()): ?>
-      <td><input type="checkbox" name="member_ids[]" value="<?= (int)$m['id'] ?>" form="bulk-form" style="width:auto;accent-color:#003594" class="row-cb"></td>
+      <td><input type="checkbox" name="member_ids[]" value="<?= (int)$m['id'] ?>" form="bulk-form" style="width:auto;accent-color:#000000" class="row-cb"></td>
       <?php endif; ?>
       <td><?= h($m['class_year']) ?></td>
       <td>
-        <a href="view.php?id=<?= (int)$m['id'] ?>" style="font-weight:700;color:#002554"><?= h($m['cadet_last_name']) ?></a><?= !empty($m['cadet_suffix']) ? ' ' . h($m['cadet_suffix']) : '' ?><?php $cadet_fm = trim($m['cadet_first_name'] . ' ' . $m['cadet_middle_name']); ?><?= $cadet_fm ? ', ' . h($cadet_fm) : '' ?><?php if (strpos(trim($m['cadet_first_name']), ' ') !== false): ?> <span title="First Name still contains a space — likely needs to be split into First/Middle" style="font-size:.65rem;font-weight:700;color:#5f4c00;background:#fff3cd;padding:.05rem .35rem;border-radius:3px">✂️ SPLIT?</span><?php endif; ?><?php if (isset($dup_ids[(int)$m['id']])): ?> <span title="Another active cadet shares this last name + class year — possible duplicate" style="font-size:.65rem;font-weight:700;color:#8a1425;background:#fde0e0;padding:.05rem .35rem;border-radius:3px">👥 DUP?</span><?php endif; ?><br>
+        <a href="view.php?id=<?= (int)$m['id'] ?>" style="font-weight:700;color:#000000"><?= h($m['cadet_last_name']) ?></a><?= !empty($m['cadet_suffix']) ? ' ' . h($m['cadet_suffix']) : '' ?><?php $cadet_fm = trim($m['cadet_first_name'] . ' ' . $m['cadet_middle_name']); ?><?= $cadet_fm ? ', ' . h($cadet_fm) : '' ?><?php if (strpos(trim($m['cadet_first_name']), ' ') !== false): ?> <span title="First Name still contains a space — likely needs to be split into First/Middle" style="font-size:.65rem;font-weight:700;color:#5f4c00;background:#fff3cd;padding:.05rem .35rem;border-radius:3px">✂️ SPLIT?</span><?php endif; ?><?php if (isset($dup_ids[(int)$m['id']])): ?> <span title="Another active cadet shares this last name + class year — possible duplicate" style="font-size:.65rem;font-weight:700;color:#8a1425;background:#fde0e0;padding:.05rem .35rem;border-radius:3px">👥 DUP?</span><?php endif; ?><br>
         <?php if ($m['cadet_email']): ?><a href="mailto:<?= h($m['cadet_email']) ?>" style="font-size:.78rem;color:#5a6a7a"><?= h($m['cadet_email']) ?></a><?php endif; ?>
       </td>
       <td><?php if ($m['al_region']): ?><span class="badge <?= h($region_cls) ?>"><?= h($m['al_region']) ?></span><?php endif; ?></td>
@@ -639,7 +639,7 @@ function setCurrentYrs() {
 
 <?php if (can_mark_dues() && !empty($members)): ?>
 <!-- Bulk action bar -->
-<div id="bulk-bar" style="display:none;position:sticky;bottom:1rem;background:#002554;color:#fff;padding:.85rem 1.25rem;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.3);align-items:center;gap:.65rem;flex-wrap:wrap;margin-top:.75rem">
+<div id="bulk-bar" style="display:none;position:sticky;bottom:1rem;background:#000000;color:#fff;padding:.85rem 1.25rem;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.3);align-items:center;gap:.65rem;flex-wrap:wrap;margin-top:.75rem">
   <span id="bulk-count" style="font-size:.9rem;font-weight:600;margin-right:.25rem"></span>
   <span style="font-size:.82rem;opacity:.7">Dues:</span>
   <button type="submit" form="bulk-form" name="action" value="mark_paid_current" class="btn btn-primary btn-sm">✓ Paid (this year)</button>

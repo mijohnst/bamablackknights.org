@@ -224,7 +224,7 @@ echo show_flash();
       ⚠ Large selection — consider uploading in batches under 200 MB to avoid server limits.
     </div>
     <button type="submit" class="btn btn-primary" id="upload-btn">Upload Files</button>
-    <div id="upload-notice" style="display:none;margin-top:.75rem;background:#e8f0fb;border:1px solid #b3caf5;border-radius:4px;padding:.6rem .8rem;font-size:.82rem;color:#003594">
+    <div id="upload-notice" style="display:none;margin-top:.75rem;background:#e8f0fb;border:1px solid #b3caf5;border-radius:4px;padding:.6rem .8rem;font-size:.82rem;color:#000000">
       ⏳ Uploading — please wait and do not click again.
     </div>
   </form>
@@ -278,7 +278,7 @@ uploadForm.addEventListener('submit', function(e) {
 
 <?php if (!empty($docs)): ?>
 <!-- Bulk bar -->
-<div id="bulk-bar" style="display:none;position:sticky;top:0;z-index:100;background:#003594;color:white;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;align-items:center;gap:.75rem;flex-wrap:wrap">
+<div id="bulk-bar" style="display:none;position:sticky;top:0;z-index:100;background:#000000;color:white;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;align-items:center;gap:.75rem;flex-wrap:wrap">
   <span id="bulk-count" style="font-size:.85rem;font-weight:600;min-width:80px"></span>
   <button onclick="bulkDelete()" class="btn btn-danger btn-sm">Delete Selected</button>
   <button onclick="clearSelection()" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:.85rem;margin-left:auto">✕ Clear</button>
@@ -307,7 +307,7 @@ uploadForm.addEventListener('submit', function(e) {
     <div style="font-size:1.5rem;flex-shrink:0"><?= $icon ?></div>
     <div style="flex:1;min-width:180px">
       <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">
-        <span style="font-weight:600;font-size:.9rem;color:#002554"><?= h($display_name) ?></span>
+        <span style="font-weight:600;font-size:.9rem;color:#000000"><?= h($display_name) ?></span>
         <span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.1rem .35rem;border-radius:3px;background:<?= $is_link?'#e3f2fd':'#f1f3f5' ?>;color:<?= $is_link?'#1565c0':'#5a6a7a' ?>"><?= $is_link?'LINK':'FILE' ?></span>
       </div>
       <div style="font-size:.72rem;color:#9aa5b4;margin-top:.1rem"><?= $meta ?></div>

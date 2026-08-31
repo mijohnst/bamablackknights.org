@@ -164,9 +164,9 @@ echo show_flash();
       <input type="hidden" name="action" value="set_cover">
       <input type="hidden" name="album_id" value="<?= $editing['id'] ?>">
       <input type="hidden" name="photo_id" value="<?= $is_cover ? '0' : $p['id'] ?>">
-      <button type="submit" style="padding:0;border:3px solid <?= $is_cover ? '#003594' : 'transparent' ?>;border-radius:6px;cursor:pointer;display:block;width:100%;background:none">
+      <button type="submit" style="padding:0;border:3px solid <?= $is_cover ? '#000000' : 'transparent' ?>;border-radius:6px;cursor:pointer;display:block;width:100%;background:none">
         <img src="/event-photo-serve.php?f=<?= rawurlencode($p['filename']) ?>" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;display:block">
-        <?php if ($is_cover): ?><div style="font-size:.65rem;text-align:center;padding:.15rem;background:#003594;color:white;border-radius:0 0 3px 3px">Cover</div><?php endif; ?>
+        <?php if ($is_cover): ?><div style="font-size:.65rem;text-align:center;padding:.15rem;background:#000000;color:white;border-radius:0 0 3px 3px">Cover</div><?php endif; ?>
       </button>
     </form>
     <?php endforeach; ?>
@@ -187,7 +187,7 @@ echo show_flash();
     <div style="width:72px;height:72px;background:var(--light);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.75rem;flex-shrink:0">📷</div>
     <?php endif; ?>
     <div style="flex:1;min-width:0">
-      <div style="font-weight:700;font-size:.95rem;color:#002554"><?= h($a['name']) ?></div>
+      <div style="font-weight:700;font-size:.95rem;color:#000000"><?= h($a['name']) ?></div>
       <div style="font-size:.78rem;color:#5a6a7a;margin-top:.2rem">
         <?= $a['event_date'] ? date('M j, Y', strtotime($a['event_date'])) . ' · ' : '' ?>
         <?= (int)$a['photo_count'] ?> photo<?= $a['photo_count'] != 1 ? 's' : '' ?>

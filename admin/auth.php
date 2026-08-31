@@ -353,9 +353,9 @@ function admin_css(): string { return '
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Segoe UI",Arial,sans-serif;background:#f0f2f5;color:#1a2332;font-size:15px}
-a{color:#003594;text-decoration:none}
+a{color:#000000;text-decoration:none}
 a:hover{text-decoration:underline}
-.topbar{background:#002554;color:#fff;padding:.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.topbar{background:#000000;color:#fff;padding:.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
 .topbar-title{font-weight:700;font-size:1rem;letter-spacing:.03em}
 .topbar-title small{font-weight:400;opacity:.65;margin-left:.5rem;font-size:.8rem}
 .topbar nav{display:flex;gap:1.25rem;align-items:center}
@@ -363,8 +363,8 @@ a:hover{text-decoration:underline}
 .topbar nav a:hover{color:#fff;text-decoration:none}
 .main{max-width:1300px;margin:2rem auto;padding:0 1rem}
 .page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem}
-h1{font-size:1.4rem;color:#002554}
-h2{font-size:1rem;color:#002554;margin-bottom:.75rem;font-weight:700}
+h1{font-size:1.4rem;color:#000000}
+h2{font-size:1rem;color:#000000;margin-bottom:.75rem;font-weight:700}
 .card{background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:1.5rem;margin-bottom:1.5rem}
 table{width:100%;border-collapse:collapse;font-size:.85rem}
 th{text-align:left;padding:.55rem .75rem;background:#f5f7fa;border-bottom:2px solid #e1e5eb;color:#5a6a7a;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
@@ -373,7 +373,7 @@ tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:#f8f9fb}
 .btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem 1rem;border-radius:4px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;letter-spacing:.02em;text-decoration:none}
 .btn:hover{text-decoration:none}
-.btn-primary{background:#003594;color:#fff}
+.btn-primary{background:#000000;color:#fff}
 .btn-primary:hover{background:#002268}
 .btn-danger{background:#A6192E;color:#fff}
 .btn-danger:hover{background:#8a1425}
@@ -382,7 +382,7 @@ tbody tr:hover td{background:#f8f9fb}
 .btn-sm{padding:.28rem .65rem;font-size:.75rem}
 .btn-group{display:flex;gap:.4rem}
 input,select,textarea{width:100%;padding:.55rem .75rem;border:1px solid #d0d5dd;border-radius:4px;font-family:inherit;font-size:.9rem;color:#1a2332;background:#fff}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#003594;box-shadow:0 0 0 2px rgba(0,53,148,.15)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
 textarea{resize:vertical;min-height:75px}
 label{display:block;font-size:.78rem;font-weight:700;color:#5a6a7a;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.04em}
 .form-group{margin-bottom:.9rem}
@@ -391,7 +391,7 @@ label{display:block;font-size:.78rem;font-weight:700;color:#5a6a7a;margin-bottom
 .col-3{grid-template-columns:1fr 1fr 1fr}
 .col-4{grid-template-columns:1fr 1fr 1fr 1fr}
 fieldset{border:1px solid #e1e5eb;border-radius:6px;padding:1.1rem 1.25rem;margin-bottom:1.25rem}
-legend{font-weight:700;color:#002554;font-size:.82rem;padding:0 .4rem;letter-spacing:.04em;text-transform:uppercase}
+legend{font-weight:700;color:#000000;font-size:.82rem;padding:0 .4rem;letter-spacing:.04em;text-transform:uppercase}
 .alert{padding:.75rem 1rem;border-radius:4px;margin-bottom:1rem;font-size:.9rem}
 .alert-success{background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50}
 .alert-error{background:#ffebee;color:#c62828;border-left:4px solid #f44336}

@@ -39,23 +39,23 @@ foreach ($all as $p) {
 }
 ksort($groups);
 
-$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#003594'];
+$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#000000'];
 
 admin_header('Receipts by ' . ucfirst($by));
 ?>
 <style>
 .rb-tabs{display:flex;gap:.4rem;margin-bottom:1.5rem;flex-wrap:wrap}
 .rb-tab{padding:.45rem 1.1rem;border-radius:5px;font-size:.82rem;font-weight:700;letter-spacing:.03em;text-decoration:none;border:2px solid transparent;transition:all .15s}
-.rb-tab.active{background:#002554;color:#fff;border-color:#002554}
-.rb-tab:not(.active){background:#fff;color:#002554;border-color:#d0d8e4}
-.rb-tab:not(.active):hover{border-color:#002554;text-decoration:none;color:#002554}
+.rb-tab.active{background:#000000;color:#fff;border-color:#000000}
+.rb-tab:not(.active){background:#fff;color:#000000;border-color:#d0d8e4}
+.rb-tab:not(.active):hover{border-color:#000000;text-decoration:none;color:#000000}
 .group-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:.85rem;overflow:hidden}
 .group-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;cursor:pointer;user-select:none;gap:1rem;flex-wrap:wrap}
 .group-header:hover{background:#f7f9fc}
 .group-header.open{border-bottom:2px solid #e1e8f0}
-.group-name{font-family:var(--font-display,Georgia,serif);font-size:.95rem;font-weight:700;color:#002554;letter-spacing:.02em}
+.group-name{font-family:var(--font-display,Georgia,serif);font-size:.95rem;font-weight:700;color:#000000;letter-spacing:.02em}
 .group-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.group-total{font-size:.9rem;font-weight:700;color:#002554}
+.group-total{font-size:.9rem;font-weight:700;color:#000000}
 .group-count{font-size:.75rem;color:#9aa5b4}
 .group-chevron{font-size:1rem;color:#9aa5b4;transition:transform .2s;flex-shrink:0}
 .group-header.open .group-chevron{transform:rotate(180deg)}
@@ -67,7 +67,7 @@ table.rb-table{width:100%;border-collapse:collapse;font-size:.82rem}
 .rb-table tr:hover td{background:#fafbfc}
 .status-pill{display:inline-block;padding:.15rem .5rem;border-radius:99px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .no-receipt{font-size:.72rem;color:#9aa5b4;font-style:italic}
-.receipt-link{font-size:.78rem;color:#003594;font-weight:600;text-decoration:none}
+.receipt-link{font-size:.78rem;color:#000000;font-weight:600;text-decoration:none}
 .receipt-link:hover{text-decoration:underline}
 .group-footer td{background:#f7f9fc;font-weight:700;font-size:.82rem;padding:.55rem 1rem;border-top:2px solid #e1e8f0}
 .no-receipt-badge{display:inline-block;background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:3px;font-size:.65rem;padding:.1rem .35rem;font-weight:700;letter-spacing:.03em}
@@ -126,7 +126,7 @@ $no_receipt_count = count(array_filter($all, fn($p) => empty($p['receipt_filenam
   <span>·</span>
   <span><?= count($all) ?> purchase<?= count($all)!==1?'s':'' ?></span>
   <span>·</span>
-  <span style="font-weight:700;color:#002554">$<?= number_format($grand_total,2) ?> total</span>
+  <span style="font-weight:700;color:#000000">$<?= number_format($grand_total,2) ?> total</span>
   <?php if ($no_receipt_count > 0): ?>
   <span>·</span>
   <span style="color:#856404">⚠ <?= $no_receipt_count ?> missing receipt<?= $no_receipt_count!==1?'s':'' ?></span>
@@ -202,7 +202,7 @@ $no_receipt_count = count(array_filter($all, fn($p) => empty($p['receipt_filenam
 <?php endforeach; ?>
 
 <!-- Grand total -->
-<div style="text-align:right;padding:.75rem 1.25rem;font-size:.9rem;font-weight:700;color:#002554">
+<div style="text-align:right;padding:.75rem 1.25rem;font-size:.9rem;font-weight:700;color:#000000">
   Grand total &nbsp; $<?= number_format($grand_total,2) ?>
 </div>
 

@@ -106,13 +106,13 @@ admin_header('Vote');
 echo show_flash();
 ?>
 <style>
-.poll-card{border-left:3px solid #003594;padding:.85rem 1rem;margin-bottom:.85rem;background:#fff;border-radius:0 4px 4px 0}
+.poll-card{border-left:3px solid #000000;padding:.85rem 1rem;margin-bottom:.85rem;background:#fff;border-radius:0 4px 4px 0}
 .poll-card.closed{border-left-color:#9aa5b4}
 .poll-meta{font-size:.78rem;color:#5a6a7a;margin-top:.15rem;margin-bottom:.6rem}
 .poll-choice{display:flex;align-items:center;gap:.55rem;padding:.4rem 0;font-size:.92rem}
 .poll-bar-row{display:flex;align-items:center;gap:.6rem;margin-top:.3rem;font-size:.82rem}
 .poll-bar-track{flex:1;height:10px;background:#f0f2f5;border-radius:99px;overflow:hidden}
-.poll-bar-fill{height:100%;background:#003594;border-radius:99px}
+.poll-bar-fill{height:100%;background:#000000;border-radius:99px}
 </style>
 
 <div class="page-head">
@@ -143,7 +143,7 @@ echo show_flash();
     $show_ballot   = $is_open && $poll_eligible && !$already;
   ?>
   <div class="poll-card <?= $is_open ? '' : 'closed' ?>">
-    <strong style="color:#002554"><?= h($p['title']) ?></strong>
+    <strong style="color:#000000"><?= h($p['title']) ?></strong>
     <?php if (!$is_open): ?><span style="color:#9aa5b4;font-size:.75rem"> · Closed</span>
     <?php elseif ($already): ?><span style="color:#1b5e20;font-size:.75rem"> · ✓ You voted</span><?php endif; ?>
     <?php if ($audience === 'board'): ?><span style="color:#A6192E;font-size:.75rem"> · Board Only</span><?php endif; ?>

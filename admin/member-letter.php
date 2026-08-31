@@ -67,22 +67,22 @@ body{font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;backgro
   .no-print{display:none!important}
   @page{margin:0.85in}
 }
-.letterhead{text-align:center;border-bottom:2px solid #003594;padding-bottom:.6rem;margin-bottom:1.4rem}
-.club-name{font-size:18pt;font-weight:bold;color:#002554;letter-spacing:.02em}
-.club-sub{font-size:10pt;color:#003594;margin-top:.15rem}
+.letterhead{text-align:center;border-bottom:2px solid #000000;padding-bottom:.6rem;margin-bottom:1.4rem}
+.club-name{font-size:18pt;font-weight:bold;color:#000000;letter-spacing:.02em}
+.club-sub{font-size:10pt;color:#000000;margin-top:.15rem}
 .letter-date{text-align:right;margin-bottom:1.4rem;font-size:11pt}
 .to-line{margin-bottom:1.4rem;font-size:11pt}
 .body-text{line-height:1.7;margin-bottom:1rem;font-size:11.5pt}
-.member-box{border:1px solid #003594;border-radius:4px;padding:.75rem 1rem;margin:1.2rem 0;background:#f8faff}
+.member-box{border:1px solid #000000;border-radius:4px;padding:.75rem 1rem;margin:1.2rem 0;background:#f8faff}
 .member-box table{width:100%;border-collapse:collapse;font-size:11pt}
 .member-box td{padding:.25rem .5rem;vertical-align:top}
-.member-box td:first-child{font-weight:bold;width:45%;color:#003594}
+.member-box td:first-child{font-weight:bold;width:45%;color:#000000}
 .sig-block{margin-top:2.5rem}
 .sig-line{border-top:1px solid #000;margin-top:2rem;padding-top:.25rem;font-size:10.5pt}
 .sig-name{font-weight:bold;margin-top:.25rem}
-.print-btn{position:fixed;top:1rem;right:1rem;background:#003594;color:#fff;border:none;padding:.6rem 1.2rem;border-radius:5px;font-size:14px;cursor:pointer;font-family:sans-serif}
-.print-btn:hover{background:#002554}
-.back-link{position:fixed;top:1rem;left:1rem;background:#f0f2f5;color:#002554;border:none;padding:.5rem 1rem;border-radius:5px;font-size:13px;text-decoration:none;font-family:sans-serif}
+.print-btn{position:fixed;top:1rem;right:1rem;background:#000000;color:#fff;border:none;padding:.6rem 1.2rem;border-radius:5px;font-size:14px;cursor:pointer;font-family:sans-serif}
+.print-btn:hover{background:#000000}
+.back-link{position:fixed;top:1rem;left:1rem;background:#f0f2f5;color:#000000;border:none;padding:.5rem 1rem;border-radius:5px;font-size:13px;text-decoration:none;font-family:sans-serif}
 </style>
 </head>
 <body>

@@ -37,7 +37,7 @@ $brows = $bstmt->fetchAll();
 foreach ($brows as $b) $budgets[$b['event']] = (float)$b['budget'];
 
 $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#003594'];
+$status_colors = ['pending'=>'#f57c00','approved'=>'#1b5e20','submitted'=>'#6a1b9a','paid'=>'#000000'];
 
 admin_header('Finance Report');
 ?>
@@ -48,13 +48,13 @@ admin_header('Finance Report');
 .bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.55rem;font-size:.82rem}
 .bar-label{width:160px;flex-shrink:0;color:#333;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bar-track{flex:1;background:#f0f2f5;border-radius:99px;height:16px;overflow:hidden;position:relative}
-.bar-fill{height:100%;border-radius:99px;background:#003594;transition:width .4s}
+.bar-fill{height:100%;border-radius:99px;background:#000000;transition:width .4s}
 .bar-fill.over{background:#A6192E}
-.bar-amount{width:70px;text-align:right;font-weight:700;color:#002554;flex-shrink:0}
+.bar-amount{width:70px;text-align:right;font-weight:700;color:#000000;flex-shrink:0}
 .bar-budget{font-size:.72rem;color:#9aa5b4;flex-shrink:0}
 .month-bar{display:flex;align-items:flex-end;gap:4px;height:80px}
 .mb-col{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
-.mb-bar{width:100%;background:#003594;border-radius:3px 3px 0 0;min-height:2px}
+.mb-bar{width:100%;background:#000000;border-radius:3px 3px 0 0;min-height:2px}
 .mb-label{font-size:.65rem;color:#9aa5b4}
 @media(max-width:700px){.rep-grid{grid-template-columns:1fr}}
 </style>
@@ -76,7 +76,7 @@ admin_header('Finance Report');
 <!-- Summary cards -->
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin-bottom:1.5rem">
   <div class="card" style="padding:1rem;text-align:center;margin:0">
-    <div style="font-size:1.5rem;font-weight:700;color:#002554"><?= count($all) ?></div>
+    <div style="font-size:1.5rem;font-weight:700;color:#000000"><?= count($all) ?></div>
     <div style="font-size:.72rem;color:#5a6a7a;text-transform:uppercase">Purchases</div>
   </div>
   <div class="card" style="padding:1rem;text-align:center;margin:0;border:2px solid #A6192E">
@@ -140,8 +140,8 @@ admin_header('Finance Report');
         $h = $by_month[$m] > 0 ? max(4, round($by_month[$m]/$max_month*72)) : 0;
       ?>
       <div class="mb-col">
-        <div style="font-size:.65rem;color:#002554;font-weight:700"><?= $by_month[$m]>0 ? '$'.number_format($by_month[$m],0) : '' ?></div>
-        <div class="mb-bar" style="height:<?= $h ?>px;background:<?= $by_month[$m]>0?'#003594':'#e1e5eb' ?>"></div>
+        <div style="font-size:.65rem;color:#000000;font-weight:700"><?= $by_month[$m]>0 ? '$'.number_format($by_month[$m],0) : '' ?></div>
+        <div class="mb-bar" style="height:<?= $h ?>px;background:<?= $by_month[$m]>0?'#000000':'#e1e5eb' ?>"></div>
         <div class="mb-label"><?= $months[$m-1] ?></div>
       </div>
       <?php endfor; ?>

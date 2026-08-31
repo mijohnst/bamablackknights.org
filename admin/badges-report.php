@@ -101,7 +101,7 @@ admin_header('Badges Status Report');
 
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin-bottom:1.5rem">
   <div class="card" style="padding:1rem;text-align:center;margin:0">
-    <div style="font-size:1.5rem;font-weight:700;color:#002554"><?= $paid_total ?></div>
+    <div style="font-size:1.5rem;font-weight:700;color:#000000"><?= $paid_total ?></div>
     <div style="font-size:.72rem;color:#5a6a7a;text-transform:uppercase">Paid Families</div>
   </div>
   <div class="card" style="padding:1rem;text-align:center;margin:0;border:2px solid #1b5e20">

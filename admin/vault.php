@@ -100,7 +100,7 @@ echo show_flash();
 .doc-row:hover{background:#fafbff}
 .doc-icon{font-size:1.5rem;flex-shrink:0}
 .doc-meta{flex:1;min-width:0}
-.doc-title{font-weight:700;color:#002554;font-size:.92rem}
+.doc-title{font-weight:700;color:#000000;font-size:.92rem}
 .doc-sub{font-size:.75rem;color:#5a6a7a;margin-top:.15rem}
 .cat-badge{display:inline-block;background:#e3f2fd;color:#0d47a1;font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;margin-right:.35rem}
 </style>

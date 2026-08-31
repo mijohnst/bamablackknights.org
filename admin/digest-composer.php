@@ -15,12 +15,12 @@ admin_header('Digest Composer');
 .digest-status{font-size:.85rem;color:#5a6a7a}
 .digest-result{display:none}
 .digest-preview{border:1px solid #d0d5dd;border-radius:4px;padding:1.25rem 1.5rem;background:#fbfcfe;margin-top:.75rem}
-.digest-preview h3{color:#002554;font-size:1rem;margin:1rem 0 .4rem}
+.digest-preview h3{color:#000000;font-size:1rem;margin:1rem 0 .4rem}
 .digest-preview h3:first-child{margin-top:0}
 .digest-preview p{margin:0 0 .75rem;line-height:1.5}
 .digest-preview ul{margin:0 0 .75rem 1.25rem}
 .digest-preview li{margin-bottom:.35rem;line-height:1.5}
-.digest-preview a{color:#003594}
+.digest-preview a{color:#000000}
 .copy-toast{display:none;color:#2e7d32;font-size:.82rem;font-weight:600}
 .digest-textout{width:100%;min-height:180px;margin-top:.5rem;font-family:ui-monospace,Consolas,monospace;font-size:.82rem}
 </style>

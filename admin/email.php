@@ -276,19 +276,19 @@ admin_header('Compose Email');
 <style>
 .compose-card{background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:1.5rem;max-width:900px;margin-bottom:1.25rem}
 .loader-card{background:#f0f4ff;border:1px solid #c7d4f5;border-radius:6px;padding:1.25rem 1.5rem;max-width:900px;margin-bottom:1.25rem}
-.loader-card h2{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#003594;margin-bottom:1rem}
-.from-badge{display:inline-flex;align-items:center;gap:.5rem;background:#f0f4ff;border:1px solid #c7d4f5;border-radius:4px;padding:.45rem .85rem;font-size:.9rem;color:#002554;font-weight:600}
+.loader-card h2{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#000000;margin-bottom:1rem}
+.from-badge{display:inline-flex;align-items:center;gap:.5rem;background:#f0f4ff;border:1px solid #c7d4f5;border-radius:4px;padding:.45rem .85rem;font-size:.9rem;color:#000000;font-weight:600}
 .recipient-count{font-size:.78rem;margin-top:.3rem}
 .char-count{font-size:.78rem;color:#5a6a7a;text-align:right;margin-top:.25rem}
 .cd{position:relative}
 .cd-btn{width:100%;text-align:left;background:#fff;border:1px solid #d0d5dd;border-radius:4px;padding:.55rem .75rem;cursor:pointer;font-size:.9rem;color:#1a2332;display:flex;justify-content:space-between;align-items:center;font-family:inherit}
 .cd-btn::after{content:'▾';font-size:.8rem;color:#5a6a7a;flex-shrink:0}
-.cd-btn:focus{outline:none;border-color:#003594;box-shadow:0 0 0 2px rgba(0,53,148,.15)}
+.cd-btn:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
 .cd-panel{display:none;position:absolute;top:calc(100% + 3px);left:0;right:0;background:#fff;border:1px solid #d0d5dd;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.12);z-index:200;padding:.4rem 0;min-width:160px}
 .cd.open .cd-panel{display:block}
 .cd-panel label{display:flex;align-items:center;gap:.55rem;padding:.38rem .8rem;cursor:pointer;font-size:.875rem;color:#1a2332;font-weight:400;text-transform:none;letter-spacing:0;white-space:nowrap}
 .cd-panel label:hover{background:#f5f7fa}
-.cd-panel input[type=checkbox]{width:auto;accent-color:#003594;cursor:pointer}
+.cd-panel input[type=checkbox]{width:auto;accent-color:#000000;cursor:pointer}
 .cd-footer{border-top:1px solid #e1e5eb;padding:.4rem .8rem 0;display:flex;gap:.5rem;margin-top:.25rem}
 .cd-group-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#9aa5b4;padding:.5rem .8rem .2rem}
 .ql-editor{min-height:220px;font-family:"Segoe UI",Arial,sans-serif;font-size:.95rem}
@@ -428,7 +428,7 @@ admin_header('Compose Email');
 
     <div class="form-group" style="max-width:360px">
       <label>From</label>
-      <select name="from_email" id="from-select" style="font-weight:600;color:#002554" onchange="updateSigPreview()">
+      <select name="from_email" id="from-select" style="font-weight:600;color:#000000" onchange="updateSigPreview()">
         <?php foreach ($from_options as $addr => $title): ?>
           <option value="<?= h($addr) ?>" <?= $from_email===$addr?'selected':''?>>
             <?= h($title) ?> &lt;<?= h($addr) ?>&gt;

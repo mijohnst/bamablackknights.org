@@ -15,7 +15,7 @@ admin_header('Committee Interest');
 ?>
 <style>
 .ci-group{margin-bottom:1.25rem}
-.ci-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#003594;border-bottom:2px solid #003594;padding-bottom:.25rem;margin-bottom:.6rem}
+.ci-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#000000;border-bottom:2px solid #000000;padding-bottom:.25rem;margin-bottom:.6rem}
 .ci-member{display:flex;justify-content:space-between;padding:.4rem .1rem;font-size:.85rem;border-bottom:1px solid #f0f2f5}
 </style>
 

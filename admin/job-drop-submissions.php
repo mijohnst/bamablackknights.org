@@ -277,7 +277,7 @@ function confirmDeleteAllJobDrop(pendingCount, liveCount) {
 <?php endif; ?>
 
 <div class="card" style="max-width:520px;margin-bottom:1.5rem">
-  <h3 style="margin-bottom:.4rem;font-size:1rem;color:#002554">Which class is Job Drop Night open for?</h3>
+  <h3 style="margin-bottom:.4rem;font-size:1rem;color:#000000">Which class is Job Drop Night open for?</h3>
   <p style="font-size:.8rem;color:#5a6a7a;margin-bottom:1rem">
     Currently: <strong>Class of <?= h($effective_year) ?></strong>
     <?= $year_override ? " (manually set — automatic would be $auto_year)" : ' (automatic — flips every July 1st)' ?>.
@@ -314,7 +314,7 @@ function confirmDeleteAllJobDrop(pendingCount, liveCount) {
     <img src="/job-drop-submission-serve.php?id=<?= (int)$s['id'] ?>" alt="Preview of <?= h($cadet_name) ?>'s submitted Job Drop photo">
     <div class="sub-body">
       <div class="sub-meta">
-        <strong style="color:#002554"><?= h($cadet_name) ?></strong> — <?= h($s['job_title']) ?><br>
+        <strong style="color:#000000"><?= h($cadet_name) ?></strong> — <?= h($s['job_title']) ?><br>
         Submitted by <?= h($parent_name) ?> &bull; <?= date('M j, Y', strtotime($s['submitted_at'])) ?>
         <?php if (!empty($s['youtube_id'])): ?>
           <br><a href="https://www.youtube-nocookie.com/watch?v=<?= h($s['youtube_id']) ?>" target="_blank" rel="noopener">&#9654; Watch submitted video</a>
@@ -345,7 +345,7 @@ function confirmDeleteAllJobDrop(pendingCount, liveCount) {
 </div>
 <?php endif; ?>
 
-<h2 style="margin-top:2.5rem;margin-bottom:.25rem;font-size:1.15rem;color:#002554">Live on Homepage</h2>
+<h2 style="margin-top:2.5rem;margin-bottom:.25rem;font-size:1.15rem;color:#000000">Live on Homepage</h2>
 <p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem">
   Approved entries. Grouped by class year — once a class graduates and the next one becomes eligible, its entries stop
   appearing on the homepage automatically, but stay listed here until you delete them.
@@ -360,7 +360,7 @@ function confirmDeleteAllJobDrop(pendingCount, liveCount) {
     <img src="/job-drop-photo-serve.php?id=<?= (int)$l['id'] ?>" alt="<?= h($l['cadet_name']) ?> — <?= h($l['job_title']) ?>">
     <div class="sub-body">
       <div class="sub-meta">
-        <strong style="color:#002554"><?= h($l['cadet_name']) ?></strong> — <?= h($l['job_title']) ?><br>
+        <strong style="color:#000000"><?= h($l['cadet_name']) ?></strong> — <?= h($l['job_title']) ?><br>
         Class of <?= h($l['class_year']) ?><?= $l['active'] ? '' : ' &middot; Hidden' ?>
         <?php if (!empty($l['youtube_id'])): ?>
           <br><a href="https://www.youtube-nocookie.com/watch?v=<?= h($l['youtube_id']) ?>" target="_blank" rel="noopener">&#9654; Watch video</a>

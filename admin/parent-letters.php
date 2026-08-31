@@ -99,7 +99,7 @@ function confirmDeleteAllLetters(count) {
   ?>
   <div class="pl-row">
     <div style="flex:1;min-width:0">
-      <strong style="color:#002554"><?= h($cadet_name) ?></strong>
+      <strong style="color:#000000"><?= h($cadet_name) ?></strong>
       <span style="font-size:.78rem;color:#9aa5b4"> — from <?= h($parent_name) ?> · saved <?= $saved ?></span>
       <div class="pl-snippet"><?= h($l['letter_body']) ?></div>
     </div>

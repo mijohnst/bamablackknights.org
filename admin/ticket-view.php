@@ -198,7 +198,7 @@ echo show_flash();
     <div class="comment-bubble <?= $cls ?>">
       <div class="comment-meta">
         <strong><?= h($c['author_name'] ?? 'Unknown') ?></strong>
-        <?= in_array($c['author_role'],['admin','tech']) ? '<span style="background:#002554;color:#fff;font-size:.62rem;padding:.1rem .35rem;border-radius:3px;margin-left:.3rem">SUPPORT</span>' : '' ?>
+        <?= in_array($c['author_role'],['admin','tech']) ? '<span style="background:#000000;color:#fff;font-size:.62rem;padding:.1rem .35rem;border-radius:3px;margin-left:.3rem">SUPPORT</span>' : '' ?>
         <?= $c['is_internal'] ? '<span style="background:#ffc107;color:#5f4c00;font-size:.62rem;padding:.1rem .35rem;border-radius:3px;margin-left:.3rem">INTERNAL</span>' : '' ?>
         · <?= h(date('M j, Y g:ia', strtotime($c['created_at']))) ?>
       </div>
