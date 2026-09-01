@@ -1162,6 +1162,44 @@ function renderEvents(events) {
 
 var EVENTS_CACHE_KEY = 'usafa_events_cache_v1';
 
+// Placeholder shown until the admin portal has real events to feed this
+// section — the 2026 Army Black Knights football schedule, so the page
+// isn't just an empty "coming soon" box for this demo. Source:
+// https://www.espn.com/college-football/team/schedule/_/id/349/army-black-knights
+// Delete this function (and its two call sites below) once real events
+// are flowing through events-feed.php.
+function footballScheduleHtml() {
+  var games = [
+    ['Sep 5',  'vs Bryant',            '12:00 PM &middot; CBSSN'],
+    ['Sep 12', 'vs South Florida',     '12:00 PM &middot; CBSSN'],
+    ['Sep 25', '@ Temple',             '4:00 PM'],
+    ['Oct 3',  '@ Louisiana Tech',     'TBD'],
+    ['Oct 10', 'vs Tulane',            '12:00 PM &middot; CBSSN'],
+    ['Oct 17', 'vs Florida Atlantic',  '12:00 PM &middot; CBSSN'],
+    ['Oct 23', '@ Tulsa',              '8:30 PM'],
+    ['Oct 31', '@ Memphis',            'TBD'],
+    ['Nov 7',  'vs Air Force',         '7:30 PM &middot; CBS'],
+    ['Nov 21', 'vs East Carolina',     '12:00 PM &middot; CBSSN'],
+    ['Nov 28', '@ Rice',               'TBD'],
+    ['Dec 12', 'vs Navy',              '3:00 PM &middot; CBS']
+  ];
+  var rows = games.map(function(g, i) {
+    var isRivalry = g[1] === 'vs Navy';
+    return '<tr style="background:' + (i % 2 ? 'var(--light)' : 'transparent') + (isRivalry ? ';font-weight:700' : '') + '">'
+      + '<td style="padding:.55rem .75rem">' + g[0] + '</td>'
+      + '<td style="padding:.55rem .75rem">' + g[1] + (isRivalry ? ' <span style="color:#D4BF91">&#127942; Army-Navy Game</span>' : '') + '</td>'
+      + '<td style="padding:.55rem .75rem;color:#5a6a7a">' + g[2] + '</td>'
+      + '</tr>';
+  }).join('');
+  return '<div style="text-align:left">'
+    + '<p style="color:#5a6a7a;margin-bottom:1rem;font-size:.9rem">Club events will appear here once added &mdash; for now, here\'s the 2026 Army Black Knights football schedule.</p>'
+    + '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.88rem">'
+    + '<thead><tr style="background:#000;color:#fff"><th style="padding:.6rem .75rem;text-align:left">Date</th><th style="padding:.6rem .75rem;text-align:left">Opponent</th><th style="padding:.6rem .75rem;text-align:left">Time</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table></div>'
+    + '<div style="margin-top:1rem;text-align:center"><a href="events-calendar.html" style="display:inline-block;padding:.5rem 1.5rem;background:var(--blue);color:#fff;border-radius:3px;font-family:var(--font-display);font-size:.75rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;">View Academy Calendar &amp; Key Dates &rarr;</a></div>'
+    + '</div>';
+}
+
 async function loadEvents() {
   var list = document.getElementById('events-list');
   var renderedFromCache = false;
@@ -1187,7 +1225,7 @@ async function loadEvents() {
       // showing events that were removed, and show the placeholder.
       if (data.success) {
         try { localStorage.removeItem(EVENTS_CACHE_KEY); } catch(e) {}
-        if (list) list.innerHTML = '<p style="color:#5a6a7a">Events coming soon. Check back often.</p>';
+        if (list) list.innerHTML = footballScheduleHtml();
         return;
       }
     }
@@ -1196,7 +1234,7 @@ async function loadEvents() {
   // Network/server failure: keep whatever we already rendered from cache; only
   // fall back to the placeholder if we had nothing to show.
   if (!renderedFromCache && list) {
-    list.innerHTML = '<p style="color:#5a6a7a">Events coming soon. Check back often.</p>';
+    list.innerHTML = footballScheduleHtml();
   }
 }
 
