@@ -6,6 +6,7 @@
   --silver:#D4BF91; --silver2:#E4D6B0; --white:#f5f5f0;
   --gray:#6B6E70; --light:#efece3;
   --accent:#D4BF91;
+  --gunmetal:#4A4A44; --gunmetal-dark:#2E2E2A;
   --font-display:'Cinzel',serif; --font-body:'Source Sans 3',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
