@@ -76,7 +76,8 @@
     #mascot .section-label{color:var(--silver2);}
     #mascot .section-title{color:var(--white);}
     #mascot .divider{margin-left:auto;margin-right:auto;}
-    .mascot-badge{width:150px;height:150px;border-radius:50%;background:rgba(0,0,0,.35);border:3px solid #D4BF91;display:flex;align-items:center;justify-content:center;font-size:4.5rem;margin:0 auto 1.5rem;line-height:1;}
+    .mascot-badge{width:220px;height:280px;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.35);border:3px solid #D4BF91;margin:0 auto 1.5rem;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+    .mascot-badge img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;}
     .mascot-copy{max-width:680px;margin:0 auto;color:rgba(245,245,240,.85);font-size:.95rem;line-height:1.7;}
     .mascot-copy strong{color:#D4BF91;}
 
@@ -114,6 +115,10 @@
     .event-card{display:grid;grid-template-columns:80px 1fr;gap:1.5rem;align-items:center;background:var(--white);border:1px solid rgba(212,191,145,.25);border-left:4px solid #D4BF91;border-radius:4px;padding:1.5rem;transition:background .2s,box-shadow .2s;}
     .event-card:hover{background:#fdf5f6;box-shadow:0 4px 16px rgba(212,191,145,.12);}
     .events-group-label{font-family:var(--font-display);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.4rem .75rem;margin-bottom:.5rem;border-radius:3px;display:inline-block;}
+    .rivalry-banner{background:#0d0d0b;background-image:linear-gradient(160deg,#1a1a17 0%,#000 100%);border:1px solid #D4BF91;border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;text-align:center;}
+    .rivalry-banner .rivalry-label{font-family:var(--font-display);color:#D4BF91;font-size:1.1rem;letter-spacing:.04em;margin-bottom:.5rem;}
+    .rivalry-banner .rivalry-label span{color:rgba(245,245,240,.65);font-family:var(--font-body);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-top:.2rem;}
+    .rivalry-banner .ev-countdown{background:transparent!important;border:none!important;padding:0!important;font-size:1.15rem!important;color:#fff!important;display:block!important;margin:0!important;}
     .events-group-label.label-upcoming{background:var(--blue);color:#fff;}
     .events-group-label.label-cadets{background:#D4BF91;color:#000;}
     .events-group-label.label-future{background:#000000;color:#FFC72C;}
@@ -402,7 +407,7 @@
     <p class="section-label">Corps Spirit</p>
     <h2 class="section-title">Meet the Mascot</h2>
     <div class="divider"></div>
-    <div class="mascot-badge">&#129743;</div>
+    <div class="mascot-badge"><img src="mascot-mule.jpg" alt="Army West Point mule mascot" loading="lazy"></div>
     <p class="mascot-copy">Since 1899, a mule has carried Army's colors as its official mascot &mdash; chosen because the sturdy, stubborn animal hauled the Army's supplies and artillery long before trucks ever could, the same grit West Point cadets are known for. Every December, the mule squares off against Navy's goat at the <strong>Army-Navy Game</strong>, one of the oldest and proudest rivalries in college sports.</p>
   </div>
 </section>
@@ -451,7 +456,7 @@
     <p class="section-label">Upcoming</p>
     <h2 class="section-title">Events &amp; Key Dates</h2>
     <div class="divider"></div>
-    <p style="color:#5a6a7a;margin-bottom:2rem;">Events are added and updated as they come up &mdash; check back often for the latest schedule.</p>
+    <p style="color:#5a6a7a;margin-bottom:2rem;">Check back regularly for the latest club gatherings and Academy dates.</p>
     <div class="events-list" id="events-list">
       <p class="news-loading">&#128197; Loading events&hellip;</p>
     </div>
@@ -1173,7 +1178,7 @@ function bindEvCountdowns(container) {
   });
 }
 
-var EVENTS_CACHE_KEY = 'usafa_events_cache_v1';
+var EVENTS_CACHE_KEY = 'usma_events_cache_v1';
 
 // Placeholder shown until the admin portal has real events to feed this
 // section — the 2026 Army Black Knights football schedule, so the page
@@ -1206,8 +1211,11 @@ function footballScheduleHtml() {
   }).join('');
   var armyNavyDeadline = new Date('December 12, 2026 15:00:00').getTime();
   return '<div style="text-align:left">'
-    + '<p style="color:#5a6a7a;margin-bottom:1rem;font-size:.9rem">Club events will appear here once added &mdash; for now, here\'s the 2026 Army Black Knights football schedule.</p>'
-    + '<div class="ev-countdown" data-deadline="' + armyNavyDeadline + '" data-verb="Kickoff in" style="display:inline-flex;align-items:center;gap:.5rem;background:#1a1a17;border:1px solid #D4BF91;border-radius:4px;padding:.5rem 1rem;margin-bottom:1.25rem;font-size:.9rem;font-weight:700;color:#D4BF91">Loading&hellip;</div>'
+    + '<div class="rivalry-banner">'
+      + '<div class="rivalry-label">&#127942; Army &ndash; Navy Game &middot; Dec 12, 2026<span>College Football\'s Oldest Rivalry</span></div>'
+      + '<div class="ev-countdown" data-deadline="' + armyNavyDeadline + '" data-verb="Kickoff in">Loading&hellip;</div>'
+    + '</div>'
+    + '<p style="color:#5a6a7a;margin-bottom:1rem;font-size:.9rem">While our club calendar comes together, here\'s the 2026 Army Black Knights football schedule:</p>'
     + '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.88rem">'
     + '<thead><tr style="background:#000;color:#fff"><th style="padding:.6rem .75rem;text-align:left">Date</th><th style="padding:.6rem .75rem;text-align:left">Opponent</th><th style="padding:.6rem .75rem;text-align:left">Time</th></tr></thead>'
     + '<tbody>' + rows + '</tbody></table></div>'
