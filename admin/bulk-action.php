@@ -57,7 +57,7 @@ if (in_array($action, $dues_actions, true)) {
     }
     $labels = [
         'mark_paid_current'   => "marked paid for $cur_year",
-        'mark_paid_4year'     => 'marked paid for all 4 undergrad years ($275 rate)',
+        'mark_paid_4year'     => 'marked paid for all 4 undergrad years ($375 rate)',
         'mark_unpaid_current' => "marked not paid for $cur_year",
     ];
     flash('success', "$count member(s) " . $labels[$action] . '.');
