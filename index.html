@@ -107,19 +107,7 @@
     .tag-social{background:rgba(107,110,112,.12);color:#3a3d3f;border:1px solid rgba(107,110,112,.2);}
     .tag-volunteer{background:rgba(30,100,30,.1);color:#1a5a1a;border:1px solid rgba(30,100,30,.2);}
 
-    /* NEWS */
-    #usafa-news{background:var(--white);}
-    #news-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:1.5rem;}
-    .news-card{background:#ffffff;border-radius:4px;overflow:hidden;border:1px solid rgba(0,0,0,.12);box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;}
-    .news-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.2);background:#f2e9d3;border-color:rgba(212,191,145,.4);}
-    .news-card-body{padding:1.5rem;}
-    .news-card-date{font-size:.75rem;color:var(--gray);letter-spacing:.08em;margin-bottom:.5rem;}
-    .news-card h3{font-family:var(--font-display);font-size:.95rem;color:var(--navy);margin-bottom:.5rem;}
-    .news-card p{font-size:.875rem;color:#5a6a7a;}
-    .news-card a.read-more{display:inline-block;margin-top:.75rem;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:600;}
-    .news-card a.read-more:hover{color:var(--silver);}
     .news-loading{color:var(--gray);font-style:italic;grid-column:1/-1;padding:2rem 0;}
-    .news-view-all{margin-top:2rem;text-align:center;}
 
     /* LEADERSHIP */
     #leadership{background:var(--white);}
@@ -252,63 +240,7 @@
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
-  <ul class="nav-links" id="nav-links">
-    <li class="nav-dropdown">
-      <a href="#about">About</a>
-      <ul class="nav-dropdown-menu">
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#leadership">Leadership</a></li>
-        <li><a href="president-letter.html">President's Letter</a></li>
-        <li><a href="#photos">Member Photos</a></li>
-      </ul>
-    </li>
-    <li class="nav-dropdown">
-      <a href="#">Programs</a>
-      <ul class="nav-dropdown-menu">
-        <li><a href="liaison.html">Liaison</a></li>
-        <li><a href="familyresources.html">Family Resources</a></li>
-        <li><a href="cadetconnection.html">Cadet Connection</a></li>
-        <li><a href="communitysupport.html">Community Support</a></li>
-        <li><a href="nominations.html">Alabama Delegation</a></li>
-      </ul>
-    </li>
-    <li class="nav-dropdown">
-      <a href="#membership">Get Involved</a>
-      <ul class="nav-dropdown-menu">
-        <li><a href="#membership">Membership</a></li>
-        <li><a href="update.html">Update Your Information</a></li>
-        <li><a href="#volunteer">Volunteer with Us</a></li>
-        <li><a href="job-drop-night.html">Job Drop Night</a></li>
-        <li><a href="sponsorship.html">Sponsors</a></li>
-        <li><a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener">Alabama Falcons Facebook</a></li>
-      </ul>
-    </li>
-    <li class="nav-dropdown">
-      <a href="#events">Events</a>
-      <ul class="nav-dropdown-menu">
-        <li><a href="#events">Club Events</a></li>
-        <li><a href="events-calendar.html">Academy Calendar</a></li>
-        <li><a href="gallery.html">Event Photos</a></li>
-      </ul>
-    </li>
-    <li class="nav-dropdown">
-      <a href="#usafa-news">Resources</a>
-      <ul class="nav-dropdown-menu">
-        <li><a href="#usafa-news">USMA News</a></li>
-        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online <span class="nav-new-badge">NEW</span></a></li>
-        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
-        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">USAFA Parents Page</a></li>
-        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">USAFA Calendars</a></li>
-        <li><a href="https://www.usafa.edu/contact-us/" target="_blank" rel="noopener">USAFA Key Contacts</a></li>
-        <li><a href="https://www.usafa.edu/military/basic-cadet-training/" target="_blank" rel="noopener">Basic Training Info</a></li>
-        <li><a href="https://www.usafa.org/" target="_blank" rel="noopener">Alumni Association (AOG)</a></li>
-        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
-        <li><a href="https://shop.usafa.org/products/air-force-academy-cadet-saber-usafa" target="_blank" rel="noopener">Saber Orders</a></li>
-      </ul>
-    </li>
-    <li><a href="#volunteer">Contact</a></li>
-    <li><a href="/admin/login.php" class="nav-login-btn">Member Login</a></li>
-  </ul>
+  <ul class="nav-links" id="nav-links"></ul>
 </nav>
 <!-- ANNOUNCEMENT BANNER — sticky below the fixed nav -->
 <div id="site-announcement" style="display:none;position:sticky;top:64px;z-index:99;width:100%"></div>
@@ -422,18 +354,6 @@
 </section>
 
 <!-- NEWS -->
-<section id="usafa-news">
-  <div class="container">
-    <p class="section-label">From the Academy</p>
-    <h2 class="section-title">Latest USMA News</h2>
-    <div class="divider"></div>
-    <p style="color:#5a6a7a;margin-bottom:1rem;">Stay connected with the latest news and updates from the United States Air Force Academy.</p>
-    <div id="news-container"><p class="news-loading">&#128225; Loading latest USAFA news...</p></div>
-    <p id="news-updated" style="font-size:.78rem;color:#9aa5b4;margin-top:.5rem;text-align:right"></p>
-    <div class="news-view-all"><a href="https://www.usafa.edu/news/" target="_blank" rel="noopener" class="btn btn-dark">View All USAFA News</a></div>
-  </div>
-</section>
-
 <!-- COMMUNITY PHOTOS -->
 <section id="photos">
   <div class="container">
@@ -602,45 +522,22 @@
     <div class="footer-brand">
       <img src="logo01.png" alt="Alabama West Point Parents Club" />
       <p>Supporting Alabama families and their cadets at the United States Military Academy.</p>
-      <a href="https://www.facebook.com/groups/usafaal" target="_blank" rel="noopener" class="footer-fb" id="footer-fb-link" style="margin-top:.75rem">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Alabama Falcons Facebook
-      </a>
     </div>
     <div class="footer-col">
       <h4>Quick Links</h4>
-      <ul>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#membership">Membership</a></li>
-        <li><a href="#events">Events</a></li>
-        <li><a href="sponsorship.html">Sponsors</a></li>
-        <li><a href="#volunteer">Volunteer</a></li>
-      </ul>
+      <ul></ul>
     </div>
     <div class="footer-col">
       <h4>Programs</h4>
-      <ul>
-        <li><a href="liaison.html">Liaison</a></li>
-        <li><a href="mentorship.html">Mentorship</a></li>
-        <li><a href="familyresources.html">Family Resources</a></li>
-        <li><a href="gallery.html">Event Photos</a></li>
-      </ul>
+      <ul></ul>
     </div>
     <div class="footer-col">
-      <h4>USAFA Resources</h4>
-      <ul id="footer-resources">
-        <li><a href="https://www.usafa.edu" target="_blank" rel="noopener">USAFA Official Site</a></li>
-        <li><a href="https://www.usafa.edu/parents" target="_blank" rel="noopener">Parents Page</a></li>
-        <li><a href="https://www.usafa.edu/academics/academic-calendar/" target="_blank" rel="noopener">Academy Calendar</a></li>
-        <li><a href="https://usafa.org/checkpoints_online" target="_blank" rel="noopener">Checkpoints Online</a></li>
-        <li><a href="https://www.usafawebguy.com/" target="_blank" rel="noopener">Webguy</a></li>
-      </ul>
+      <h4>Resources</h4>
+      <ul id="footer-resources"></ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>&copy; 2026 Alabama West Point Parents Club. All rights reserved.</span>
-    <span>Aim High &middot; Fly &middot; Fight &middot; Win</span>
-    <a href="/admin/login.php" style="color:rgba(245,245,240,.35);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='rgba(245,245,240,.75)'" onmouseout="this.style.color='rgba(245,245,240,.35)'">Club Portal</a>
   </div>
 </footer>
 
@@ -797,112 +694,6 @@ function escHtml(s) {
 
 function safeHref(url) {
   return /^https?:\/\/|^\/|^#/i.test(url || '') ? url : '#';
-}
-
-function renderNews(items, isLive) {
-  var container = document.getElementById('news-container');
-  var ts = document.getElementById('news-updated');
-  if (!items || items.length === 0) {
-    container.innerHTML = '<p class="news-loading">No news items available at this time.</p>';
-    return;
-  }
-  items = items.slice(0, 3); // show 3 articles for a clean grid
-  if (ts) {
-    var now = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-    ts.textContent = isLive ? 'Live feed · Updated ' + now : 'Showing cached news · Last checked ' + now;
-  }
-  container.innerHTML = items.map(function(item) {
-    var safeLink = (item.link && /^https?:\/\//i.test(item.link)) ? item.link : '';
-    return '<div class="news-card"><div class="news-card-body">' +
-      '<p class="news-card-date">' + escHtml(item.date) + '</p>' +
-      '<h3>' + escHtml(item.title) + '</h3>' +
-      '<p>' + escHtml(item.description) + '</p>' +
-      (safeLink ? '<a class="read-more" href="' + escHtml(safeLink) + '" target="_blank" rel="noopener">Read More &rarr;</a>' : '') +
-      '</div></div>';
-  }).join('');
-}
-
-async function loadNews() {
-  var container = document.getElementById('news-container');
-
-  // Fallback cached news data
-  var cachedNewsData = {
-    status: 'ok',
-    items: [
-      {
-        title: 'Vice President JD Vance named commencement speaker for U.S. Air Force Academy Class of 2026 graduation',
-        link: 'https://www.usafa.edu/vice-president-jd-vance-named-commencement-speaker-for-u-s-air-force-academy-class-of-2026-graduation/',
-        pubDate: 'Tue, 19 May 2026 19:55:44 +0000',
-        description: 'The Academy announced that Vice President Vance will address the Class of 2026 graduation ceremony on May 28, 2026, at Falcon Stadium. More than 900 cadets will commission as officers in the Air Force and Space Force.'
-      },
-      {
-        title: 'Hosmer Visitor Center Grand Opening Showcases Cadet Experiences',
-        link: 'https://www.usafa.edu/hosmer-visitor-center-grand-opening-showcases-cadet-experiences/',
-        pubDate: 'Mon, 18 May 2026 16:27:31 +0000',
-        description: 'Over 1,600 people attended the May 16 grand opening of the Hosmer Visitor Center, featuring interactive galleries demonstrating the 47-month cadet journey. The facility showcases Academy heritage and cadet life.'
-      },
-      {
-        title: 'Academy opens Hosmer Visitor Center with ribbon-cutting ceremony',
-        link: 'https://www.usafa.edu/academys-hosmer-visitor-center-ribbon-cutting-ceremony/',
-        pubDate: 'Mon, 18 May 2026 16:08:46 +0000',
-        description: 'The Academy celebrated the Hosmer Visitor Center opening with a ribbon-cutting ceremony on May 15, 2026. The 34,000-square-foot facility honors retired Lt. Gen. Bradley Hosmer and serves as a gateway to understanding the Academy\'s mission.'
-      },
-      {
-        title: 'FalconSAT program builds cadet skills through space projects',
-        link: 'https://www.usafa.edu/falconsat-program-builds-cadet-skills-through-space-projects/',
-        pubDate: 'Mon, 11 May 2026 19:51:36 +0000',
-        description: 'Cadets in the FalconSAT program gained hands-on experience developing satellite components including reaction wheels and star trackers. The nearly 20-year program provides practical training in problem-solving and team leadership.'
-      }
-    ]
-  };
-
-  try {
-    var r = await fetchWithTimeout('/usafa-news.php', 6000);
-    if (r.ok) {
-      var parsed = await r.json();
-      var raw = (parsed.status === 'ok' && parsed.items) ? parsed.items : (Array.isArray(parsed) ? parsed : null);
-      if (raw && raw.length > 0) {
-        var items = raw.map(function(i) {
-          var d = '';
-          if (i.pubDate) {
-            try { d = new Date(i.pubDate).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'}); } catch(ex) {}
-          }
-          return {
-            title: i.title || '',
-            link: i.link || '',
-            date: d,
-            description: i.description
-          };
-        });
-        renderNews(items, true);
-        return;
-      }
-    }
-  } catch (error) {
-    console.error('News fetch error:', error);
-  }
-
-  // Fallback to cached data if fetch fails or returns no items
-  var items = cachedNewsData.items.map(function(i) {
-    var d = '';
-    if (i.pubDate) {
-      try { d = new Date(i.pubDate).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'}); } catch(ex) {}
-    }
-    return {
-      title: i.title || '',
-      link: i.link || '',
-      date: d,
-      description: i.description
-    };
-  });
-  renderNews(items, false);
-}
-
-// Load news when page loads
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadNews);
-} else {
-  loadNews();
 }
 
 // ── Job Drop Night — same slide-track technique as the Member Photos
