@@ -383,9 +383,9 @@
 
     <div class="info-box" id="dues-info-box">
       <h3>&#128197; Membership Dues</h3>
-      <p><strong>Prep School</strong> &mdash; <span class="dues-amount">$75</span>/year &mdash; For families with cadets at the USAFA Preparatory School.</p>
-      <p><strong>1-Year</strong> &mdash; <span class="dues-amount">$75</span> &mdash; Annual membership for one year.</p>
-      <p><strong>4-Year</strong> &mdash; $275 &mdash; Full Academy membership covering all four years.</p>
+      <p><strong>Prep School</strong> &mdash; <span class="dues-amount">$100</span>/year &mdash; For families with cadets at the USMA Preparatory School.</p>
+      <p><strong>1-Year</strong> &mdash; <span class="dues-amount">$100</span> &mdash; Annual membership for one year.</p>
+      <p><strong>4-Year</strong> &mdash; $375 &mdash; Full Academy membership covering all four years.</p>
     </div>
     <script>
     fetch('settings-feed.php').then(function(r){return r.json();}).then(function(d){
@@ -581,8 +581,8 @@
       var sdkReady = false;
       var buttonsRendered = false;
 
-      // Mirrors dues_years_price() in admin/lib.php: $75/year, except a
-      // $275 bundle once all 4 of the cadet's undergrad years are paid.
+      // Mirrors dues_years_price() in admin/lib.php: $100/year, except a
+      // $375 bundle once all 4 of the cadet's undergrad years are paid.
       // Kept in sync with that function's business rule (not its own
       // source of truth — the server always recomputes and validates the
       // real charge in dues-pay-create-order.php) so the total shown here
@@ -590,16 +590,16 @@
       // of a per-checkbox estimate that only held up in one specific order.
       function duesPrice(paidYears, cadetYears) {
         if (!cadetYears.length) {
-          return uniq(paidYears).length * 75;
+          return uniq(paidYears).length * 100;
         }
         var undergrad = cadetYears.slice(-4);
         var hasFullUndergrad = undergrad.length === 4 && undergrad.every(function(y) { return paidYears.indexOf(y) !== -1; });
         if (!hasFullUndergrad) {
-          return cadetYears.filter(function(y) { return paidYears.indexOf(y) !== -1; }).length * 75;
+          return cadetYears.filter(function(y) { return paidYears.indexOf(y) !== -1; }).length * 100;
         }
-        var price = 275;
+        var price = 375;
         var prepYear = cadetYears.length === 5 ? cadetYears[0] : null;
-        if (prepYear !== null && paidYears.indexOf(prepYear) !== -1) price += 75;
+        if (prepYear !== null && paidYears.indexOf(prepYear) !== -1) price += 100;
         return price;
       }
       function uniq(arr) {

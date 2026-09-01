@@ -769,7 +769,7 @@ function dues_years_fieldset(array $m): void {
         echo '<div style="margin-bottom:.75rem"><span class="badge ' . ($is_paid_now ? 'badge-paid' : 'badge-unpaid') . '">'
            . ($is_paid_now ? '✓ Paid for ' . h($cur_year) : '✗ Not Paid for ' . h($cur_year)) . '</span></div>';
         echo '<div class="form-group"><label>Years Paid <span style="font-weight:400;font-size:.72rem;color:#9aa5b4">'
-           . '$75 each — check all 4 undergrad years for the $275 bulk rate. Reflects the Class Year above as of page load; save and reopen if you just changed it.</span></label>';
+           . '$100 each — check all 4 undergrad years for the $375 bulk rate. Reflects the Class Year above as of page load; save and reopen if you just changed it.</span></label>';
         echo '<div style="display:flex;gap:1.25rem;flex-wrap:wrap;margin-top:.4rem" id="dues-year-checks">';
         foreach ($cadet_years as $yr) {
             $checked = in_array($yr, $paid_years, true);
@@ -779,7 +779,7 @@ function dues_years_fieldset(array $m): void {
                . h($yr) . $tag . '</label>';
         }
         echo '</div></div>';
-        echo '<button type="button" class="btn btn-secondary btn-sm" style="margin-top:.5rem" onclick="checkAllUndergradDues()">Check all 4 undergrad years ($275)</button>';
+        echo '<button type="button" class="btn btn-secondary btn-sm" style="margin-top:.5rem" onclick="checkAllUndergradDues()">Check all 4 undergrad years ($375)</button>';
         echo '<div style="margin-top:.65rem;font-size:.85rem;color:#5a6a7a">Total: $<strong id="dues-total-preview">' . dues_years_price($paid_years, $cadet_years) . '</strong></div>';
         echo '<script>
 function calcDuesTotal() {

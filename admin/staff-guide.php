@@ -346,8 +346,8 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
   <div class="two-col">
     <div>
       <ul class="bullets">
-        <li><strong>Annual plan ($75)</strong> — Renews each dues year. Reset Dues will mark them unpaid for the new year.</li>
-        <li><strong>4-Year plan ($275)</strong> — Covers all four years of a cadet's time at USAFA. The system auto-calculates the expiry year (e.g., paid in 2026 → covered through 2029–2030).</li>
+        <li><strong>Annual plan ($100)</strong> — Renews each dues year. Reset Dues will mark them unpaid for the new year.</li>
+        <li><strong>4-Year plan ($375)</strong> — Covers all four years of a cadet's time at USMA. The system auto-calculates the expiry year (e.g., paid in 2026 → covered through 2029–2030).</li>
         <li>4-Year members are <strong>protected during Reset Dues</strong> — they are never accidentally marked unpaid while still within their coverage window.</li>
         <li>Each member's profile shows their plan type and paid-through date.</li>
         <li>The Treasurer dashboard shows a dollar breakdown: how much collected from each plan type.</li>
@@ -357,7 +357,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
       <div class="card">
         <h3>Marking Dues Paid</h3>
         <ul>
-          <li>Select plan: <strong>Annual ($75)</strong> or <strong>4-Year ($275)</strong></li>
+          <li>Select plan: <strong>Annual ($100)</strong> or <strong>4-Year ($375)</strong></li>
           <li>Enter the membership year (e.g., <em>2026-2027</em>)</li>
           <li>Click <strong>✓ Paid</strong> — system fills in the paid-through date automatically</li>
         </ul>

@@ -88,7 +88,7 @@ $paid_years  = parse_dues_years($m['membership_paid_years']);
 $payable     = array_values(array_diff($cadet_years, $paid_years));
 
 // cadetYears/paidYears let the front end mirror dues_years_price()'s own
-// $75/year-with-$275-bundle-discount rule (see admin/lib.php) to compute an
+// $100/year-with-$375-bundle-discount rule (see admin/lib.php) to compute an
 // accurate running total for *any* combination the parent checks — a
 // per-checkbox price walked in list order was misleading (it dumped the
 // whole 4-year bundle discount onto whichever box happened to be last),

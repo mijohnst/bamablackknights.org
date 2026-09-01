@@ -643,7 +643,7 @@ function setCurrentYrs() {
   <span id="bulk-count" style="font-size:.9rem;font-weight:600;margin-right:.25rem"></span>
   <span style="font-size:.82rem;opacity:.7">Dues:</span>
   <button type="submit" form="bulk-form" name="action" value="mark_paid_current" class="btn btn-primary btn-sm">✓ Paid (this year)</button>
-  <button type="submit" form="bulk-form" name="action" value="mark_paid_4year" class="btn btn-primary btn-sm">✓ Paid (4-Yr, $275)</button>
+  <button type="submit" form="bulk-form" name="action" value="mark_paid_4year" class="btn btn-primary btn-sm">✓ Paid (4-Yr, $375)</button>
   <button type="submit" form="bulk-form" name="action" value="mark_unpaid_current" class="btn btn-secondary btn-sm" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff">✗ Unpaid (this year)</button>
   <?php if (can_manage_members()): ?>
   <span style="font-size:.82rem;opacity:.7;margin-left:.25rem">Members:</span>

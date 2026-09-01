@@ -166,7 +166,7 @@ function parse_dues_years(?string $csv): array {
     return array_values(array_filter(array_map('trim', explode(',', $csv))));
 }
 
-// $75/year, except a $275 bulk rate once all 4 of a cadet's own undergrad
+// $100/year, except a $375 bulk rate once all 4 of a cadet's own undergrad
 // years are paid — however that happened, whether checked individually
 // over time or all at once. This is the same discount the old Annual/
 // 4-Year plan toggle gave, just derived from the actual years paid
@@ -176,15 +176,15 @@ function dues_years_price(array $paid_years, array $cadet_years): int {
     // back to pricing whatever years are actually on file directly, rather
     // than intersecting against an empty window and always landing on $0
     // regardless of real payment history.
-    if (!$cadet_years) return count(array_unique($paid_years)) * 75;
+    if (!$cadet_years) return count(array_unique($paid_years)) * 100;
     $undergrad = array_slice($cadet_years, -4);
     $has_full_undergrad = count($undergrad) === 4 && !array_diff($undergrad, $paid_years);
     if (!$has_full_undergrad) {
-        return count(array_intersect($cadet_years, $paid_years)) * 75;
+        return count(array_intersect($cadet_years, $paid_years)) * 100;
     }
-    $price = 275;
+    $price = 375;
     $prep_year = count($cadet_years) === 5 ? $cadet_years[0] : null;
-    if ($prep_year !== null && in_array($prep_year, $paid_years, true)) $price += 75;
+    if ($prep_year !== null && in_array($prep_year, $paid_years, true)) $price += 100;
     return $price;
 }
 

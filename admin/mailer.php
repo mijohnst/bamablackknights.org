@@ -226,7 +226,7 @@ function send_dues_renewal_reminders(PDO $pdo): int {
             '{parent_name}' => $r['parent1_first_name'] ?: 'there',
             '{cadet_name}'  => $full_name ?: 'your cadet',
             '{expire_date}' => $year_end->format('F j, Y'),
-            '{dues_amount}' => '$75', // cost of renewing one more year; the 4-year bulk option is offered separately on the site
+            '{dues_amount}' => '$100', // cost of renewing one more year; the 4-year bulk option is offered separately on the site
         ];
         $subject = strtr($cfg['subject'], $replace);
         $body    = strtr($cfg['body'], $replace);
@@ -487,7 +487,7 @@ function send_automated_test_email(PDO $pdo, string $email_key, string $to, stri
     $samples = [
         'birthday_cadet'      => $birthday_sample,
         'birthday_parent'     => $birthday_sample,
-        'dues_renewal'        => ['{parent_name}' => 'Alex', '{cadet_name}' => 'Jamie Example', '{expire_date}' => date('F j, Y', strtotime('+30 days')), '{dues_amount}' => '$75'],
+        'dues_renewal'        => ['{parent_name}' => 'Alex', '{cadet_name}' => 'Jamie Example', '{expire_date}' => date('F j, Y', strtotime('+30 days')), '{dues_amount}' => '$100'],
         'meeting_reminder'    => ['{meeting_title}' => 'Monthly General Meeting', '{meeting_date}' => date('l, F j, Y'), '{meeting_location}' => 'Zoom', '{meeting_link}' => 'https://zoom.us/j/example'],
         'new_member_welcome'  => ['{parent_name}' => 'Alex', '{cadet_name}' => 'Jamie Example'],
         'lapsed_reengagement' => ['{parent_name}' => 'Alex', '{cadet_name}' => 'Jamie Example', '{expire_date}' => date('F j, Y', strtotime('-60 days'))],
