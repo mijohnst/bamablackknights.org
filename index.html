@@ -80,24 +80,21 @@
     #membership .section-title{color:var(--navy);}
     #membership .section-label{color:var(--blue);}
     #membership .divider{background:linear-gradient(90deg,var(--blue),transparent);}
-    .membership-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:1rem;align-items:stretch;max-width:800px;margin-left:auto;margin-right:auto;}
-    .membership-card{background:var(--white);border:1px solid rgba(0,0,0,.15);border-radius:4px;padding:2.5rem;border-left:3px solid var(--blue);display:flex;flex-direction:column;}
-    .membership-card h3{font-family:var(--font-display);font-size:1.2rem;color:var(--navy);margin-bottom:1rem;}
-    .membership-card p{font-size:.9rem;color:#5a6a7a;margin-bottom:1rem;}
-    .price-tag{font-family:var(--font-display);font-size:2rem;color:var(--navy);margin-bottom:1rem;}
-    .price-tag span{font-size:.9rem;color:var(--gray);font-family:var(--font-body);}
-    .payment-note{font-size:.8rem;color:var(--gray);margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.15);}
-    .payment-note a{color:var(--blue);}
-    .payment-portal{margin-top:auto;padding:1.5rem;background:rgba(0,0,0,.04);border:1px dashed rgba(0,0,0,.3);border-radius:4px;text-align:center;}
-    .payment-portal p{font-size:.85rem;color:var(--gray);margin-bottom:1rem;}
-    .payment-portal .btn-pay{background:linear-gradient(180deg,#2a2a2a 0%,#000000 100%);color:#ffffff;border:none;padding:.85rem 1.5rem;font-size:.85rem;box-shadow:0 4px 0 #5f4c00,0 6px 12px rgba(0,0,0,.25);border-radius:4px;position:relative;top:0;transition:all .15s ease;width:100%;display:block;text-align:center;white-space:nowrap;}
-    .payment-portal .btn-pay:hover{background:linear-gradient(180deg,#3d3d3d 0%,#1a1a1a 100%);box-shadow:0 2px 0 #5f4c00,0 4px 8px rgba(0,0,0,.2);top:2px;}
-    .membership-card.featured{border-left-color:#D4BF91;background:linear-gradient(180deg,rgba(212,191,145,.05) 0%,var(--white) 18%);}
-    .limited-badge{display:inline-block;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#000;background:#D4BF91;padding:3px 10px;border-radius:2px;margin-bottom:.75rem;font-weight:700;}
-    .payment-portal.featured{background:rgba(212,191,145,.05);border-color:rgba(212,191,145,.3);}
-    .payment-portal .btn-pay.btn-shop{background:linear-gradient(180deg,#3d3d3d 0%,#000000 100%);box-shadow:0 4px 0 #D4BF91,0 6px 12px rgba(0,0,0,.25);}
-    .payment-portal .btn-pay.btn-shop:hover{background:linear-gradient(180deg,#4d4d4d 0%,#1a1a1a 100%);box-shadow:0 2px 0 #D4BF91,0 4px 8px rgba(0,0,0,.2);}
-    @media(max-width:640px){.membership-grid{grid-template-columns:1fr;}}
+    .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem;margin-top:2.5rem;align-items:stretch;max-width:980px;margin-left:auto;margin-right:auto;}
+    .tier-card{background:var(--white);border-radius:6px;padding:2.25rem 1.75rem;display:flex;flex-direction:column;border-top:4px solid #000;box-shadow:0 2px 10px rgba(0,0,0,.08);position:relative;}
+    .tier-card h3{font-family:var(--font-display);font-size:1.15rem;color:var(--navy);margin-bottom:.5rem;text-align:center;}
+    .tier-price{font-family:var(--font-display);font-size:2.2rem;color:var(--navy);text-align:center;margin-bottom:1.5rem;}
+    .tier-price span{display:block;font-family:var(--font-body);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--gray);margin-top:.2rem;}
+    .tier-features{list-style:none;margin-bottom:1.75rem;flex:1;}
+    .tier-features li{font-size:.85rem;color:var(--gray);padding:.4rem 0;padding-left:1.4rem;position:relative;line-height:1.5;}
+    .tier-features li::before{content:'\2713';position:absolute;left:0;color:#D4BF91;font-weight:700;}
+    .tier-cta{display:block;text-align:center;text-decoration:none;width:100%;}
+    .tier-card.featured{background:#000;border-top-color:#D4BF91;transform:scale(1.06);box-shadow:0 10px 28px rgba(0,0,0,.28);z-index:1;}
+    .tier-card.featured h3,.tier-card.featured .tier-price{color:#fff;}
+    .tier-card.featured .tier-price span{color:rgba(255,255,255,.6);}
+    .tier-card.featured .tier-features li{color:rgba(255,255,255,.75);}
+    .tier-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#D4BF91;color:#000;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.3rem .9rem;border-radius:99px;white-space:nowrap;}
+    @media(max-width:860px){.tier-grid{grid-template-columns:1fr;max-width:420px;gap:2.5rem;}.tier-card.featured{transform:none;}}
 
     /* EVENTS */
     #events{background:var(--light);}
@@ -470,30 +467,39 @@
     <p class="section-label">Support Our Mission</p>
     <h2 class="section-title">Membership &amp; Donations</h2>
     <div class="divider"></div>
-    <div class="membership-grid">
-      <div class="membership-card">
+    <div class="tier-grid">
+      <div class="tier-card">
         <h3>Annual Membership</h3>
-        <div class="price-tag" id="membership-dues">$100 <span>/ year</span></div>
-        <div id="membership-description">
-        <p>Membership dues cover cadet support activities, club operations, and care packages for Alabama cadets throughout their Academy journey.</p>
-        <p style="margin-top:.75rem;">As a member, you'll be part of a community of Alabama families who share the unique experience of having a son or daughter at the Academy &mdash; with access to resources and a network of parents who understand the journey firsthand.</p>
-        <p style="margin-top:.75rem;">Paid members also get access to our member portal, where you can vote for (and run for) club leadership, join committees, RSVP to events, share event photos, and connect with other families through our member directory.</p>
-        </div>
-        <p style="margin-top:.75rem;">🎖️ <strong>Paid members will receive a club identification badge</strong></p>
-        <div class="payment-portal" style="margin-top:auto;">
-          <p>Secure online payment.</p>
-          <a href="membership.html" class="btn btn-pay">PAY ANNUAL DUES</a>
-        </div>
+        <div class="tier-price" id="membership-dues">$100<span>per year</span></div>
+        <ul class="tier-features">
+          <li>Cadet support activities &amp; care packages</li>
+          <li>Member portal access &mdash; vote, volunteer, RSVP</li>
+          <li>Connect with Alabama families at West Point</li>
+          <li>Club identification badge</li>
+        </ul>
+        <a href="membership.html" class="btn btn-gold tier-cta">Join for a Year</a>
       </div>
-      <div class="membership-card">
-        <h3>Donations</h3>
-        <div class="program-icon" style="font-size:2rem;margin-bottom:.75rem;">🤝</div>
-        <p>In addition to membership dues, we gratefully accept donations of any amount. Your generosity directly funds care packages, cadet recognition events, and family support activities across Alabama.</p>
-        <p style="margin-top:.75rem;">Every contribution &mdash; large or small &mdash; makes a real difference in the lives of Alabama cadets and their families.</p>
-        <div class="payment-portal" style="margin-top:auto;">
-          <p>Secure online donation.</p>
-          <a href="payment.html" class="btn btn-pay">MAKE A DONATION</a>
-        </div>
+      <div class="tier-card featured">
+        <div class="tier-badge">Best Value &mdash; Save $25</div>
+        <h3>4-Year Membership</h3>
+        <div class="tier-price">$375<span>one time</span></div>
+        <ul class="tier-features">
+          <li>Everything in Annual Membership</li>
+          <li>Covers all four years at West Point</li>
+          <li>No renewals to remember</li>
+          <li>Club identification badge</li>
+        </ul>
+        <a href="membership.html" class="btn btn-gold tier-cta">Join for 4 Years</a>
+      </div>
+      <div class="tier-card">
+        <h3>Make a Donation</h3>
+        <div class="tier-price">Any<span>amount</span></div>
+        <ul class="tier-features">
+          <li>Funds care packages &amp; cadet recognition</li>
+          <li>Supports family events across Alabama</li>
+          <li>Every contribution makes a difference</li>
+        </ul>
+        <a href="payment.html" class="btn btn-gold tier-cta">Donate Now</a>
       </div>
     </div>
   </div>
@@ -946,11 +952,7 @@ fetch('settings-feed.php').then(function(r){return r.json();}).then(function(dat
   // Membership
   if (s.membership_dues) {
     var dt = document.getElementById('membership-dues');
-    if (dt) dt.innerHTML = escHtml(s.membership_dues) + ' <span>/ year</span>';
-  }
-  if (s.membership_description) {
-    var md = document.getElementById('membership-description');
-    if (md) md.innerHTML = s.membership_description.split(/\r?\n\s*\r?\n/).map(function(p){ return '<p>' + escHtml(p.trim()) + '</p>'; }).join('');
+    if (dt) dt.innerHTML = escHtml(s.membership_dues) + '<span>per year</span>';
   }
   // Facebook
   if (s.facebook_url) {
