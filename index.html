@@ -255,7 +255,7 @@
       <a href="#">Resources</a>
       <ul class="nav-dropdown-menu"></ul>
     </li>
-    <li><a href="#volunteer">Contact</a></li>
+    <li><a href="#">Contact</a></li>
   </ul>
 </nav>
 <!-- ANNOUNCEMENT BANNER — sticky below the fixed nav -->
@@ -427,7 +427,12 @@
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- CONTACT / VOLUNTEER — disabled until the admin portal is set up; wrapped
+     in a <template> (not an HTML comment) since the content below has its
+     own nested "-->"-containing comments. Re-enable by unwrapping this
+     <template> tag and reverting the two matching JS guards further down
+     (search "disabled along with"). -->
+<template id="volunteer-section-disabled">
 <section id="volunteer">
   <div class="container">
     <p class="section-label">Get Involved</p>
@@ -529,6 +534,7 @@
     </div>
   </div>
 </section>
+</template>
 
 <!-- FOOTER -->
 <footer>
@@ -557,9 +563,12 @@
 
 <script>
 // ── Volunteer form ────────────────────────────────────────────────────────
+// Disabled along with the commented-out <section id="volunteer"> above,
+// until the admin portal is set up. Re-enable by uncommenting the section
+// and changing this back to "if (volForm) {".
 var volForm   = document.getElementById('volunteer-form');
 var volStatus = document.getElementById('volunteer-status');
-if (volForm) {
+if (false) {
   volForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     var btn = volForm.querySelector('button[type="submit"]');
@@ -599,6 +608,7 @@ if (volForm) {
 
 // ── Open Volunteer Opportunities (specific dated needs, no login required) ─
 (function() {
+  return; // disabled along with the volunteer section above; delete this line to re-enable
   var wrap = document.getElementById('volunteer-opportunities-wrap');
   var list = document.getElementById('volunteer-opportunities-list');
   if (!wrap || !list) return;
