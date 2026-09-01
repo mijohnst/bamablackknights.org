@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $techs = $pdo->query("SELECT name,email FROM users WHERE role IN ('admin','tech') AND active=1")->fetchAll();
             foreach ($techs as $t) {
-                $body = "Alabama West Point Parents Club\nNew Support Ticket — $ticket_num\n" . str_repeat('─',48) . "\n\n"
+                $body = "West Point Parents Club of Alabama\nNew Support Ticket — $ticket_num\n" . str_repeat('─',48) . "\n\n"
                       . "Ticket:    $ticket_num\n"
                       . "Category:  $category\n"
                       . "Priority:  " . ucfirst($priority) . "\n"
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $se_stmt->execute([(int)($_SESSION['user_id'] ?? 0)]);
         $submitter_email = $se_stmt->fetchColumn();
         if (filter_var($submitter_email, FILTER_VALIDATE_EMAIL)) {
-            $body = "Alabama West Point Parents Club\nSupport Ticket Received — $ticket_num\n" . str_repeat('─',48) . "\n\n"
+            $body = "West Point Parents Club of Alabama\nSupport Ticket Received — $ticket_num\n" . str_repeat('─',48) . "\n\n"
                   . "Your support ticket has been submitted. Our tech team has been notified and will respond shortly.\n\n"
                   . "Ticket:    $ticket_num\n"
                   . "Category:  $category\n"

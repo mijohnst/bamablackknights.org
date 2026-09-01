@@ -37,7 +37,7 @@ if ($user && !$expired && $_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Set Up Your Portal Account — Alabama West Point Parents Club</title>
+<title>Set Up Your Portal Account — West Point Parents Club of Alabama</title>
 <link rel="icon" type="image/png" href="logo01.png" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -58,8 +58,8 @@ button:hover{background:#002268}
 </style></head><body>
 <div class="box">
   <div class="logo">
-    <img src="logo01.png" alt="Alabama West Point Parents Club">
-    <strong>Alabama West Point Parents Club</strong>
+    <img src="logo01.png" alt="West Point Parents Club of Alabama">
+    <strong>West Point Parents Club of Alabama</strong>
     <small>Member Portal</small>
   </div>
 

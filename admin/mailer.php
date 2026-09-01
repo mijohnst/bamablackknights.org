@@ -25,9 +25,9 @@ require_once __DIR__ . '/lib/PHPMailer/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 
-define('CLUB_NAME',       'Alabama West Point Parents Club');
+define('CLUB_NAME',       'West Point Parents Club of Alabama');
 define('CLUB_FROM_EMAIL', 'info@alabamafalcons.org');
-define('CLUB_FROM',       'Alabama West Point Parents Club <info@alabamafalcons.org>');
+define('CLUB_FROM',       'West Point Parents Club of Alabama <info@alabamafalcons.org>');
 define('ADMIN_URL',       'https://alabamafalcons.org/admin/');
 define('SITE_URL',        'https://alabamafalcons.org/');
 define('CLUB_TAX_ID',     '61-1791020');
