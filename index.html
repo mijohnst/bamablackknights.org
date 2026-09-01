@@ -353,13 +353,15 @@
   </div>
 </section>
 
-<!-- NEWS -->
-<!-- COMMUNITY PHOTOS -->
+<!-- MEMBER PHOTOS — disabled until the admin portal (photo uploads) is set
+     up for this club; re-enable by uncommenting this section and its
+     matching script block further down (search "MEMBER PHOTOS SLIDESHOW"). -->
+<!--
 <section id="photos">
   <div class="container">
     <h2 class="section-title">Member Photos</h2>
     <div class="divider"></div>
-    <p style="color:#5a6a7a;margin-bottom:1.5rem;font-size:.95rem;">Celebrating our Falcon families across Alabama.</p>
+    <p style="color:#5a6a7a;margin-bottom:1.5rem;font-size:.95rem;">Celebrating our Black Knight families across Alabama.</p>
     <div class="slideshow-wrap">
       <div class="slideshow-viewport" id="slideshow-viewport">
         <div class="slideshow-track" id="slideshow-track"></div>
@@ -372,6 +374,7 @@
     </div>
   </div>
 </section>
+-->
 
 <!-- MEMBERSHIP -->
 <section id="membership">
@@ -1107,6 +1110,9 @@ if (document.readyState === 'loading') {
 
 
 
+<!-- MEMBER PHOTOS SLIDESHOW — disabled along with the section above until
+     the admin portal (photo uploads) is set up; uncomment both together
+     to bring it back.
 <script>
 (function() {
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJgBxqksYcbPKnvCOMc7I1SZbgJbM-v6A1BaeSn0mr8aRRZMuSpJwuceOij4cAesct/exec';
@@ -1230,9 +1236,10 @@ if (document.readyState === 'loading') {
   });
 })();
 </script>
+-->
 
 <script>
-// Leadership, Events, USAFA News, and Photos all replace short "Loading…"
+// Leadership and Events replace short "Loading…"
 // placeholders with much taller real content after an async fetch. If this
 // page is opened fresh with a hash like #membership already in the URL
 // (rather than clicked while already on the page), the browser's native
