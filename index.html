@@ -23,10 +23,6 @@
     .btn-gold:hover{background:linear-gradient(180deg,#f0e2ba 0%,#d4bf91 100%);box-shadow:0 2px 0 #5f4c00,0 4px 8px rgba(0,0,0,.2);top:2px;}
     .btn-outline{background:linear-gradient(180deg,#2a2a2a 0%,#000000 100%);color:#ffffff;border:none;box-shadow:0 4px 0 #5f4c00,0 6px 12px rgba(0,0,0,.25);position:relative;top:0;transition:all .15s ease;}
     .btn-outline:hover{background:linear-gradient(180deg,#3d3d3d 0%,#1a1a1a 100%);box-shadow:0 2px 0 #5f4c00,0 4px 8px rgba(0,0,0,.2);top:2px;}
-    .hero-stats{display:flex;gap:3rem;margin-top:4rem;opacity:0;animation:fadeUp .6s 1s forwards;}
-    .stat{text-align:center;}
-    .stat strong{display:block;font-family:var(--font-display);font-size:2rem;color:#FFC72C;}
-    .stat span{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.65);}
     @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
     /* SECTIONS */
@@ -288,11 +284,6 @@
   <div class="hero-cta">
     <a href="#membership" class="btn btn-gold" id="hero-cta">Join Our Club</a>
     <a href="#about" class="btn btn-outline">Learn More</a>
-  </div>
-  <div class="hero-stats">
-    <div class="stat"><strong id="stat-current-cadets">60+</strong><span>Current Cadets</span></div>
-    <div class="stat"><strong id="stat-annual-events">4+</strong><span>Annual Events</span></div>
-    <div class="stat"><strong id="stat-years-active">10+</strong><span>Years Active</span></div>
   </div>
 </section>
 
@@ -939,11 +930,6 @@ fetch('settings-feed.php').then(function(r){return r.json();}).then(function(dat
     var cta = document.getElementById('hero-cta');
     if (cta) { if (s.hero_cta_text) cta.textContent = s.hero_cta_text; if (s.hero_cta_url) cta.href = safeHref(s.hero_cta_url); }
   }
-  // Hero stats — falls back to the hardcoded defaults already in the markup
-  // if a value is blank or the migration adding these settings hasn't run yet.
-  if (s.stat_current_cadets) document.getElementById('stat-current-cadets').textContent = s.stat_current_cadets;
-  if (s.stat_annual_events)  document.getElementById('stat-annual-events').textContent  = s.stat_annual_events;
-  if (s.stat_years_active)   document.getElementById('stat-years-active').textContent   = s.stat_years_active;
   // Parent Spotlight — left half stays hidden unless a name is set
   if (s.spotlight_name) {
     document.getElementById('spotlight-name').textContent = s.spotlight_name;
