@@ -154,7 +154,7 @@ if (!empty($data['email'])) {
                   . "Email:                      " . $data['email']       . "\n\n"
                   . "If you have any questions, please contact us at secretary@alabamafalcons.org.\n\n"
                   . "We look forward to celebrating with you!\n\n"
-                  . "Alabama West Point Parents Club\n"
+                  . "West Point Parents Club of Alabama\n"
                   . "alabamafalcons.org";
     $conf_mail = new PHPMailer(true);
     try {

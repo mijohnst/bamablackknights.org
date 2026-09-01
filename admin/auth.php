@@ -419,7 +419,7 @@ function admin_header(string $title): void {
     echo admin_css();
     echo '</head><body>';
     echo '<div class="topbar">';
-    echo '<a href="dashboard.php" class="topbar-title" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:.65rem"><img src="../logo01.png" alt="" style="height:32px;border-radius:3px"><span>Alabama West Point Parents Club <small>Club Portal</small></span></a>';
+    echo '<a href="dashboard.php" class="topbar-title" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:.65rem"><img src="../logo01.png" alt="" style="height:32px;border-radius:3px"><span>West Point Parents Club of Alabama <small>Club Portal</small></span></a>';
     echo '<nav>';
     echo '<a href="dashboard.php" title="Home">🏠</a>';
     echo '<a href="../index.html" style="font-size:.75rem;opacity:.55;color:rgba(255,255,255,.8);text-decoration:none" title="Go to the public website">View Site</a>';

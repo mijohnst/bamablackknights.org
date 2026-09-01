@@ -34,7 +34,7 @@ if (!$is_mine && !can_manage_members()) {
 function build_ticket_email(PDO $pdo, array $ticket, string $event_line): string {
     $url  = 'https://alabamafalcons.org/admin/ticket-view.php?id=' . (int)$ticket['id'];
     $sep  = str_repeat('─', 48);
-    $body = "Alabama West Point Parents Club\n"
+    $body = "West Point Parents Club of Alabama\n"
           . "Support Ticket: {$ticket['ticket_number']}\n$sep\n\n"
           . "Event:     $event_line\n"
           . "Ticket:    {$ticket['ticket_number']}\n"

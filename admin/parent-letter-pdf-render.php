@@ -75,7 +75,7 @@ function render_parent_letter_pdf_page(tFPDF $pdf, string $letterDate, string $l
     $pdf->SetXY($text_x, $top_y);
     $pdf->SetFont('Cinzel', '', 18);
     $pdf->SetTextColor(0, 37, 84);
-    $pdf->MultiCell($text_w, 0.28, 'Alabama West Point Parents Club', 0, 'C');
+    $pdf->MultiCell($text_w, 0.28, 'West Point Parents Club of Alabama', 0, 'C');
     $banner_text_bottom = $pdf->GetY();
 
     // Tagline sits directly under the banner text itself, confined to the

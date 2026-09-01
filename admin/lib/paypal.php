@@ -73,7 +73,7 @@ function paypal_send_payout(string $recipientEmail, float $amount, string $note,
             // second time. See the claim/retry logic around this call in
             // admin/purchase-action.php's send_paypal action.
             'sender_batch_id' => $senderItemId,
-            'email_subject'   => 'You have a payout from ' . (defined('CLUB_NAME') ? CLUB_NAME : 'Alabama West Point Parents Club'),
+            'email_subject'   => 'You have a payout from ' . (defined('CLUB_NAME') ? CLUB_NAME : 'West Point Parents Club of Alabama'),
             'email_message'   => $note,
         ],
         'items' => [[

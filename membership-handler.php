@@ -353,13 +353,13 @@ $parent_email = s($payload, 'parent1Email');
 if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     $parent_name  = s($payload, 'parent1FirstName');
     $cadet_name   = trim(preg_replace('/\s+/', ' ', "$first $middle " . s($payload, 'cadetLastName') . " $suffix"));
-    $conf_subject = 'Membership Application Received — Alabama West Point Parents Club';
+    $conf_subject = 'Membership Application Received — West Point Parents Club of Alabama';
     $conf_body    = "Dear $parent_name,\n\n"
                   . "We have received your membership application for $cadet_name (Class of " . s($payload,'graduationYear') . ").\n\n"
                   . "Your information has been recorded. You will be redirected to our payment page to complete your membership.\n\n"
                   . "If you have any questions, please contact us at info@alabamafalcons.org.\n\n"
                   . "Aim High · Fly · Fight · Win\n"
-                  . "Alabama West Point Parents Club\n"
+                  . "West Point Parents Club of Alabama\n"
                   . "alabamafalcons.org";
     $conf_mail = new PHPMailer(true);
     try {
