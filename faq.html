@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ - West Point Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: #f7f4ee; }
+    .page-hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, #000000 0%, #001d4f 100%);
+      color: #fff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+    }
+    .page-hero p {
+      max-width: 780px;
+      margin: 0 auto;
+      font-size: 1.08rem;
+      color: rgba(255,255,255,0.9);
+    }
+    .section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .section h2 {
+      font-family: var(--font-display);
+      color: var(--navy);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom: 1rem;
+    }
+    .faq-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    details {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.2rem 1.3rem;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--navy);
+      list-style: none;
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+    }
+    summary::-webkit-details-marker { display: none; }
+    details p {
+      color: var(--gray);
+      margin: 0.9rem 0 0 0;
+      line-height: 1.8;
+      font-size: 0.97rem;
+    }
+    @media (max-width: 768px) {
+      .section { padding: 3rem 1.25rem; }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo01.png" alt="West Point Parents Club of Alabama" />
+      <span>West Point Parents Club of Alabama</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="membership.html">Get Involved</a></li>
+      <li><a href="index.html#events">Events</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-hero">
+    <h1>Frequently Asked Questions</h1>
+    <p>Helpful answers for parents who are new to the West Point experience or looking to get more involved with the club.</p>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>Questions Families Ask</h2>
+      <div class="faq-list">
+        <details open>
+          <summary>What is the West Point Parents Club of Alabama?</summary>
+          <p>We are a parent-led club focused on supporting Alabama families connected to the United States Military Academy. Our goal is to offer connection, information, and community throughout the West Point journey.</p>
+        </details>
+
+        <details>
+          <summary>Who can join the club?</summary>
+          <p>Our club is intended for parents and family members of cadets and graduates associated with the Academy. We welcome families at every stage of the cadet journey.</p>
+        </details>
+
+        <details>
+          <summary>Do I need to be a member to attend events?</summary>
+          <p>Many club events are open to interested families, but membership helps keep families connected to club communications, volunteer opportunities, and the broader community.</p>
+        </details>
+
+        <details>
+          <summary>How can I get involved?</summary>
+          <p>You can join the club, volunteer for events, support committee efforts, or simply connect with other families through club communications and gatherings.</p>
+        </details>
+
+        <details>
+          <summary>How do I stay informed about club updates?</summary>
+          <p>We encourage parents to sign up for email updates, follow the club on social media, and check the events and resources pages here on the website.</p>
+        </details>
+
+        <details>
+          <summary>Is this website a replacement for the member portal?</summary>
+          <p>No. This website is designed as a public, informative resource for families and the broader community. A future member portal may support additional internal functions like member-only access and event management.</p>
+        </details>
+
+        <details>
+          <summary>How can I contact the club?</summary>
+          <p>You can use the contact page to reach out via email or message form. We are happy to help answer questions and connect you with the right club leadership member.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto 3rem;padding:0 1rem;">
+      <div class="footer-brand">
+        <img src="logo01.png" alt="West Point Parents Club of Alabama" style="width:80px;margin-bottom:1rem;border-radius:4px;" />
+        <p>Supporting Alabama families and their cadets at the United States Military Academy.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Membership</h4>
+        <ul>
+          <li><a href="membership.html">Join</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:info@alabamafalcons.org">Email</a></li>
+          <li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 West Point Parents Club of Alabama.</span>
+    </div>
+  </footer>
+</body>
+</html>

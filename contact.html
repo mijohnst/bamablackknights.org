@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - West Point Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: #f7f4ee; }
+    .page-hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, #000000 0%, #001d4f 100%);
+      color: #fff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+    }
+    .page-hero p {
+      max-width: 780px;
+      margin: 0 auto;
+      font-size: 1.08rem;
+      color: rgba(255,255,255,0.9);
+    }
+    .section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .section h2 {
+      font-family: var(--font-display);
+      color: var(--navy);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom: 1rem;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .contact-card, .form-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+    .contact-card h3, .form-card h3 {
+      font-family: var(--font-display);
+      color: var(--navy);
+      margin-bottom: 1rem;
+      font-size: 1.35rem;
+    }
+    .contact-list {
+      display: grid;
+      gap: 1rem;
+    }
+    .contact-item {
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding-bottom: 0.9rem;
+    }
+    .contact-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .contact-item strong {
+      color: var(--navy);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .contact-item a, .contact-item span {
+      color: var(--gray);
+      line-height: 1.7;
+    }
+    .form-card form {
+      display: grid;
+      gap: 1rem;
+    }
+    .form-group {
+      display: grid;
+      gap: 0.45rem;
+    }
+    .form-group label {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 0.98rem;
+    }
+    .form-group textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+    .btn { display:inline-block; padding:0.75rem 1.8rem; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; font-weight:700; }
+    .btn-gold { background: linear-gradient(180deg,#e6d4a8 0%,#c4a862 100%); color:#000; }
+    @media (max-width: 768px) {
+      .section { padding: 3rem 1.25rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo01.png" alt="West Point Parents Club of Alabama" />
+      <span>West Point Parents Club of Alabama</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="membership.html">Get Involved</a></li>
+      <li><a href="index.html#events">Events</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-hero">
+    <h1>Contact the Club</h1>
+    <p>Questions, ideas, support needs, or interest in getting involved? We’d love to hear from you and help connect you with the right club contact.</p>
+  </header>
+
+  <main class="section">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Get in Touch</h3>
+        <div class="contact-list">
+          <div class="contact-item">
+            <strong>Email</strong>
+            <a href="mailto:info@alabamafalcons.org">info@alabamafalcons.org</a>
+          </div>
+          <div class="contact-item">
+            <strong>General Questions</strong>
+            <span>Use this page to ask about membership, resources, events, or club involvement.</span>
+          </div>
+          <div class="contact-item">
+            <strong>Volunteer Interest</strong>
+            <span>We welcome parents interested in serving on committees, helping at events, or supporting families.</span>
+          </div>
+          <div class="contact-item">
+            <strong>Resources</strong>
+            <a href="resources.html">Visit the Parent Resources page</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h3>Send a Message</h3>
+        <form action="mailto:info@alabamafalcons.org" method="post" enctype="text/plain">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input id="name" name="name" type="text" placeholder="First and Last Name" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" />
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" placeholder="Membership, Resources, Event, etc." />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us how we can help..."></textarea>
+          </div>
+          <button class="btn btn-gold" type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto 3rem;padding:0 1rem;">
+      <div class="footer-brand">
+        <img src="logo01.png" alt="West Point Parents Club of Alabama" style="width:80px;margin-bottom:1rem;border-radius:4px;" />
+        <p>Supporting Alabama families and their cadets at the United States Military Academy.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Membership</h4>
+        <ul>
+          <li><a href="membership.html">Join</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:info@alabamafalcons.org">Email</a></li>
+          <li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 West Point Parents Club of Alabama.</span>
+    </div>
+  </footer>
+</body>
+</html>

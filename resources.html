@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent Resources - West Point Parents Club of Alabama</title>
+  <link rel="icon" type="image/png" href="logo01.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: #f7f4ee; }
+    .page-hero {
+      margin-top: 64px;
+      background: linear-gradient(135deg, #000000 0%, #001d4f 100%);
+      color: #fff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+    }
+    .page-hero p {
+      max-width: 780px;
+      margin: 0 auto;
+      font-size: 1.08rem;
+      color: rgba(255,255,255,0.9);
+    }
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .section h2 {
+      font-family: var(--font-display);
+      color: var(--navy);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom: 1rem;
+    }
+    .section p {
+      color: var(--gray);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+    .resource-card {
+      background: #fff;
+      border-radius: 8px;
+      border-top: 4px solid #D4BF91;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      padding: 1.4rem 1.2rem;
+    }
+    .resource-card .eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .resource-card h3 {
+      font-family: var(--font-display);
+      color: var(--navy);
+      font-size: 1.2rem;
+      margin-bottom: 0.7rem;
+    }
+    .resource-card p {
+      font-size: 0.94rem;
+      margin: 0;
+    }
+    .link-list {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+    .link-list a {
+      display: inline-block;
+      color: var(--navy);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(0,0,0,0.15);
+      padding-bottom: 0.2rem;
+    }
+    .link-list a:hover {
+      color: #000;
+    }
+    @media (max-width: 768px) {
+      .section { padding: 3rem 1.25rem; }
+    }
+  </style>
+  <script src="shared-nav.js" defer></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="logo01.png" alt="West Point Parents Club of Alabama" />
+      <span>West Point Parents Club of Alabama</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="membership.html">Get Involved</a></li>
+      <li><a href="index.html#events">Events</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-hero">
+    <h1>Parent Resources</h1>
+    <p>Helpful information for families navigating West Point and the cadet experience, from applications to key milestones and support opportunities.</p>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>Resource Highlights</h2>
+      <p>We know the West Point journey can feel overwhelming at times. We aim to make the process easier by curating practical information, trusted guidance, and helpful links for families.</p>
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="eyebrow">Admissions</div>
+          <h3>Admissions &amp; Application</h3>
+          <p>Helpful resources for families navigating the application and nomination process and understanding the path ahead.</p>
+        </div>
+        <div class="resource-card">
+          <div class="eyebrow">Support</div>
+          <h3>Family Support</h3>
+          <p>Guidance for parents who want to better understand cadet life, milestones, and how to provide support at home.</p>
+        </div>
+        <div class="resource-card">
+          <div class="eyebrow">Milestones</div>
+          <h3>Key Dates</h3>
+          <p>Important dates, traditions, and events that matter most to West Point families during the cadet journey.</p>
+        </div>
+        <div class="resource-card">
+          <div class="eyebrow">Academy</div>
+          <h3>Official Links</h3>
+          <p>Links to official Academy information, family resources, and trusted external sources to help keep you informed.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="background:rgba(0,0,0,0.02);">
+      <h2>Helpful Information</h2>
+      <div class="link-list">
+        <a href="https://www.westpoint.edu/" target="_blank" rel="noopener">United States Military Academy</a>
+        <a href="https://www.usma.edu/" target="_blank" rel="noopener">West Point Admissions and Academy Information</a>
+        <a href="https://www.west-point.org/parent-clubs/" target="_blank" rel="noopener">Parent Clubs Directory</a>
+        <a href="faq.html">Frequently Asked Questions</a>
+        <a href="contact.html">Contact the Club</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Common Parent Questions</h2>
+      <p>Parents often want straightforward answers to practical questions such as how to support a cadet, where to find important dates, and how to get involved with the club.</p>
+      <p>Our goal is to provide clarity and support so families can feel confident as they move through the process together.</p>
+      <div class="cta-row" style="display:flex;gap:1rem;flex-wrap:wrap; margin-top:1.5rem;">
+        <a href="faq.html" class="btn btn-gold">Read the FAQ</a>
+        <a href="membership.html" class="btn btn-outline" style="border:2px solid #000; color:#000; background:#fff;">Join the Club</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto 3rem;padding:0 1rem;">
+      <div class="footer-brand">
+        <img src="logo01.png" alt="West Point Parents Club of Alabama" style="width:80px;margin-bottom:1rem;border-radius:4px;" />
+        <p>Supporting Alabama families and their cadets at the United States Military Academy.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Membership</h4>
+        <ul>
+          <li><a href="membership.html">Join</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:info@alabamafalcons.org">Email</a></li>
+          <li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 West Point Parents Club of Alabama.</span>
+    </div>
+  </footer>
+</body>
+</html>
