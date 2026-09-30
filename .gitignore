@@ -1,0 +1,37 @@
+# Local-only Claude Code config and notes (repo is public)
+.claude/
+CLAUDE.md
+
+# Local dev tooling
+devserver.py
+debug.txt
+.nojekyll
+
+# Secrets and one-off DB scripts — never commit
+admin/config.php
+schema.sql
+admin/import.php
+admin/migrate_*.sql
+admin/guide-images/
+
+# User uploads on the server — keep only each folder's .htaccess
+avatars/*
+!avatars/.htaccess
+event-docs/*
+!event-docs/.htaccess
+event-photos/*
+!event-photos/.htaccess
+job-drop-photos/*
+!job-drop-photos/.htaccess
+job-drop-submissions/*
+!job-drop-submissions/.htaccess
+photo-submissions/*
+!photo-submissions/.htaccess
+admin/minutes-files/*
+!admin/minutes-files/.htaccess
+admin/receipts/*
+!admin/receipts/.htaccess
+admin/vault/*
+!admin/vault/.htaccess
+leadership-photos/
+sponsor-logos/
