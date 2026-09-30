@@ -86,7 +86,7 @@ function render_parent_letter_pdf_page(tFPDF $pdf, string $letterDate, string $l
     $pdf->SetXY($text_x, $banner_text_bottom + 0.08);
     $pdf->SetFont('Kalam', '', 10);
     $pdf->SetTextColor(90, 106, 122);
-    $pdf->MultiCell($text_w, 0.2, 'A volunteer-run nonprofit supporting Alabama USAFA families. alabamafalcons.org', 0, 'C');
+    $pdf->MultiCell($text_w, 0.2, 'A volunteer-run nonprofit supporting Alabama West Point families. bamablackknights.org', 0, 'C');
     $tagline_bottom = $pdf->GetY();
 
     // Whatever comes next clears the tagline and both flanking images,

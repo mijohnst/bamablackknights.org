@@ -9,7 +9,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';

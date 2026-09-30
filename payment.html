@@ -220,41 +220,6 @@
       letter-spacing: normal;
     }
 
-    /* ZELLE QR SECTION */
-    .zelle-qr-section {
-      background: #e8edf4;
-      padding: 1.5rem;
-      border-radius: 6px;
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-    .zelle-qr-section h5 {
-      color: var(--navy);
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-    .zelle-qr-section img {
-      max-width: 220px;
-      margin: 0 auto 1rem;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .zelle-recipient {
-      background: var(--white);
-      padding: 1rem;
-      border-radius: 4px;
-      margin-top: 1rem;
-    }
-    .zelle-recipient p {
-      margin: 0.25rem 0;
-    }
-    .zelle-recipient .email {
-      font-size: 1.1rem;
-      font-weight: 700;
-      font-family: monospace;
-      color: var(--navy);
-    }
-
     /* CHECK EMAIL BUTTON */
     .email-btn {
       display: inline-block;
@@ -441,7 +406,7 @@
           </div>
           <div id="duesLookupStatus" role="status" aria-live="polite"></div>
           <button type="button" id="duesLookupBtn" class="cta-button">Find My Cadet</button>
-          <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble? Contact <a href="mailto:treasurer@alabamafalcons.org" style="color:var(--blue)">treasurer@alabamafalcons.org</a>.</p>
+          <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble? Contact <a href="mailto:treasurer@bamablackknights.org" style="color:var(--blue)">treasurer@bamablackknights.org</a>.</p>
         </div>
 
         <!-- PAY -->
@@ -461,46 +426,7 @@
       </div>
     </div>
 
-    <!-- PAYMENT METHOD 2: ZELLE (hidden for now) -->
-    <div class="payment-method-box" style="display:none">
-      <div class="box-header">
-        <span class="icon">📱</span>
-        <h4>Pay by Zelle</h4>
-      </div>
-      <div class="box-content">
-        
-        <!-- Important Notice -->
-        <div class="important-notice">
-          <div class="notice-header">
-            <span class="icon">⚠️</span>
-            <h5>Important: How to Pay with Zelle</h5>
-          </div>
-          <p><strong>Zelle payments must be sent FROM YOUR OWN BANK'S mobile app or online banking.</strong></p>
-          <p>
-            <strong>Step 1:</strong> Open your bank's mobile app or log into your online banking<br>
-            <strong>Step 2:</strong> Find "Send Money with Zelle" (usually in the transfer or payments section)<br>
-            <strong>Step 3:</strong> Send payment to: <strong>[removed]</strong><br>
-            <strong>Step 4:</strong> Or scan the QR code below from within your bank's Zelle feature
-          </p>
-          <p style="font-style: italic; margin-top: 0.75rem;">Note: You cannot pay with Zelle by clicking a link or button on this website. You must initiate the payment from your own banking app.</p>
-          <p style="font-style: italic; margin-top: 0.75rem;">Note: Certain financial institutions may restrict or decline Zelle withdrawals due to concerns about fraud or scams. If your withdrawal is rejected, please choose an alternative payment method or contact our treasurer for assistance.</p>
-        </div>
-
-        <!-- Zelle QR Code Section -->
-        <div class="zelle-qr-section">
-          <h5>Zelle QR Code</h5>
-          <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem;">Open your bank's Zelle feature and scan this QR code:</p>
-          <img src="zelle.jpg" alt="Zelle Payment QR Code">
-          <div class="zelle-recipient">
-            <p style="color: var(--navy); font-size: 0.9rem;"><strong>Send payment to:</strong></p>
-            <p class="email">[removed]</p>
-            <p style="color: var(--gray); font-size: 0.85rem;">Recipient: [removed]</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAYMENT METHOD 3: CHECK -->
+    <!-- PAYMENT METHOD 1: CHECK -->
     <div class="payment-method-box">
       <div class="box-header">
         <span class="icon">✉️</span>
@@ -519,9 +445,9 @@
         </div>
 
         <div style="margin-top: 1.5rem;">
-          <a href="mailto:treasurer@alabamafalcons.org?subject=Check%20Payment%20-%20Membership%20Dues" class="email-btn">📧 Email Treasurer</a>
+          <a href="mailto:treasurer@bamablackknights.org?subject=Check%20Payment%20-%20Membership%20Dues" class="email-btn">📧 Email Treasurer</a>
           <p style="margin-top:.6rem;font-size:.82rem;color:#5a6a7a;text-align:center">
-            Or email directly: <a href="mailto:treasurer@alabamafalcons.org" style="color:var(--blue);font-weight:600">treasurer@alabamafalcons.org</a>
+            Or email directly: <a href="mailto:treasurer@bamablackknights.org" style="color:var(--blue);font-weight:600">treasurer@bamablackknights.org</a>
           </p>
         </div>
       </div>
@@ -559,7 +485,7 @@
       </div>
 
       <p style="color: var(--gray); margin-top: 1.5rem; font-size: 0.9rem; text-align: center;">
-        Or use Zelle (<strong>[removed]</strong>) to send any amount you wish to contribute. Thank you for supporting the West Point Parents Club of Alabama!
+        Thank you for supporting the West Point Parents Club of Alabama!
       </p>
     </div>
 
@@ -697,7 +623,7 @@
             statusEl.style.display = 'block';
           }
         } catch (err) {
-          statusEl.textContent = 'Something went wrong. Please try again or email treasurer@alabamafalcons.org.';
+          statusEl.textContent = 'Something went wrong. Please try again or email treasurer@bamablackknights.org.';
           statusEl.className = 'error';
           statusEl.style.display = 'block';
         }
@@ -856,7 +782,7 @@
           },
           onError: function() {
             var statusEl = document.getElementById('donateStatus');
-            statusEl.textContent = 'Something went wrong with PayPal. Please try again or use Zelle below.';
+            statusEl.textContent = 'Something went wrong with PayPal. Please try again, or email our treasurer to pay by check.';
             statusEl.className = 'error';
             statusEl.style.display = 'block';
           }

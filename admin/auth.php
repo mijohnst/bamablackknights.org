@@ -28,7 +28,7 @@ function start_session(): void {
         // unchanged) — this only affects how long an open tab can idle, not
         // whether a session survives closing the browser.
         ini_set('session.gc_maxlifetime', '14400');
-        session_name('usafa_admin');
+        session_name('wppc_admin');
         $is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
             || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
         session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => $is_https]);

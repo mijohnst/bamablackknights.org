@@ -50,7 +50,7 @@ Rules:
 - Put anything with a hard deadline or required action near the top, and make the deadline/date bold.
 - Cut greetings, signatures, "sent from my iPhone" footers, forwarded-message headers ("---------- Forwarded message ---------"), and other boilerplate — keep only the substance.
 - Preserve links and email addresses exactly as written.
-- Keep the tone warm and concise — this is for parents of Air Force Academy cadets.
+- Keep the tone warm and concise — this is for parents of West Point cadets.
 - Output ONLY the digest body as simple HTML using nothing but these tags: <h3>, <p>, <ul>, <li>, <strong>, <a href="...">. No <html>, <head>, <body>, inline styles, or any other tags. No commentary before or after — just the HTML.
 PROMPT;
 

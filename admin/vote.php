@@ -221,7 +221,7 @@ function startVoteCountdown(icon, label, expiredText) {
   <?php if ($my_member && $my_member['membership_paid'] && !$my_slot): ?>
   <div class="card" style="max-width:480px;margin-top:1.25rem">
     <h2>Run for Office</h2>
-    <p style="color:#5a6a7a;font-size:.85rem">We couldn't match your login email to a parent on your family's member record, so we can't confirm which parent you are. Contact <a href="mailto:info@alabamafalcons.org">info@alabamafalcons.org</a> to self-nominate.</p>
+    <p style="color:#5a6a7a;font-size:.85rem">We couldn't match your login email to a parent on your family's member record, so we can't confirm which parent you are. Contact <a href="mailto:info@bamablackknights.org">info@bamablackknights.org</a> to self-nominate.</p>
   </div>
   <?php elseif ($my_member && $my_member['membership_paid']): ?>
   <div class="card" style="max-width:480px;margin-top:1.25rem">
@@ -252,7 +252,7 @@ function startVoteCountdown(icon, label, expiredText) {
     <p style="color:#5a6a7a;font-size:.85rem">Only paid members are eligible to run for office. <a href="/payment.html" style="font-weight:700">Pay your dues</a> to become eligible.</p>
   </div>
   <?php else: ?>
-  <p style="font-size:.82rem;color:#9aa5b4;margin-top:1rem">We couldn't find a membership record linked to your account, so you can't self-nominate. Contact <a href="mailto:info@alabamafalcons.org">info@alabamafalcons.org</a> if you believe this is an error.</p>
+  <p style="font-size:.82rem;color:#9aa5b4;margin-top:1rem">We couldn't find a membership record linked to your account, so you can't self-nominate. Contact <a href="mailto:info@bamablackknights.org">info@bamablackknights.org</a> if you believe this is an error.</p>
   <?php endif; ?>
 <?php else: ?>
   <p style="color:#9aa5b4">No election is currently open or scheduled.</p>

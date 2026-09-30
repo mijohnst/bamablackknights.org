@@ -32,7 +32,7 @@ if (!$is_mine && !can_manage_members()) {
 
 // ── Helper: build full ticket history for email ───────────────────────────
 function build_ticket_email(PDO $pdo, array $ticket, string $event_line): string {
-    $url  = 'https://alabamafalcons.org/admin/ticket-view.php?id=' . (int)$ticket['id'];
+    $url  = 'https://bamablackknights.org/admin/ticket-view.php?id=' . (int)$ticket['id'];
     $sep  = str_repeat('─', 48);
     $body = "West Point Parents Club of Alabama\n"
           . "Support Ticket: {$ticket['ticket_number']}\n$sep\n\n"
@@ -56,7 +56,7 @@ function build_ticket_email(PDO $pdo, array $ticket, string $event_line): string
         $who  = $c['author_name'] ?? 'Unknown';
         $body .= "[$when] $who:\n{$c['comment']}\n\n";
     }
-    $body .= "$sep\nView ticket: $url\n\nalabamafalcons.org/admin/";
+    $body .= "$sep\nView ticket: $url\n\nbamablackknights.org/admin/";
     return $body;
 }
 

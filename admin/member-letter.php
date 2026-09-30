@@ -16,7 +16,7 @@ $setting = function(string $key, string $default = '') use ($pdo): string {
 };
 
 $club_name = $setting('club_name', 'West Point Parents Club of Alabama');
-$club_website = $setting('website_url', 'alabamafalcons.org');
+$club_website = $setting('website_url', 'bamablackknights.org');
 
 // ── Member search ──────────────────────────────────────────────────────────
 $member_id = (int)($_GET['member_id'] ?? 0);
@@ -93,7 +93,7 @@ body{font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;backgro
 <!-- Letterhead -->
 <div class="letterhead">
   <div class="club-name"><?= h($club_name) ?></div>
-  <div class="club-sub"><?= h($club_website) ?> &nbsp;·&nbsp; secretary@alabamafalcons.org</div>
+  <div class="club-sub"><?= h($club_website) ?> &nbsp;·&nbsp; secretary@bamablackknights.org</div>
 </div>
 
 <div class="letter-date"><?= h($letter_date) ?></div>
@@ -148,12 +148,12 @@ body{font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;backgro
 </div>
 
 <p class="body-text">
-  The <?= h($club_name) ?> is a volunteer parent support organization for families of cadets attending the United States Air Force Academy. Membership supports club activities, cadet events, and community programs throughout the academic year.
+  The <?= h($club_name) ?> is a volunteer parent support organization for families of cadets attending the United States Military Academy at West Point. Membership supports club activities, cadet events, and community programs throughout the academic year.
 </p>
 
 <p class="body-text">
   If you have any questions regarding this letter, please contact us at
-  secretary@alabamafalcons.org.
+  secretary@bamablackknights.org.
 </p>
 
 <p class="body-text">Sincerely,</p>

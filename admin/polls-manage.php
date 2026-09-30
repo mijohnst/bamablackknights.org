@@ -156,7 +156,7 @@ echo show_flash();
     <input type="hidden" name="action" value="create">
     <div class="form-group">
       <label>Title *</label>
-      <input name="title" required placeholder="e.g. Should we move the Sendoff to Falcon Stadium?">
+      <input name="title" required placeholder="e.g. Should we move the Sendoff to a new venue?">
     </div>
     <div class="form-group">
       <label>Description <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.72rem;color:#9aa5b4">optional — context for members</span></label>
@@ -188,7 +188,7 @@ echo show_flash();
     </div>
     <div class="form-group" id="options_group" style="display:none">
       <label>Options <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.72rem;color:#9aa5b4">one per line, at least 2</span></label>
-      <textarea name="options" rows="4" placeholder="Falcon Stadium&#10;Clark Field&#10;Keep current location"></textarea>
+      <textarea name="options" rows="4" placeholder="Option A&#10;Option B&#10;Keep current location"></textarea>
     </div>
     <p style="font-size:.78rem;color:#5a6a7a;margin-bottom:1rem">Every portal user gets an email as soon as this is created — there's no separate "publish" step.</p>
     <div style="display:flex;gap:.75rem">

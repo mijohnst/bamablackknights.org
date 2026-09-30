@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ticket_num = 'TICK-' . str_pad($ticket_id, 4, '0', STR_PAD_LEFT);
         $pdo->prepare('UPDATE tickets SET ticket_number = ? WHERE id = ?')->execute([$ticket_num, $ticket_id]);
 
-        $url = 'https://alabamafalcons.org/admin/ticket-view.php?id=' . $ticket_id;
+        $url = 'https://bamablackknights.org/admin/ticket-view.php?id=' . $ticket_id;
 
         // Notify all Tech Support and Admin users
         try {
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       . "From:      " . current_user_name() . "\n\n"
                       . "Issue:\n$description\n\n"
                       . "Respond here: $url\n\n"
-                      . str_repeat('─',48) . "\nalabamafalcons.org/admin/";
+                      . str_repeat('─',48) . "\nbamablackknights.org/admin/";
                 $clean_sub = preg_replace('/[\x00-\x1F\x7F]/', '', "New Support Ticket $ticket_num: $subject");
                 $mail = new PHPMailer(true);
                 try {
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   . "Subject:   $subject\n\n"
                   . "Your Issue:\n$description\n\n"
                   . "Track your ticket: $url\n\n"
-                  . str_repeat('─',48) . "\nalabamafalcons.org/admin/";
+                  . str_repeat('─',48) . "\nbamablackknights.org/admin/";
             $clean_sub = preg_replace('/[\x00-\x1F\x7F]/', '', "Support Ticket $ticket_num Received: $subject");
             $conf_mail = new PHPMailer(true);
             try {

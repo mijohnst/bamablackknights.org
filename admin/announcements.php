@@ -53,7 +53,7 @@ echo show_flash();
   <form method="POST">
     <?= csrf_field() ?><input type="hidden" name="action" value="save">
     <?php if ($edit): ?><input type="hidden" name="id" value="<?= (int)$edit['id'] ?>"><?php endif; ?>
-    <div class="form-group"><label>Message *</label><textarea name="message" rows="3" required placeholder="e.g. BCT begins July 27 — update your cadet's contact info!"><?= h($edit['message']??'') ?></textarea></div>
+    <div class="form-group"><label>Message *</label><textarea name="message" rows="3" required placeholder="e.g. Cadet Basic Training begins July 1 — update your cadet's contact info!"><?= h($edit['message']??'') ?></textarea></div>
     <div class="form-row col-2">
       <div class="form-group"><label>Type</label>
         <select name="type">

@@ -336,7 +336,7 @@ admin_header('Lists');
             <option value="addr1"        <?= $type==='addr1'        ?'selected':''?>>Parent 1 Addresses</option>
             <option value="addr2"        <?= $type==='addr2'        ?'selected':''?>>Parent 2 Addresses</option>
             <option value="addr_both"    <?= $type==='addr_both'    ?'selected':''?>>Both Parent Addresses</option>
-            <option value="cadet_addr"   <?= $type==='cadet_addr'   ?'selected':''?>>Cadet Address at USAFA</option>
+            <option value="cadet_addr"   <?= $type==='cadet_addr'   ?'selected':''?>>Cadet Address at West Point</option>
           </optgroup>
           <optgroup label="Quick Lists">
             <option value="birthdays"     <?= $type==='birthdays'     ?'selected':''?>>Birthday List (by date)</option>

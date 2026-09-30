@@ -9,7 +9,7 @@
 header('Content-Type: application/json');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/config.php';
 require_once __DIR__ . '/admin/lib/paypal.php';

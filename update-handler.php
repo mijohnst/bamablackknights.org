@@ -255,7 +255,7 @@ $diff_labels = [
     'nickname'            => 'Nickname',
     'cadet_gender'        => 'Gender',
     'cadet_birthday'      => 'Date of Birth',
-    'cadet_po_box'        => 'USAFA Mailbox / PO Box',
+    'cadet_po_box'        => 'West Point Mailbox / PO Box',
     'cadet_email'         => 'Cadet Email',
     'cadet_cell'          => 'Cadet Cell Phone',
     'company'             => 'Company',
@@ -305,7 +305,7 @@ $email_body .= "Email: " . $g('cadet_email') . "\n";
 $email_body .= "Phone: " . $g('cadet_cell') . "\n";
 $email_body .= "Graduation Year: " . $g('class_year') . "\n";
 $email_body .= "Company: " . $g('company') . "\n";
-$email_body .= "USAFA Mailbox: " . $g('cadet_po_box') . "\n\n";
+$email_body .= "West Point Mailbox: " . $g('cadet_po_box') . "\n\n";
 $email_body .= "PARENT/FAMILY INFORMATION\n";
 $email_body .= "Primary: " . trim($g('parent1_first_name') . ' ' . $g('parent1_last_name')) . "\n";
 $email_body .= "Primary relationship: " . $g('parent1_relationship') . "\n";
@@ -356,7 +356,7 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
                   . "If any of this wasn't intentional, or you have questions, please contact us at secretary@bamablackknights.org.\n\n"
                   . "Aim High · Fly · Fight · Win\n"
                   . "West Point Parents Club of Alabama\n"
-                  . "alabamafalcons.org";
+                  . "bamablackknights.org";
     $conf_mail = new PHPMailer(true);
     try {
         configure_smtp_relay($conf_mail);

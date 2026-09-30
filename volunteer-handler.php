@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\Exception as PHPMailerException;
 header('Content-Type: application/json');
 // Must be set on every response, not just the OPTIONS preflight — see
 // membership-handler.php for why.
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -34,7 +34,7 @@ if (honeypot_tripped($data)) {
 
 if (rate_limited(get_pdo(), 'volunteer_form')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email us directly at info@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email us directly at info@bamablackknights.org.']);
     exit;
 }
 
@@ -77,9 +77,9 @@ $body     = "West Point Parents Club of Alabama\nNew Volunteer Interest Submissi
            . ($availability ? "Availability: $availability\n" : '')
            . ($cadet_info   ? "Cadet Info:   $cadet_info\n"  : '')
            . ($comments     ? "\nComments:\n$comments\n"      : '')
-           . "\n" . str_repeat('─',48) . "\nalabamafalcons.org/admin/";
+           . "\n" . str_repeat('─',48) . "\nbamablackknights.org/admin/";
 
-foreach (['secretary@alabamafalcons.org', 'president@alabamafalcons.org'] as $notify_to) {
+foreach (['secretary@bamablackknights.org', 'president@bamablackknights.org'] as $notify_to) {
     $mail = new PHPMailer(true);
     try {
         configure_smtp_relay($mail);
@@ -102,7 +102,7 @@ $conf = "Thank you for your interest in volunteering with the West Point Parents
       . "  Areas of interest: " . ($areas ?: 'Not specified') . "\n"
       . "  Availability: " . ($availability ?: 'Not specified') . "\n\n"
       . "Aim High · Fly · Fight · Win\n"
-      . "West Point Parents Club of Alabama\nalabamafalcons.org";
+      . "West Point Parents Club of Alabama\nbamablackknights.org";
 $conf_mail = new PHPMailer(true);
 try {
     configure_smtp_relay($conf_mail);

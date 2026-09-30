@@ -6,7 +6,7 @@ require_once __DIR__ . '/admin/mailer.php';
 header('Content-Type: application/json');
 // Must be set on every response, not just the OPTIONS preflight — see
 // membership-handler.php for why.
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -33,7 +33,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'volunteer_claim')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email us directly at info@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email us directly at info@bamablackknights.org.']);
     exit;
 }
 
@@ -88,7 +88,7 @@ try {
         exit;
     }
     error_log('volunteer-opportunity-claim: signup failed — ' . $e->getMessage());
-    http_response_code(500); echo json_encode(['success' => false, 'error' => 'A server error occurred. Please try again or email us directly at info@alabamafalcons.org.']); exit();
+    http_response_code(500); echo json_encode(['success' => false, 'error' => 'A server error occurred. Please try again or email us directly at info@bamablackknights.org.']); exit();
 }
 
 $title = $opp['title'];
@@ -99,10 +99,10 @@ send_notification(
     "Thanks for volunteering with the West Point Parents Club of Alabama!\n\n"
     . "You're signed up for: $title\n\n"
     . "A club officer may follow up with details beforehand. If your plans change, just reply to this email and let us know.\n\n"
-    . "Aim High \xC2\xB7 Fly \xC2\xB7 Fight \xC2\xB7 Win\nWest Point Parents Club of Alabama\nalabamafalcons.org"
+    . "Aim High \xC2\xB7 Fly \xC2\xB7 Fight \xC2\xB7 Win\nWest Point Parents Club of Alabama\nbamablackknights.org"
 );
 
-foreach (['secretary@alabamafalcons.org', 'president@alabamafalcons.org'] as $notify_to) {
+foreach (['secretary@bamablackknights.org', 'president@bamablackknights.org'] as $notify_to) {
     send_notification(
         $notify_to,
         'New Volunteer Sign-Up: ' . $title,

@@ -201,7 +201,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
   <h1>Club Portal Guide</h1>
   <p class="sub">Everything you need to know about managing the portal</p>
   <div class="accent-bar"></div>
-  <p class="url">alabamafalcons.org/admin</p>
+  <p class="url">bamablackknights.org/admin</p>
 </div>
 
 <!-- 1: What is the Portal -->
@@ -214,14 +214,14 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
       <li>A private, password-protected admin website accessible only to club officers and staff</li>
       <li>Manage club members, track dues, handle finances, and update the public website — all in one place</li>
       <li>Every officer sees only the tools their role requires; sensitive data stays protected</li>
-      <li>Changes to leadership, events, announcements, and settings update <strong>alabamafalcons.org</strong> instantly</li>
-      <li>Access it at <strong>alabamafalcons.org/admin</strong> — bookmark it on your phone and desktop</li>
+      <li>Changes to leadership, events, announcements, and settings update <strong>bamablackknights.org</strong> instantly</li>
+      <li>Access it at <strong>bamablackknights.org/admin</strong> — bookmark it on your phone and desktop</li>
     </ul>
     <div>
       <div class="card">
         <h3>Logging In</h3>
         <ul>
-          <li>Go to <strong>alabamafalcons.org/admin</strong></li>
+          <li>Go to <strong>bamablackknights.org/admin</strong></li>
           <li>Enter your username and password</li>
           <li>If you forget your password, contact the Tech Officer</li>
           <li>Always log out when finished on a shared device</li>
@@ -610,7 +610,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
         <li>The recipient count updates live as you adjust filters</li>
         <li><strong>Format the message</strong> with the rich text toolbar — bold, color, size, alignment, lists, links — plus an emoji picker</li>
         <li><strong>Attach files</strong> — images, PDF, Word, Excel, PowerPoint — up to 10MB each, 20MB total</li>
-        <li>Choose which officer address to send <strong>From</strong> — Reply-To matches automatically, and a copy always goes to info@alabamafalcons.org for the club's records</li>
+        <li>Choose which officer address to send <strong>From</strong> — Reply-To matches automatically, and a copy always goes to info@bamablackknights.org for the club's records</li>
         <li>Large sends are automatically split into batches behind the scenes if the recipient count is high — nothing you need to do</li>
         <li>Available to: Officers, Secretary, Tech Support</li>
       </ul>
@@ -756,7 +756,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
         <li><strong>Membership section</strong> — dues amount and description shown to visitors</li>
         <li><strong>President's Letter</strong> — the full letter text, name, and title (rich text editor)</li>
         <li><strong>Facebook link</strong> — updates the Facebook button on the site</li>
-        <li><strong>Footer Resources</strong> — the USAFA links listed at the bottom of every page (format: <em>Title|URL</em>, one per line)</li>
+        <li><strong>Footer Resources</strong> — the West Point links listed at the bottom of every page (format: <em>Title|URL</em>, one per line)</li>
       </ul>
       <div class="hbox mt2">
         All settings save immediately and update the public website within a few minutes. No publish step required.
@@ -907,8 +907,8 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
   <div class="accent-bar" style="margin:0 auto 1.5rem"></div>
   <h1>Questions?</h1>
   <p class="cs">West Point Parents Club of Alabama &nbsp;·&nbsp; Club Portal</p>
-  <p class="cmail">mijohnst@alabamafalcons.org</p>
-  <p class="cmail" style="margin-top:.5rem">alabamafalcons.org/admin</p>
+  <p class="cmail">mijohnst@bamablackknights.org</p>
+  <p class="cmail" style="margin-top:.5rem">bamablackknights.org/admin</p>
 </div>
 
 </div><!-- /deck -->

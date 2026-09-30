@@ -12,7 +12,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
@@ -45,7 +45,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'dues_pay_capture_order', 10, 15)) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@bamablackknights.org.']);
     exit();
 }
 
@@ -88,7 +88,7 @@ if ($track['status'] === 'applied') {
 }
 
 function notify_treasurer_capture_issue(string $subject, string $detail): void {
-    send_notification('treasurer@alabamafalcons.org', $subject, nl2br(htmlspecialchars($detail)));
+    send_notification('treasurer@bamablackknights.org', $subject, nl2br(htmlspecialchars($detail)));
 }
 
 // Sandbox mode always reports a successful capture (it's fake test money),
@@ -110,7 +110,7 @@ if ($result['success']) {
     if (!$recover['success']) {
         error_log('dues-pay-capture-order: recovery failed for order ' . $order_id . ': ' . $recover['error']);
         http_response_code(502);
-        echo json_encode(['success' => false, 'error' => 'We could not confirm your payment status. Please contact treasurer@alabamafalcons.org with your PayPal receipt.']);
+        echo json_encode(['success' => false, 'error' => 'We could not confirm your payment status. Please contact treasurer@bamablackknights.org with your PayPal receipt.']);
         exit();
     }
     $capture_id = $recover['capture_id'];

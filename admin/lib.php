@@ -21,7 +21,7 @@ function strip_name_suffix(string $normalized): string {
 }
 
 // Starts a session under its own cookie name, distinct from the admin
-// panel's 'usafa_admin' session (auth.php's start_session()) — used to bind
+// panel's 'wppc_admin' session (auth.php's start_session()) — used to bind
 // a successful public-form identity lookup (see update-lookup.php) to the
 // specific browser that performed it, so update-handler.php doesn't have to
 // trust resubmitted last-name/year/email values that could otherwise be
@@ -31,7 +31,7 @@ function strip_name_suffix(string $normalized): string {
 // never shares session state between the two.
 function start_verification_session(): void {
     if (session_status() === PHP_SESSION_NONE) {
-        session_name('usafa_verify');
+        session_name('wppc_verify');
         $is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
             || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
         session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => $is_https]);

@@ -78,7 +78,7 @@ if (empty($cadets)) {
 }
 
 $body .= "\n— West Point Parents Club of Alabama Admin System\n";
-$body .= "   alabamafalcons.org\n";
+$body .= "   bamablackknights.org\n";
 
 $sent = false;
 $mail = new PHPMailer(true);

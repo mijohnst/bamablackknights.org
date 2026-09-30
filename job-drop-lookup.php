@@ -11,7 +11,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
@@ -39,7 +39,7 @@ if (!$payload) {
 }
 
 if (honeypot_tripped($payload)) {
-    echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please double-check your information, or contact secretary@alabamafalcons.org."]);
+    echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please double-check your information, or contact secretary@bamablackknights.org."]);
     exit();
 }
 
@@ -47,7 +47,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'job_drop_lookup')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@bamablackknights.org.']);
     exit();
 }
 
@@ -85,7 +85,7 @@ foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
 if (!$m) {
     echo json_encode([
         'success' => false,
-        'error'   => "We couldn't find a matching record. Job Drop Night is only open to the graduating Class of $eligible_year — please double-check the cadet's last name, birthday, and the email on file, or contact secretary@alabamafalcons.org."
+        'error'   => "We couldn't find a matching record. Job Drop Night is only open to the graduating Class of $eligible_year — please double-check the cadet's last name, birthday, and the email on file, or contact secretary@bamablackknights.org."
     ]);
     exit();
 }

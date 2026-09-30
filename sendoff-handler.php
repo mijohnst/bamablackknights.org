@@ -31,7 +31,7 @@ if (honeypot_tripped($input)) {
 
 if (rate_limited(get_pdo(), 'sendoff_form')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'message' => 'Too many submissions from your network. Please try again later or email us directly at secretary@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'message' => 'Too many submissions from your network. Please try again later or email us directly at secretary@bamablackknights.org.']);
     exit;
 }
 
@@ -86,7 +86,7 @@ curl_close($ch);
 
 if ($response === false || !empty($curl_err) || $http_code >= 400) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Could not save your registration. Please try again or email secretary@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'message' => 'Could not save your registration. Please try again or email secretary@bamablackknights.org.']);
     exit;
 }
 
@@ -110,7 +110,7 @@ function mask_id_number(string $id): string {
 
 // Email notification to secretary
 $data = json_decode($payload, true);
-$to      = 'secretary@alabamafalcons.org';
+$to      = 'secretary@bamablackknights.org';
 $subject = str_replace(["\r", "\n"], '', 'New Sendoff Registration – ' . $data['first'] . ' ' . $data['last']);
 $body    = "A new registration has been submitted for the Cadet Class of 2030 Sendoff.\n\n"
          . "Last Name:                  " . $data['last']           . "\n"
@@ -142,9 +142,9 @@ try {
 // Confirmation email to registrant
 if (!empty($data['email'])) {
     $conf_to      = $data['email'];
-    $conf_subject = 'Registration Confirmation – USAFA Alabama Cadet Sendoff';
+    $conf_subject = 'Registration Confirmation – West Point Parents Club of Alabama Cadet Sendoff';
     $conf_body    = "Dear " . $data['first'] . " " . $data['last'] . ",\n\n"
-                  . "You have successfully registered for entry into Maxwell Air Force Base to attend the USAFA Alabama Cadet Sendoff.\n\n"
+                  . "You have successfully registered to attend the West Point Parents Club of Alabama Cadet Sendoff.\n\n"
                   . "Please retain this email as confirmation of your registration. Below is a summary of the information you submitted:\n\n"
                   . "Last Name:                  " . $data['last']        . "\n"
                   . "First Name:                 " . $data['first']       . "\n"
@@ -152,15 +152,15 @@ if (!empty($data['email'])) {
                   . "Affiliation with Cadet:     " . $data['affiliation'] . "\n"
                   . "Phone:                      " . $data['phone']       . "\n"
                   . "Email:                      " . $data['email']       . "\n\n"
-                  . "If you have any questions, please contact us at secretary@alabamafalcons.org.\n\n"
+                  . "If you have any questions, please contact us at secretary@bamablackknights.org.\n\n"
                   . "We look forward to celebrating with you!\n\n"
                   . "West Point Parents Club of Alabama\n"
-                  . "alabamafalcons.org";
+                  . "bamablackknights.org";
     $conf_mail = new PHPMailer(true);
     try {
         configure_smtp_relay($conf_mail);
         $conf_mail->setFrom(CLUB_FROM_EMAIL, CLUB_NAME);
-        $conf_mail->addReplyTo('secretary@alabamafalcons.org', CLUB_NAME);
+        $conf_mail->addReplyTo('secretary@bamablackknights.org', CLUB_NAME);
         $conf_mail->addAddress($conf_to);
         $conf_mail->isHTML(false);
         $conf_mail->Subject = $conf_subject;

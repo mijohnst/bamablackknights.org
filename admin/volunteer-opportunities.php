@@ -189,7 +189,7 @@ echo show_flash();
 
 <script>
 function copyOppLink(btn, id) {
-  var url = 'https://alabamafalcons.org/#opp-' + id;
+  var url = 'https://bamablackknights.org/#opp-' + id;
   navigator.clipboard.writeText(url).then(function() {
     var orig = btn.textContent;
     btn.textContent = 'Copied!';

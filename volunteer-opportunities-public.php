@@ -4,7 +4,7 @@ require_once __DIR__ . '/admin/auth.php';
 header('Content-Type: application/json');
 // Must be set on every response, not just an OPTIONS preflight — see
 // membership-handler.php for why.
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: GET, OPTIONS');

@@ -148,19 +148,19 @@ function fix_email_paragraph_spacing(string $html): string {
 }
 
 $from_options = [
-    'president@alabamafalcons.org' => 'President',
-    'vp@alabamafalcons.org'        => 'Vice President',
-    'secretary@alabamafalcons.org' => 'Secretary',
-    'treasurer@alabamafalcons.org' => 'Treasurer',
+    'president@bamablackknights.org' => 'President',
+    'vp@bamablackknights.org'        => 'Vice President',
+    'secretary@bamablackknights.org' => 'Secretary',
+    'treasurer@bamablackknights.org' => 'Treasurer',
 ];
 
 // Maps each From address to its signature's site_settings key (edit signature
 // text on the Site Settings page, under "Email Signatures").
 $signature_keys = [
-    'president@alabamafalcons.org' => 'signature_president',
-    'vp@alabamafalcons.org'        => 'signature_vp',
-    'secretary@alabamafalcons.org' => 'signature_secretary',
-    'treasurer@alabamafalcons.org' => 'signature_treasurer',
+    'president@bamablackknights.org' => 'signature_president',
+    'vp@bamablackknights.org'        => 'signature_vp',
+    'secretary@bamablackknights.org' => 'signature_secretary',
+    'treasurer@bamablackknights.org' => 'signature_treasurer',
 ];
 
 $pdo = get_pdo();
@@ -176,8 +176,8 @@ try {
 $recipients  = trim($_POST['recipients']  ?? '');
 $subject     = trim($_POST['subject']     ?? '');
 $body        = trim($_POST['body']        ?? '');
-$from_email  = $_POST['from_email'] ?? 'president@alabamafalcons.org';
-if (!array_key_exists($from_email, $from_options)) $from_email = 'president@alabamafalcons.org';
+$from_email  = $_POST['from_email'] ?? 'president@bamablackknights.org';
+if (!array_key_exists($from_email, $from_options)) $from_email = 'president@bamablackknights.org';
 $sent        = false;
 $errors      = [];
 $valid_count = 0;
@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['send'])) {
 
             // Batch BCC into chunks well under Google's SMTP relay per-message
             // recipient limits — each batch is its own separate send to
-            // info@alabamafalcons.org, reusing the same body/attachments.
+            // info@bamablackknights.org, reusing the same body/attachments.
             $batches      = array_chunk($valid, 90);
             $sent_count   = 0;
             $failed_count = 0;

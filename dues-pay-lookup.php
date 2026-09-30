@@ -9,7 +9,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
@@ -37,7 +37,7 @@ if (!$payload) {
 }
 
 if (honeypot_tripped($payload)) {
-    echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please double-check your information, or contact treasurer@alabamafalcons.org."]);
+    echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please double-check your information, or contact treasurer@bamablackknights.org."]);
     exit();
 }
 
@@ -45,7 +45,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'dues_pay_lookup')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@bamablackknights.org.']);
     exit();
 }
 
@@ -78,7 +78,7 @@ foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
 if (!$m) {
     echo json_encode([
         'success' => false,
-        'error'   => "We couldn't find a matching record. Please double-check the cadet's last name, birthday, and the email on file, or contact treasurer@alabamafalcons.org."
+        'error'   => "We couldn't find a matching record. Please double-check the cadet's last name, birthday, and the email on file, or contact treasurer@bamablackknights.org."
     ]);
     exit();
 }

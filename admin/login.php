@@ -107,7 +107,7 @@ button:hover{background:#002268}
       <label>Full Name</label>
       <input type="text" name="name" required placeholder="e.g. Kari Johnston" autocomplete="name">
       <label>Email</label>
-      <input type="email" name="email" required placeholder="president@alabamafalcons.org">
+      <input type="email" name="email" required placeholder="president@bamablackknights.org">
       <label>Username</label>
       <input type="text" name="username" required placeholder="e.g. kjohnston" autocomplete="username">
       <label>Password (min 8 characters)</label>

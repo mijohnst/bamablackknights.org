@@ -9,7 +9,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
@@ -41,7 +41,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'dues_pay_create_order')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@bamablackknights.org.']);
     exit();
 }
 

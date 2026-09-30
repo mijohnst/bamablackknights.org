@@ -1,5 +1,5 @@
 // ============================================================
-//  USAFA Parents Club - Community Photo Gallery
+//  West Point Parents Club of Alabama - Community Photo Gallery
 //  Google Apps Script  (copy this entire file into Apps Script)
 // ============================================================
 //

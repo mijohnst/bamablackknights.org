@@ -75,7 +75,7 @@ if ($p['amount_shipping']> 0) $line_items[] = ['Shipping',           $p['amount_
   <div class="cr-header">
     <div>
       <div class="cr-org"><?= h($club_name) ?></div>
-      <div class="cr-org-sub">alabamafalcons.org &nbsp;·&nbsp; treasurer@alabamafalcons.org</div>
+      <div class="cr-org-sub">bamablackknights.org &nbsp;·&nbsp; treasurer@bamablackknights.org</div>
     </div>
     <div style="text-align:right">
       <div class="cr-title">Reimbursement / Check Request</div>

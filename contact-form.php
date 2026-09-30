@@ -1,6 +1,6 @@
 <?php
 /**
- * Contact Form Handler for USAFA Alabama Parents Club
+ * Contact Form Handler for West Point Parents Club of Alabama
  * Sends via Google SMTP relay (see admin/mailer.php)
  */
 
@@ -15,8 +15,8 @@ use PHPMailer\PHPMailer\Exception as PHPMailerException;
 header('Content-Type: application/json');
 
 // Configuration
-$to_email = 'info@alabamafalcons.org'; // Where form submissions go
-$subject_prefix = '[USAFA AL Website]'; // Email subject prefix
+$to_email = 'info@bamablackknights.org'; // Where form submissions go
+$subject_prefix = '[WPPC AL Website]'; // Email subject prefix
 
 // Check if this is a POST request
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -43,7 +43,7 @@ if (honeypot_tripped($data)) {
 
 if (rate_limited(get_pdo(), 'contact_form')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'message' => 'Too many submissions from your network. Please try again later or email us directly at info@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'message' => 'Too many submissions from your network. Please try again later or email us directly at info@bamablackknights.org.']);
     exit;
 }
 
@@ -79,7 +79,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $subject = "$subject_prefix Contact Form Submission from $name";
 
 // Build email body
-$email_body = "New contact form submission from alabamafalcons.org\n\n";
+$email_body = "New contact form submission from bamablackknights.org\n\n";
 $email_body .= "Name: $name\n";
 $email_body .= "Email: $email\n";
 $email_body .= "I am a: $iam\n";
@@ -87,7 +87,7 @@ $email_body .= "Cadet's Class Year: $class_year\n\n";
 $email_body .= "Message:\n";
 $email_body .= wordwrap($message, 70) . "\n\n";
 $email_body .= "---\n";
-$email_body .= "Sent from: alabamafalcons.org contact form\n";
+$email_body .= "Sent from: bamablackknights.org contact form\n";
 $email_body .= "Submitted: " . date('Y-m-d H:i:s T') . "\n";
 $email_body .= "IP Address: " . $_SERVER['REMOTE_ADDR'] . "\n";
 
@@ -116,7 +116,7 @@ if ($mail_sent) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Sorry, there was an error sending your message. Please email us directly at info@alabamafalcons.org'
+        'message' => 'Sorry, there was an error sending your message. Please email us directly at info@bamablackknights.org'
     ]);
 }
 ?>

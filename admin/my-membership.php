@@ -27,7 +27,7 @@ admin_header('My Membership');
 <?php if (!$member): ?>
   <div class="alert alert-error" style="max-width:480px">
     We couldn't find a membership record linked to your account. If you believe this is an error, contact
-    <a href="mailto:info@alabamafalcons.org">info@alabamafalcons.org</a>.
+    <a href="mailto:info@bamablackknights.org">info@bamablackknights.org</a>.
   </div>
 <?php else: ?>
   <div class="mm-card">

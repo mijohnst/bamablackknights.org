@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Keep the matching login account's display name in sync.
             // leadership and users are separate tables, linked only by the
-            // shared role email (e.g. treasurer@alabamafalcons.org) — this is
+            // shared role email (e.g. treasurer@bamablackknights.org) — this is
             // the one place that connects "who the public site shows" to
             // "who's actually logged in," so the nav bar doesn't keep
             // showing whoever previously held the position. Only fires when
@@ -117,10 +117,10 @@ echo show_flash();
       <div class="form-group"><label>Role / Title *</label><input name="role_title" value="<?= h($edit['role_title']??'') ?>" required placeholder="e.g. President"></div>
     </div>
     <div class="form-row col-2">
-      <div class="form-group"><label>Email</label><input type="email" name="email" value="<?= h($edit['email']??'') ?>" placeholder="role@alabamafalcons.org"></div>
+      <div class="form-group"><label>Email</label><input type="email" name="email" value="<?= h($edit['email']??'') ?>" placeholder="role@bamablackknights.org"></div>
       <div class="form-group"><label>Sort Order</label><input type="number" name="sort_order" value="<?= h($edit['sort_order']??'0') ?>"></div>
     </div>
-    <div class="form-group"><label>Bio</label><textarea name="bio" rows="4" placeholder="Officer background and connection to USAFA…"><?= h($edit['bio']??'') ?></textarea></div>
+    <div class="form-group"><label>Bio</label><textarea name="bio" rows="4" placeholder="Officer background and connection to West Point…"><?= h($edit['bio']??'') ?></textarea></div>
     <div class="form-group">
       <label>Photo <?= $edit?'(upload to replace)':'' ?></label>
       <input type="file" name="photo" accept="image/*" style="padding:.5rem;font-size:.9rem">

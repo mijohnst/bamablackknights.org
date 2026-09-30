@@ -1,4 +1,4 @@
-// USAFA Alabama Falcons - Photo Gallery Backend
+// West Point Parents Club of Alabama - Photo Gallery Backend
 // ─────────────────────────────────────────────
 // Setup:
 //   1. Go to script.google.com and create a new project.
@@ -10,7 +10,7 @@
 //
 // Adding new events:
 //   Create a subfolder inside "Club Photos" in Google Drive
-//   (e.g. "2027 BCT Sendoff") and upload photos. No code changes needed.
+//   (e.g. "2027 Cadet Sendoff") and upload photos. No code changes needed.
 //
 // Redeploying after edits:
 //   Use Deploy → Manage deployments → Edit (keep the same deployment)

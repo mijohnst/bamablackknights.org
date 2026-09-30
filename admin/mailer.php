@@ -5,7 +5,7 @@
  * Sends via Google Workspace's SMTP relay service (smtp-relay.gmail.com),
  * authenticated by the sending server's IP being allowlisted in the Google
  * Admin console — no password/app-password is stored here. Replaced PHP's
- * bare mail(), which broke once alabamafalcons.org's MX moved to Google:
+ * bare mail(), which broke once bamablackknights.org's MX moved to Google:
  * cPanel's mail routing no longer considered itself authoritative for the
  * domain, so local mail() delivery silently failed.
  * ─────────────────────────────────────────────────────────────────────────────
@@ -26,10 +26,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 
 define('CLUB_NAME',       'West Point Parents Club of Alabama');
-define('CLUB_FROM_EMAIL', 'info@alabamafalcons.org');
-define('CLUB_FROM',       'West Point Parents Club of Alabama <info@alabamafalcons.org>');
-define('ADMIN_URL',       'https://alabamafalcons.org/admin/');
-define('SITE_URL',        'https://alabamafalcons.org/');
+define('CLUB_FROM_EMAIL', 'info@bamablackknights.org');
+define('CLUB_FROM',       'West Point Parents Club of Alabama <info@bamablackknights.org>');
+define('ADMIN_URL',       'https://bamablackknights.org/admin/');
+define('SITE_URL',        'https://bamablackknights.org/');
 define('CLUB_TAX_ID',     '61-1791020');
 
 // Shared SMTP relay setup — used here and by email.php's Compose Email tool.
@@ -946,7 +946,7 @@ function build_nominations_open_email(PDO $pdo, array $election): ?array {
     $body .= "\nAs a paid member, you're eligible to nominate yourself for any open position. "
            . "The Secretary reviews and approves nominations before voting opens.\n\n"
            . "Nominate yourself:  $url\n\n"
-           . "Don't have a portal login yet? Email info@alabamafalcons.org and we'll get you set up.\n\n"
+           . "Don't have a portal login yet? Email info@bamablackknights.org and we'll get you set up.\n\n"
            . str_repeat('─', 48) . "\n" . CLUB_NAME . "\n" . ADMIN_URL;
 
     return ['subject' => $subject, 'body' => $body];
@@ -994,7 +994,7 @@ function notify_election_open(PDO $pdo, array $election): int {
              . "President, Vice President, Secretary, and Treasurer.\n\n"
              . "Voting closes: $closes\n\n"
              . "Vote now:  $url\n\n"
-             . "Don't have a portal login yet? Email info@alabamafalcons.org and we'll get you set up.\n\n"
+             . "Don't have a portal login yet? Email info@bamablackknights.org and we'll get you set up.\n\n"
              . str_repeat('─', 48) . "\n" . CLUB_NAME . "\n" . ADMIN_URL;
 
     $sent = 0;
@@ -1071,7 +1071,7 @@ function send_donation_receipt(string $donorEmail, string $donorName, float $amo
              . "  Date:          $date\n"
              . "  Amount:        $amt\n"
              . "  PayPal Ref:    $captureId\n\n"
-             . "If you have any questions, please contact our treasurer at treasurer@alabamafalcons.org.\n\n"
+             . "If you have any questions, please contact our treasurer at treasurer@bamablackknights.org.\n\n"
              . str_repeat('─', 48) . "\n" . CLUB_NAME . "\n" . SITE_URL;
     return send_notification($donorEmail, $subject, $body);
 }
@@ -1130,5 +1130,5 @@ function notify_treasurer_of_donation(string $donorName, string $donorEmail, flo
              . "PayPal Capture: $captureId\n\n"
              . "This has been logged in the Income Ledger automatically (source: Online Donation).\n\n"
              . str_repeat('─', 48) . "\n" . CLUB_NAME . "\n" . ADMIN_URL;
-    return send_notification('treasurer@alabamafalcons.org', $subject, $body);
+    return send_notification('treasurer@bamablackknights.org', $subject, $body);
 }

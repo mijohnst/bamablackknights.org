@@ -8,7 +8,7 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
@@ -35,7 +35,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'job_drop_submit')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email secretary@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email secretary@bamablackknights.org.']);
     exit();
 }
 
@@ -106,7 +106,7 @@ $existing_stmt->execute([$member_id]);
 $existing = $existing_stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($existing && $existing['status'] === 'approved') {
-    echo json_encode(['success' => false, 'error' => "This cadet's Job Drop submission has already been approved and is live on the homepage. Email secretary@alabamafalcons.org if it needs to change."]);
+    echo json_encode(['success' => false, 'error' => "This cadet's Job Drop submission has already been approved and is live on the homepage. Email secretary@bamablackknights.org if it needs to change."]);
     exit;
 }
 
