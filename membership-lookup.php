@@ -56,26 +56,31 @@ if (
 
 $stmt = $pdo->prepare(
     'SELECT * FROM members
-     WHERE archived = 0 AND cadet_birthday = :birthday
-       AND (LOWER(cadet_email) = :email OR LOWER(parent1_email) = :email OR LOWER(parent2_email) = :email)'
+     WHERE archived = 0 AND cadet_birthday = :birthday'
 );
-$stmt->execute(['birthday' => $birthday, 'email' => $email]);
+$stmt->execute(['birthday' => $birthday]);
 $target_last = strip_name_suffix(normalize_name($last));
-$matches = [];
+$name_matches = [];
+$email_matches = [];
 foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_last) {
-        $matches[] = $row;
-    }
+    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) !== $target_last) continue;
+    $name_matches[] = $row;
+    $record_emails = array_map('strtolower', array_filter([
+        $row['cadet_email'] ?? '',
+        $row['parent1_email'] ?? '',
+        $row['parent2_email'] ?? '',
+    ]));
+    if (in_array($email, $record_emails, true)) $email_matches[] = $row;
 }
 
 start_verification_session();
-if (count($matches) > 1) {
+if (count($email_matches) > 1) {
     echo json_encode(['success' => false, 'error' => 'More than one record matched those details. Please contact the club for help.']);
     exit();
 }
 
-if (count($matches) === 1) {
-    $member = $matches[0];
+if (count($email_matches) === 1) {
+    $member = $email_matches[0];
     $token = bin2hex(random_bytes(24));
     if (!isset($_SESSION['update_verified']) || !is_array($_SESSION['update_verified'])) {
         $_SESSION['update_verified'] = [];
@@ -134,6 +139,14 @@ if (count($matches) === 1) {
             'photoConsent' => $g('photo_consent'),
             'directoryConsent' => $g('directory_consent'),
         ],
+    ]);
+    exit();
+}
+
+if ($name_matches) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'A record already exists for that cadet name and birthday, but this email does not match. Try an email address on file or contact the club for help.',
     ]);
     exit();
 }
