@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($type === 'new_members') { $where[] = "created_at >= DATE_SUB(NOW(), INTERVAL $days DAY)"; }
 
     $sql = 'SELECT cadet_last_name, cadet_suffix, cadet_first_name, cadet_middle_name, class_year, al_region,
-                   cadet_gender, cadet_po_box, cadet_birthday, bct_squadron, bct_flight, fall_squadron, squadron_yr2_4,
+                   cadet_gender, cadet_po_box, cadet_birthday, company,
                    parent1_first_name, parent1_last_name, parent1_email, parent1_cell,
                    parent1_street, parent1_city, parent1_state, parent1_zip,
                    parent2_first_name, parent2_last_name, parent2_email, parent2_cell,
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rows = $stmt->fetchAll();
 
     $lines = [];
-    $sqd_groups = [];
+    $company_groups = [];
     foreach ($rows as $r) {
         $cadet_fm   = trim($r['cadet_first_name'] . ' ' . $r['cadet_middle_name']);
         $cadet_full = cadet_full_name($r);
@@ -199,11 +199,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                              . 'USAF Academy, CO 80841-' . $box . "\n";
                 }
                 break;
-            case 'sqd_roster':
-                $sqd = $r['squadron_yr2_4'] ?: ($r['fall_squadron'] ?: $r['bct_squadron']);
-                if (!isset($sqd_groups[$sqd])) $sqd_groups[$sqd] = [];
+            case 'company_roster':
+                $company = $r['company'];
+                if (!isset($company_groups[$company])) $company_groups[$company] = [];
                 $p1 = trim($r['parent1_first_name'] . ' ' . $r['parent1_last_name']);
-                $sqd_groups[$sqd][] = $cadet_last . ' — ' . $p1
+                $company_groups[$company][] = $cadet_last . ' — ' . $p1
                     . ($r['parent1_cell'] ? ': ' . $r['parent1_cell'] : '')
                     . ($r['parent1_email'] ? ' / ' . $r['parent1_email'] : '');
                 break;
@@ -217,11 +217,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Flatten squadron grouping
-    if ($type === 'sqd_roster') {
-        ksort($sqd_groups);
-        foreach ($sqd_groups as $sqd => $members) {
-            $lines[] = '=== Squadron ' . ($sqd ?: 'Unknown') . ' ===';
+    // Flatten company grouping
+    if ($type === 'company_roster') {
+        ksort($company_groups);
+        foreach ($company_groups as $company => $members) {
+            $lines[] = '=== Company ' . ($company ?: 'Unknown') . ' ===';
             foreach ($members as $entry) $lines[] = $entry;
             $lines[] = '';
         }
@@ -353,7 +353,7 @@ admin_header('Lists');
             <option value="missing_cadet_email" <?= $type==='missing_cadet_email' ?'selected':''?>>Missing Cadet Email</option>
             <option value="missing_gender" <?= $type==='missing_gender' ?'selected':''?>>Missing Gender</option>
             <option value="care_labels"  <?= $type==='care_labels'  ?'selected':''?>>Care Package Labels</option>
-            <option value="sqd_roster"   <?= $type==='sqd_roster'   ?'selected':''?>>Squadron Roster</option>
+            <option value="company_roster" <?= $type==='company_roster' ?'selected':''?>>Company Roster</option>
             <option value="archived_members" <?= $type==='archived_members' ?'selected':''?>>Archived Cadets</option>
           </optgroup>
           <optgroup label="Full Roster">
@@ -390,16 +390,14 @@ admin_header('Lists');
 <?php
 // Build TSV for copy-to-spreadsheet
 $roster_cols = [
-    'Year','Last Name','Suffix','First Name','Middle Name','Birthday','PO Box',
-    'BCT Sqd','BCT Flight','Fall Sqd','Yr 2-4 Sqd',
+    'Year','Last Name','Suffix','First Name','Middle Name','Birthday','PO Box','Company',
     'Cadet Email','Cadet Cell',
     'P1 Last','P1 First','P1 Email','P1 Cell','P1 Street','P1 City','P1 State','P1 Zip',
     'P2 Last','P2 First','P2 Email','P2 Cell','P2 Street','P2 City','P2 State','P2 Zip',
     'AL Region','Remarks'
 ];
 $roster_fields = [
-    'class_year','cadet_last_name','cadet_suffix','cadet_first_name','cadet_middle_name','cadet_birthday','cadet_po_box',
-    'bct_squadron','bct_flight','fall_squadron','squadron_yr2_4',
+    'class_year','cadet_last_name','cadet_suffix','cadet_first_name','cadet_middle_name','cadet_birthday','cadet_po_box','company',
     'cadet_email','cadet_cell',
     'parent1_last_name','parent1_first_name','parent1_email','parent1_cell',
     'parent1_street','parent1_city','parent1_state','parent1_zip',

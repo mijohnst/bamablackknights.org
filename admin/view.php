@@ -91,12 +91,9 @@ a.vf-val{color:#000000}
   </div>
 
   <div class="vsection">
-    <h3>Squadron Assignments</h3>
+    <h3>Company</h3>
     <?php
-    field('BCT Squadron',    $m['bct_squadron']);
-    field('BCT Flight',      $m['bct_flight']);
-    field('Fall Squadron',   $m['fall_squadron']);
-    field('Yr 2–4 Squadron', $m['squadron_yr2_4']);
+    field('Company', $m['company']);
     ?>
   </div>
 

@@ -129,7 +129,7 @@ echo json_encode([
         'poBox'            => $g('cadet_po_box'),
         'cadetEmail'       => $g('cadet_email'),
         'cadetPhone'       => $g('cadet_cell'),
-        'squadron'         => $g('bct_squadron'),
+        'company'          => $g('company'),
         'photoConsent'     => $g('photo_consent'),
         'directoryConsent' => $g('directory_consent'),
         'parent1FirstName' => $g('parent1_first_name'),

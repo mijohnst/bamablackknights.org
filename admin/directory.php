@@ -212,13 +212,13 @@ foreach ($by_year as $yr => $group):
   <div class="yr-label">Class of <?= h($yr) ?> &mdash; <?= count($group) ?> member<?= count($group)!==1?'s':''?></div>
   <div class="grid">
   <?php foreach ($group as $m):
-    $sqd = $m['squadron_yr2_4'] ?: ($m['fall_squadron'] ?: $m['bct_squadron']);
+    $company = $m['company'];
     $v = fn(string $k) => h((string)($m[$k] ?? ''));
   ?>
   <div class="card">
     <div class="cadet-name"><?= h(cadet_last_name_suffixed($m)) ?>, <?= h(trim(($m['cadet_first_name'] ?? '') . ' ' . ($m['cadet_middle_name'] ?? ''))) ?></div>
     <div class="cadet-meta">
-      <?= h((string)($sqd ?? '')) ?><?= $sqd && $m['al_region'] ? ' &bull; ' : '' ?><?= $v('al_region') ?>
+      <?= h((string)($company ?? '')) ?><?= $company && $m['al_region'] ? ' &bull; ' : '' ?><?= $v('al_region') ?>
       <?php if ($m['cadet_po_box']): ?>&bull; PO <?= $v('cadet_po_box') ?><?php endif; ?>
       <?php if ($m['cadet_birthday']): ?>&bull; 🎂 <?= h(date('M j', strtotime($m['cadet_birthday']))) ?><?php endif; ?>
     </div>

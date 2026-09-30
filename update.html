@@ -204,8 +204,8 @@
             <input type="text" id="poBox" name="poBox" required />
           </div>
           <div class="form-group">
-            <label for="squadron">Company</label>
-            <input type="text" id="squadron" name="squadron" />
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" />
           </div>
         </div>
 
@@ -425,7 +425,7 @@
     // ── Find Your Record ──────────────────────────────────────────────────
     function populateForm(m) {
       var fields = ['cadetFirstName','cadetMiddleName','cadetLastName','cadetSuffix','graduationYear','nickname','poBox',
-        'cadetEmail','cadetGender','cadetPhone','squadron','parent1FirstName','parent1LastName','parent1Phone','parent1Email',
+        'cadetEmail','cadetGender','cadetPhone','company','parent1FirstName','parent1LastName','parent1Phone','parent1Email',
         'parent2FirstName','parent2LastName','parent2Phone','parent2Email',
         'streetAddress','city','state','zipCode','parent2Street','parent2City','parent2State','parent2Zip'];
       fields.forEach(function(f) {

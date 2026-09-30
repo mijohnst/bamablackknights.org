@@ -310,10 +310,10 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
     <div>
       <ul class="bullets">
         <li><strong>Search</strong> by cadet name, parent name, email, or phone number</li>
-        <li><strong>Filter</strong> by class year, Alabama region, squadron, or paid/unpaid status</li>
+        <li><strong>Filter</strong> by class year, Alabama region, company, or paid/unpaid status</li>
         <li><strong>View archived members</strong> using the Status filter — they stay in the system, just hidden from the active list</li>
         <li><strong>Add a member</strong> manually (Officer/Secretary/Tech)</li>
-        <li><strong>Click any member</strong> to see their full profile — cadet info, parents, dues history, squadron assignments</li>
+        <li><strong>Click any member</strong> to see their full profile — cadet info, parents, dues history, and company</li>
         <li><strong>Archive vs Delete</strong> — Archive is reversible; Delete is permanent</li>
       </ul>
     </div>

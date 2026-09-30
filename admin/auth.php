@@ -511,7 +511,7 @@ const MISSING_DATA_OPTIONS = [
     'cadet_email' => 'Cadet Email',
     'cadet_phone' => 'Cadet Phone',
     'birthday'    => 'Birthday',
-    'squadron'    => 'Squadron',
+    'company'     => 'Company',
 ];
 
 function missing_data_sql(string $key): ?string {
@@ -520,14 +520,14 @@ function missing_data_sql(string $key): ?string {
         case 'cadet_email': return "(cadet_email IS NULL OR cadet_email = '')";
         case 'cadet_phone': return "(cadet_cell IS NULL OR cadet_cell = '')";
         case 'birthday':    return '(cadet_birthday IS NULL)';
-        case 'squadron':    return "(bct_squadron IS NULL OR bct_squadron = '') AND (fall_squadron IS NULL OR fall_squadron = '') AND (squadron_yr2_4 IS NULL OR squadron_yr2_4 = '')";
+        case 'company':     return "(company IS NULL OR company = '')";
         default:            return null;
     }
 }
 
 const FIELDS = [
     'class_year','cadet_last_name','cadet_suffix','cadet_first_name','cadet_middle_name','nickname','cadet_gender','cadet_birthday','cadet_po_box',
-    'cadet_email','cadet_cell','bct_squadron','bct_flight','fall_squadron','squadron_yr2_4',
+    'cadet_email','cadet_cell','company',
     'parent1_last_name','parent1_first_name','parent1_email','parent1_cell',
     'parent1_street','parent1_city','parent1_state','parent1_zip',
     'parent2_last_name','parent2_first_name','parent2_email','parent2_cell',
@@ -606,12 +606,9 @@ function member_form(array $m = [], bool $is_edit = false): void {
     echo '</div>';
     echo '</fieldset>';
 
-    echo '<fieldset><legend>Squadron Assignments</legend>';
-    echo '<div class="form-row col-4">';
-    echo '<div class="form-group"><label>BCT Squadron</label><input name="bct_squadron" value="' . $v('bct_squadron') . '"></div>';
-    echo '<div class="form-group"><label>BCT Flight</label><input name="bct_flight" value="' . $v('bct_flight') . '"></div>';
-    echo '<div class="form-group"><label>Fall Squadron</label><input name="fall_squadron" value="' . $v('fall_squadron') . '"></div>';
-    echo '<div class="form-group"><label>Yr 2–4 Squadron</label><input name="squadron_yr2_4" value="' . $v('squadron_yr2_4') . '"></div>';
+    echo '<fieldset><legend>Cadet Company</legend>';
+    echo '<div class="form-row">';
+    echo '<div class="form-group"><label>Company</label><input name="company" value="' . $v('company') . '"></div>';
     echo '</div></fieldset>';
 
     echo '<fieldset><legend>Parent / Contact 1</legend>';

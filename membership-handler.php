@@ -182,7 +182,7 @@ try {
                 cadet_gender=:cadet_gender,
                 cadet_birthday=:cadet_birthday, cadet_po_box=:cadet_po_box,
                 cadet_email=:cadet_email, cadet_cell=:cadet_cell,
-                bct_squadron=:bct_squadron,
+                company=:company,
                 parent1_last_name=:parent1_last_name, parent1_first_name=:parent1_first_name,
                 parent1_email=:parent1_email, parent1_cell=:parent1_cell,
                 parent1_street=:parent1_street, parent1_city=:parent1_city,
@@ -204,7 +204,7 @@ try {
             'cadet_po_box'       => s($payload,'poBox'),
             'cadet_email'        => s($payload,'cadetEmail'),
             'cadet_cell'         => s($payload,'cadetPhone'),
-            'bct_squadron'       => s($payload,'squadron'),
+            'company'            => s($payload,'company'),
             'parent1_last_name'  => s($payload,'parent1LastName'),
             'parent1_first_name' => s($payload,'parent1FirstName'),
             'parent1_email'      => s($payload,'parent1Email'),
@@ -232,7 +232,7 @@ try {
             class_year, cadet_last_name, cadet_suffix, cadet_first_name, cadet_middle_name, nickname,
             cadet_gender,
             cadet_birthday, cadet_po_box, cadet_email, cadet_cell,
-            bct_squadron,
+            company,
             parent1_last_name, parent1_first_name, parent1_email, parent1_cell,
             parent1_street, parent1_city, parent1_state, parent1_zip,
             parent2_last_name, parent2_first_name, parent2_email, parent2_cell,
@@ -243,7 +243,7 @@ try {
             :class_year, :cadet_last_name, :cadet_suffix, :cadet_first_name, :cadet_middle_name, :nickname,
             :cadet_gender,
             :cadet_birthday, :cadet_po_box, :cadet_email, :cadet_cell,
-            :bct_squadron,
+            :company,
             :parent1_last_name, :parent1_first_name, :parent1_email, :parent1_cell,
             :parent1_street, :parent1_city, :parent1_state, :parent1_zip,
             :parent2_last_name, :parent2_first_name, :parent2_email, :parent2_cell,
@@ -265,7 +265,7 @@ try {
         'cadet_po_box'        => s($payload, 'poBox'),
         'cadet_email'         => s($payload, 'cadetEmail'),
         'cadet_cell'          => s($payload, 'cadetPhone'),
-        'bct_squadron'        => s($payload, 'squadron'),
+        'company'             => s($payload, 'company'),
         'parent1_last_name'   => s($payload, 'parent1LastName'),
         'parent1_first_name'  => s($payload, 'parent1FirstName'),
         'parent1_email'       => s($payload, 'parent1Email'),
@@ -317,7 +317,7 @@ $email_body .= "Nickname: " . s($payload,'nickname') . "\n";
 $email_body .= "Email: " . s($payload,'cadetEmail') . "\n";
 $email_body .= "Phone: " . s($payload,'cadetPhone') . "\n";
 $email_body .= "Graduation Year: " . s($payload,'graduationYear') . "\n";
-$email_body .= "Squadron: " . s($payload,'squadron') . "\n\n";
+$email_body .= "Company: " . s($payload,'company') . "\n\n";
 $email_body .= "PARENT/FAMILY INFORMATION\n";
 $email_body .= "Primary: " . s($payload,'parent1FirstName') . " " . s($payload,'parent1LastName') . "\n";
 $email_body .= "Email: " . s($payload,'parent1Email') . "\n";

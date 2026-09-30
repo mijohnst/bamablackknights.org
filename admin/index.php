@@ -25,7 +25,7 @@ if (empty($_GET)) {
 }
 $region  = $_GET['region']       ?? '';
 $paid    = $_GET['paid']         ?? '';
-$squadron  = trim($_GET['squadron']  ?? '');
+$company   = trim($_GET['company']   ?? '');
 $split_only = isset($_GET['split']);
 $dup_only   = isset($_GET['dup']);
 $archived  = $_GET['archived']   ?? '0';
@@ -81,9 +81,9 @@ if (!empty($safe_years)) {
 if ($region !== '') { $where[] = 'al_region  = :region'; $params[':region'] = $region; }
 if ($paid     === '1') { $where[] = 'membership_paid = 1'; }
 if ($paid     === '0') { $where[] = 'membership_paid = 0'; }
-if ($squadron !== '') {
-    $where[] = '(bct_squadron = :sqd OR fall_squadron = :sqd OR squadron_yr2_4 = :sqd)';
-    $params[':sqd'] = $squadron;
+if ($company !== '') {
+  $where[] = 'company = :company';
+  $params[':company'] = $company;
 }
 if ($split_only) { $where[] = "cadet_first_name LIKE '% %'"; }
 if ($dup_only) {
@@ -113,14 +113,13 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="members-' . date('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['Year','Last Name','Suffix','First Name','Middle Name','Squadron','Region',
+    fputcsv($out, ['Year','Last Name','Suffix','First Name','Middle Name','Company','Region',
                    'P1 Name','P1 Email','P1 Cell','P2 Name','P2 Email','P2 Cell',
                    'Dues','Dues Year','Remarks']);
     foreach ($members as $m) {
-        $sqd = $m['squadron_yr2_4'] ?: ($m['fall_squadron'] ?: $m['bct_squadron']);
         fputcsv($out, array_map(fn($v) => is_string($v) ? csv_formula_safe($v) : $v, [
             $m['class_year'], $m['cadet_last_name'], $m['cadet_suffix'] ?? '', $m['cadet_first_name'], $m['cadet_middle_name'],
-            $sqd, $m['al_region'],
+            $m['company'], $m['al_region'],
             trim($m['parent1_first_name'].' '.$m['parent1_last_name']),
             $m['parent1_email'], $m['parent1_cell'],
             trim($m['parent2_first_name'].' '.$m['parent2_last_name']),
@@ -133,14 +132,9 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     exit;
 }
 
-// ── Distinct squadrons for filter dropdown ─────────────────────────────────
-$squadrons = $pdo->query(
-    "SELECT DISTINCT s FROM (
-        SELECT squadron_yr2_4 s FROM members WHERE squadron_yr2_4 != ''
-        UNION SELECT fall_squadron FROM members WHERE fall_squadron != ''
-        UNION SELECT bct_squadron  FROM members WHERE bct_squadron  != ''
-    ) sq ORDER BY s"
-)->fetchAll(PDO::FETCH_COLUMN);
+// ── Distinct companies for filter dropdown ─────────────────────────────────
+$companies = $pdo->query("SELECT DISTINCT company FROM members WHERE company <> '' ORDER BY company")
+    ->fetchAll(PDO::FETCH_COLUMN);
 
 // ── Dashboard stats ────────────────────────────────────────────────────────
 // Graduated classes (class_year = 'Graduate') are excluded from these
@@ -265,7 +259,7 @@ echo show_flash();
   <h1>Members <span style="font-size:.85rem;font-weight:400;color:#5a6a7a">(<?= count($members) ?> shown of <?= $stat_total ?> total)</span></h1>
   <div style="display:flex;gap:.5rem;flex-wrap:wrap">
     <?php
-    $csv_params = array_filter(['q'=>$search,'year'=>$years,'region'=>$region,'paid'=>$paid,'squadron'=>$squadron,'split'=>$split_only?'1':null,'dup'=>$dup_only?'1':null]);
+    $csv_params = array_filter(['q'=>$search,'year'=>$years,'region'=>$region,'paid'=>$paid,'company'=>$company,'split'=>$split_only?'1':null,'dup'=>$dup_only?'1':null]);
     $csv_params['export'] = 'csv';
     ?>
     <a href="index.php?<?= http_build_query($csv_params) ?>" class="btn btn-secondary">Export CSV</a>
@@ -477,11 +471,11 @@ function openBirthdays() {
       </select>
     </div>
     <div class="form-group">
-      <label>Squadron</label>
-      <select name="squadron">
+      <label>Company</label>
+      <select name="company">
         <option value="">All</option>
-        <?php foreach ($squadrons as $s): ?>
-          <option value="<?= h($s) ?>" <?= $squadron===$s?'selected':''?>><?= h($s) ?></option>
+        <?php foreach ($companies as $s): ?>
+          <option value="<?= h($s) ?>" <?= $company===$s?'selected':''?>><?= h($s) ?></option>
         <?php endforeach; ?>
       </select>
     </div>
@@ -555,7 +549,6 @@ function setCurrentYrs() {
   <?php endif; ?>
   <?php foreach ($members as $m): ?>
     <?php
-      $sqd        = $m['squadron_yr2_4'] ?: ($m['fall_squadron'] ?: $m['bct_squadron']);
       $region_cls = $m['al_region'] ? 'badge-' . $m['al_region'] : '';
       $p1email    = $m['parent1_email'];
       $p1cell     = $m['parent1_cell'];

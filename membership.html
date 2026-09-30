@@ -214,8 +214,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="squadron">Company</label>
-            <input type="text" id="squadron" name="squadron" />
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" />
           </div>
           <div class="form-group">
             <label for="cadetPhone">Cadet Cell Phone</label>
@@ -381,11 +381,6 @@
       var digitsOnly = phone.replace(/\D/g, '');
       // Must be at least 10 digits
       return digitsOnly.length >= 10;
-    }
-
-    function validateSquadron(squadron) {
-      // Must be at least 3 characters
-      return squadron.trim().length >= 3;
     }
 
     // Progress indicator — highlight active step on scroll
