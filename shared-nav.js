@@ -56,3 +56,17 @@ document.querySelectorAll('.nav-dropdown > a').forEach(function(a) {
     }
   });
 });
+// Facebook links marked data-facebook-link follow the "Facebook Group URL"
+// site setting; the hardcoded href stays as the fallback if the feed fails.
+// (index.html applies the setting itself as part of its own settings load.)
+var facebookLinks = document.querySelectorAll('a[data-facebook-link]');
+if (facebookLinks.length) {
+  fetch('settings-feed.php')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var url = data && data.settings && data.settings.facebook_url;
+      if (!url || !/^https?:\/\//i.test(url)) return;
+      facebookLinks.forEach(function(link) { link.href = url; });
+    })
+    .catch(function() {});
+}
