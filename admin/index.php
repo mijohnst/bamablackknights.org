@@ -13,13 +13,13 @@ $search  = trim($_GET['q']       ?? '');
 // Accepts either the new multi-select year[]=... or an old bookmarked
 // single year=... link — both land here as an array either way. A
 // completely bare load (no query string at all — e.g. clicking "Members"
-// in the nav) defaults to current cadets + Prep School rather than every
+// in the nav) defaults to current cadets + USMAPS rather than every
 // graduate ever entered into the system. Any query string at all —
 // including other pages' links like index.php?dup=1, ?split=1, or
 // income.php's ?year=2024 — is treated as an explicit request and left
 // alone, so those existing links keep working exactly as before.
 if (empty($_GET)) {
-    $years = array_merge(current_class_years(), ['Prep School']);
+    $years = array_merge(current_class_years(), ['USMAPS']);
 } else {
     $years = array_values(array_filter((array)($_GET['year'] ?? [])));
 }
@@ -158,8 +158,8 @@ $stat_unpaid = (int)$pdo->query(
 )->fetchColumn();
 
 // Class-year breakdown row shows only the 4 currently-enrolled classes plus
-// Prep School — not years that have already graduated or haven't arrived yet.
-$current_years = array_merge(current_class_years(), ['Prep School']);
+// USMAPS — not years that have already graduated or haven't arrived yet.
+$current_years = array_merge(current_class_years(), ['USMAPS']);
 $other_years   = array_values(array_diff(CLASS_YEAR_LIST, $current_years));
 
 // New members this month
@@ -203,10 +203,10 @@ if (can_manage_finances() && !is_member()) {
 }
 
 // Upcoming birthdays (next 30 days) — currently-enrolled cadets only
-// (the 4 active class years + Prep School), same scope as the automated
+// (the 4 active class years + USMAPS), same scope as the automated
 // birthday email cron. Graduates keep their birthday on file but don't
 // belong in this panel anymore.
-$bday_years = array_merge(current_class_years(), ['Prep School']);
+$bday_years = array_merge(current_class_years(), ['USMAPS']);
 $bday_ph    = [];
 $bday_params = [];
 foreach ($bday_years as $i => $y) {
@@ -342,7 +342,7 @@ if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a
   ?>
   <div class="card" style="padding:.75rem 1rem;margin:0;display:flex;flex-direction:column;justify-content:space-between;gap:.4rem;min-width:0;cursor:pointer"
        onclick="document.querySelector('[name=year]').value='<?= h($yr) ?>'; document.querySelector('.filter-bar button[type=submit]').click()">
-    <div style="font-size:.65rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.05em"><?= $yr === 'Prep School' ? 'Prep School' : 'Class of ' . h($yr) ?></div>
+    <div style="font-size:.65rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.05em"><?= $yr === 'USMAPS' ? 'USMAPS' : 'Class of ' . h($yr) ?></div>
     <div style="font-size:1.3rem;font-weight:700;color:<?= $col ?>;line-height:1"><?= $yp ?><span style="font-size:.8rem;color:#9aa5b4"> / <?= $cnt ?></span></div>
     <div style="font-size:.65rem;color:#9aa5b4"><?= $ypct ?>% paid</div>
     <div style="background:#e1e5eb;border-radius:99px;height:4px;overflow:hidden">

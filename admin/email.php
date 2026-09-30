@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 
 $all_years     = CLASS_YEAR_LIST;
-$current_years = array_merge(current_class_years(), ['Prep School']);
+$current_years = array_merge(current_class_years(), ['USMAPS']);
 $other_years   = array_values(array_diff($all_years, $current_years));
 
 // ── Extract valid emails from various text formats ─────────────────────────

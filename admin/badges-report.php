@@ -9,10 +9,10 @@ $pdo = get_pdo();
 
 $year = $_GET['year'] ?? '';
 if (!in_array($year, CLASS_YEAR_LIST, true)) {
-    $year = ''; // '' = default view (current classes + Prep School)
+    $year = ''; // '' = default view (current classes + USMAPS)
 }
 $default_view = ($year === '');
-$current_years = array_merge(current_class_years(), ['Prep School']);
+$current_years = array_merge(current_class_years(), ['USMAPS']);
 
 $slots = badge_slots($pdo);
 if ($default_view) {

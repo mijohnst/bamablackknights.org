@@ -117,7 +117,7 @@ function send_birthday_emails(PDO $pdo): int {
         // Only currently-enrolled cadets (the 4 active class years + Prep
         // School) — graduates keep their birthday on file but shouldn't
         // keep getting club birthday emails after commissioning.
-        $eligible_years = array_merge(current_class_years(), ['Prep School']);
+        $eligible_years = array_merge(current_class_years(), ['USMAPS']);
         $year_ph = [];
         $params  = ['month' => (int)date('n'), 'day' => (int)date('j')];
         foreach ($eligible_years as $i => $y) {

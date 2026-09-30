@@ -48,7 +48,7 @@ admin_header('Start New Membership Year');
       No dues history is ever deleted — this only recalculates who counts as currently paid for
       <strong><?= h($new_year) ?></strong>
       (Class of <?= h($active_years[0]) ?>–<?= h(end($active_years)) ?> only), based on each member's own recorded dues years.
-      Prep School and Graduate records are not touched. Safe to run more than once.
+      USMAPS and Graduate records are not touched. Safe to run more than once.
     </p>
   </div>
   <p style="margin-bottom:1.5rem;color:#333">

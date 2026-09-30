@@ -80,7 +80,7 @@ if (!filter_var(s($payload, 'cadetEmail'), FILTER_VALIDATE_EMAIL)) {
 // anything else rather than writing a tampered/arbitrary class_year
 // (e.g. 'Graduate', which would wrongly exclude a new applicant from
 // dues-renewal emails and current-class filters).
-if (!in_array(s($payload, 'graduationYear'), ['2026', '2027', '2028', '2029', '2030', 'Prep School'], true)) {
+if (!in_array(s($payload, 'graduationYear'), ['2026', '2027', '2028', '2029', '2030', 'USMAPS'], true)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Invalid graduation year.']);
     exit();

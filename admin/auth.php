@@ -489,14 +489,14 @@ const INCOME_PAYMENT_METHODS = ['Check','Cash','Venmo','Zelle','PayPal','Bank Tr
 // skipping the workflow forward (see purchase-form.php).
 const STATUS_ORDER = ['pending' => 0, 'approved' => 1, 'submitted' => 2, 'paid' => 3];
 // 2031 is deliberately absent: the class that will become 2031 is still at
-// Prep School and hasn't matriculated yet, so "2031" and "Prep School"
+// USMAPS and hasn't matriculated yet, so "2031" and "USMAPS"
 // would otherwise represent the exact same cohort under two labels.
 // Re-add it once that class actually starts at the Academy.
 // 2026 is also deliberately absent: that class graduated and every member
 // has been moved to Graduate + archived (see graduate-class.php), so no
 // active record should ever hold class_year='2026' again.
-const CLASS_YEARS     = ['', '2027', '2028', '2029', '2030', 'Prep School', 'Graduate'];
-const CLASS_YEAR_LIST = ['2027', '2028', '2029', '2030', 'Prep School', 'Graduate'];
+const CLASS_YEARS     = ['', '2027', '2028', '2029', '2030', 'USMAPS', 'Graduate'];
+const CLASS_YEAR_LIST = ['2027', '2028', '2029', '2030', 'USMAPS', 'Graduate'];
 
 // Used for the Cadet "Gender" field, which drives pronoun placeholders
 // ({he_she}, {him_her}, {his_her}) in the automated birthday emails. Left

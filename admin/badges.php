@@ -17,10 +17,10 @@ $errors = [];
 
 $year = $_GET['year'] ?? '';
 if (!in_array($year, CLASS_YEAR_LIST, true)) {
-    $year = ''; // '' = default view below (current classes + Prep School)
+    $year = ''; // '' = default view below (current classes + USMAPS)
 }
 $default_view = ($year === '');
-$current_years = array_merge(current_class_years(), ['Prep School']);
+$current_years = array_merge(current_class_years(), ['USMAPS']);
 $search = trim($_GET['q'] ?? '');
 $paid_only = isset($_GET['paid']);
 $needs_only = isset($_GET['needs']);

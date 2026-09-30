@@ -132,15 +132,15 @@ function badge_slots(PDO $pdo): array {
 
 // The ordered list of club-year strings ("2026-2027") this cadet's dues
 // can ever apply to: their 4 years as an undergrad, computed backward
-// from their graduating class_year, plus one earlier Prep School year for
+// from their graduating class_year, plus one earlier USMAPS year for
 // cadets currently at Prep — whose eventual graduating class is always
 // outgoing_class_year()+5 (see admin/auth.php's CLASS_YEARS comment: that
 // future class is deliberately absent from CLASS_YEAR_LIST until they
-// matriculate, since until then "Prep School" and that class year are the
+// matriculate, since until then "USMAPS" and that class year are the
 // same cohort). Returns [] for 'Graduate', blank, or anything that isn't
 // a real class — those cadets have no dues years to select.
 function cadet_dues_years(string $class_year): array {
-    if ($class_year === 'Prep School') {
+    if ($class_year === 'USMAPS') {
         $grad = (int)outgoing_class_year() + 5;
     } elseif (ctype_digit($class_year)) {
         $grad = (int)$class_year;
@@ -148,7 +148,7 @@ function cadet_dues_years(string $class_year): array {
         return [];
     }
     $years = [];
-    if ($class_year === 'Prep School') {
+    if ($class_year === 'USMAPS') {
         $prep_start = $grad - 5;
         $years[] = $prep_start . '-' . ($prep_start + 1);
     }
