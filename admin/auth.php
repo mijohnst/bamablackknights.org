@@ -599,15 +599,10 @@ function member_form(array $m = [], bool $is_edit = false): void {
     echo '<div class="form-group"><label>PO Box</label><input name="cadet_po_box" value="' . $v('cadet_po_box') . '"></div>';
     echo '<div class="form-group"><label>Cell</label><input type="tel" name="cadet_cell" value="' . $v('cadet_cell') . '"></div>';
     echo '</div>';
-    echo '<div class="form-row col-3">';
+    echo '<div class="form-row col-4">';
     echo '<div class="form-group"><label>Suffix <span style="font-weight:400;font-size:.72rem;color:#9aa5b4">e.g. Jr., III</span></label><input name="cadet_suffix" value="' . $v('cadet_suffix') . '" maxlength="20"></div>';
     echo '<div class="form-group"><label>Email</label><input type="email" name="cadet_email" value="' . $v('cadet_email') . '"></div>';
     echo '<div class="form-group"><label>Gender</label>' . $sel('cadet_gender', GENDERS) . '</div>';
-    echo '</div>';
-    echo '</fieldset>';
-
-    echo '<fieldset><legend>Cadet Company</legend>';
-    echo '<div class="form-row">';
     echo '<div class="form-group"><label>Company</label><select name="company">';
     echo '<option value="">— select company —</option>';
     for ($regiment = 1; $regiment <= 4; $regiment++) {
@@ -620,7 +615,7 @@ function member_form(array $m = [], bool $is_edit = false): void {
         echo '</optgroup>';
     }
     echo '</select></div>';
-    echo '</div></fieldset>';
+    echo '</fieldset>';
 
     echo '<fieldset><legend>Parent / Contact 1</legend>';
     echo '<div class="form-row col-4">';
