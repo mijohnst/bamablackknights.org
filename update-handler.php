@@ -10,7 +10,7 @@
 header('Content-Type: application/json');
 // Must be set on every response, not just the OPTIONS preflight — see
 // membership-handler.php for why.
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -75,7 +75,7 @@ try {
 
     if (rate_limited($pdo, 'update_form')) {
         http_response_code(429);
-        echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email secretary@alabamafalcons.org.']);
+        echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email secretary@bamablackknights.org.']);
         exit();
     }
 
@@ -115,7 +115,7 @@ try {
     if (!$check->fetch()) {
         echo json_encode([
             'success' => false,
-            'error'   => "We couldn't find a matching record. Please email secretary@alabamafalcons.org so we can update your information manually."
+            'error'   => "We couldn't find a matching record. Please email secretary@bamablackknights.org so we can update your information manually."
         ]);
         exit();
     }
@@ -235,7 +235,7 @@ try {
 } catch (PDOException $e) {
     error_log('Update handler: MySQL error: ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Database error. Please email secretary@alabamafalcons.org directly.']);
+    echo json_encode(['success' => false, 'error' => 'Database error. Please email secretary@bamablackknights.org directly.']);
     exit();
 }
 
@@ -285,7 +285,7 @@ foreach ($diff_labels as $col => $label) {
 }
 
 // ── Notify secretary of the update ────────────────────────────────────────
-$secretary_email = 'secretary@alabamafalcons.org';
+$secretary_email = 'secretary@bamablackknights.org';
 $subject = 'Member Info Updated: ' . sanitize_header($g('cadet_first_name')) . ' ' . sanitize_header($g('cadet_last_name'))
          . ($g('cadet_suffix') !== '' ? ' ' . sanitize_header($g('cadet_suffix')) : '');
 
@@ -348,15 +348,15 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     $conf_subject = 'Your Information Has Been Updated — West Point Parents Club of Alabama';
     $conf_body    = "Dear $parent_name,\n\n"
                   . "Your family's information for $cadet_name has been updated in our records.\n\n"
-                  . "If any of this wasn't intentional, or you have questions, please contact us at secretary@alabamafalcons.org.\n\n"
+                  . "If any of this wasn't intentional, or you have questions, please contact us at secretary@bamablackknights.org.\n\n"
                   . "Aim High · Fly · Fight · Win\n"
                   . "West Point Parents Club of Alabama\n"
                   . "alabamafalcons.org";
     $conf_mail = new PHPMailer(true);
     try {
         configure_smtp_relay($conf_mail);
-        $conf_mail->setFrom('secretary@alabamafalcons.org', CLUB_NAME);
-        $conf_mail->addReplyTo('secretary@alabamafalcons.org', CLUB_NAME);
+        $conf_mail->setFrom('secretary@bamablackknights.org', CLUB_NAME);
+        $conf_mail->addReplyTo('secretary@bamablackknights.org', CLUB_NAME);
         $conf_mail->addAddress($parent_email);
         $conf_mail->isHTML(false);
         $conf_mail->Subject = $conf_subject;

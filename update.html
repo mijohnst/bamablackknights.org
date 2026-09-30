@@ -164,7 +164,7 @@
           </div>
           <div id="lookupStatus"></div>
           <button type="button" id="lookupBtn" class="cta-button">Find My Record</button>
-          <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact site support at <a href="mailto:mijohnst@alabamafalcons.org" style="color:var(--blue)">mijohnst@alabamafalcons.org</a>.</p>
+          <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact the club at <a href="mailto:secretary@bamablackknights.org" style="color:var(--blue)">secretary@bamablackknights.org</a>.</p>
         </div>
 
         <input type="hidden" id="verifyToken" name="verifyToken" />
@@ -579,7 +579,7 @@
           statusEl.style.display = 'block';
         }
       } catch (err) {
-        statusEl.textContent = 'Error looking up your record. Please try again or contact secretary@alabamafalcons.org';
+        statusEl.textContent = 'Error looking up your record. Please try again or contact secretary@bamablackknights.org';
         statusEl.className = 'error';
         statusEl.style.display = 'block';
       } finally {
@@ -683,7 +683,7 @@
           window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
           setTimeout(function() { window.location.href = 'index.html'; }, 2500);
         } else {
-          statusEl.textContent = 'Error: ' + (result.error || 'Unknown error') + '. Please try again or contact secretary@alabamafalcons.org';
+          statusEl.textContent = 'Error: ' + (result.error || 'Unknown error') + '. Please try again or contact secretary@bamablackknights.org';
           statusEl.className = 'error';
           statusEl.style.display = 'block';
           btn.textContent = 'Update My Information';
@@ -691,7 +691,7 @@
           window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
         }
       } catch (error) {
-        statusEl.textContent = 'Error submitting form. Please try again or contact secretary@alabamafalcons.org';
+        statusEl.textContent = 'Error submitting form. Please try again or contact secretary@bamablackknights.org';
         statusEl.className = 'error';
         statusEl.style.display = 'block';
         btn.textContent = 'Update My Information';

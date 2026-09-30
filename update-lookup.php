@@ -9,7 +9,7 @@
 header('Content-Type: application/json');
 // Must be set on every response, not just the OPTIONS preflight — see
 // membership-handler.php for why.
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
@@ -39,7 +39,7 @@ if (!$payload) {
 // Honeypot — bots fill this hidden field, real visitors never see it.
 // Pretend "not found" either way so bots don't learn anything from the response.
 if (honeypot_tripped($payload)) {
-    echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please double-check your information, or contact secretary@alabamafalcons.org."]);
+    echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please double-check your information, or contact secretary@bamablackknights.org."]);
     exit();
 }
 
@@ -47,7 +47,7 @@ $pdo = get_pdo();
 
 if (rate_limited($pdo, 'update_lookup')) {
     http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@alabamafalcons.org.']);
+    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@bamablackknights.org.']);
     exit();
 }
 
@@ -87,7 +87,7 @@ if (count($matches) !== 1) {
         'success' => false,
         'error'   => count($matches) > 1
             ? 'More than one record matched those details. Please contact the club for help.'
-            : "We couldn't find a matching record. Please double-check the graduation year, last name, and email on file, or contact secretary@alabamafalcons.org."
+            : "We couldn't find a matching record. Please double-check the graduation year, last name, and email on file, or contact secretary@bamablackknights.org."
     ]);
     exit();
 }
