@@ -756,6 +756,11 @@
               body: JSON.stringify({ verifyToken: verifyToken, orderId: data.orderID })
             }).then(function(r) { return r.json(); }).then(function(result) {
               if (result.success) {
+                if (result.applied === false) {
+                  document.getElementById('duesYearsBody').innerHTML =
+                    '<p style="color:#8a1425;font-weight:600">' + (result.message || 'Payment received, but dues need manual review. Please do not pay again.') + '</p>';
+                  return;
+                }
                 document.getElementById('duesYearsBody').innerHTML =
                   '<p style="color:#2e7d32;font-weight:600">Payment received — thank you! Your membership has been updated for ' + (result.years || []).join(', ') + '.</p>';
               } else {

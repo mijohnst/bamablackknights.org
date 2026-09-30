@@ -82,9 +82,13 @@ try {
     $first  = s($payload, 'cadetFirstName');
     $middle = s($payload, 'cadetMiddleName');
 
-    // Date of Birth isn't collected on this form — bind null so the
-    // COALESCE-protected UPDATE below leaves the existing value untouched.
-    $dob = null;
+    $dob = s($payload, 'cadetDOB');
+    if ($dob !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dob)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Enter a valid cadet date of birth.']);
+        exit();
+    }
+    if ($dob === '') $dob = null;
 
     // ── Find the existing record — never create a new one. Identity comes
     // from a per-lookup token issued by update-lookup.php upon a real,
@@ -250,6 +254,7 @@ $diff_labels = [
     'cadet_suffix'        => 'Cadet Suffix',
     'nickname'            => 'Nickname',
     'cadet_gender'        => 'Gender',
+    'cadet_birthday'      => 'Date of Birth',
     'cadet_po_box'        => 'USAFA Mailbox / PO Box',
     'cadet_email'         => 'Cadet Email',
     'cadet_cell'          => 'Cadet Cell Phone',
@@ -367,8 +372,26 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     }
 }
 
+$dues_token = bin2hex(random_bytes(24));
+if (!isset($_SESSION['dues_verified']) || !is_array($_SESSION['dues_verified'])) {
+    $_SESSION['dues_verified'] = [];
+}
+$_SESSION['dues_verified'][$dues_token] = [
+    'member_id' => $existing_id,
+    'expires' => time() + 1800,
+    'pending_order' => null,
+];
+$payable_years = array_values(array_diff(
+    cadet_dues_years((string)($member['class_year'] ?? '')),
+    parse_dues_years($member['membership_paid_years'] ?? '')
+));
+
 http_response_code(200);
 echo json_encode([
     'success' => true,
-    'message' => 'Thank you! Your information has been updated.'
+    'message' => 'Your information has been updated.',
+    'duesVerifyToken' => $dues_token,
+    'cadetYears' => cadet_dues_years((string)($member['class_year'] ?? '')),
+    'paidYears' => parse_dues_years($member['membership_paid_years'] ?? ''),
+    'payableYears' => $payable_years,
 ]);

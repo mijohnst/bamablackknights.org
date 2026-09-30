@@ -10,7 +10,7 @@ header('Content-Type: application/json');
 // there the form submission completes server-side but the browser blocks
 // the JS from ever seeing success, showing a false failure to the user
 // (who may then resubmit).
-header('Access-Control-Allow-Origin: https://alabamafalcons.org');
+header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -45,7 +45,7 @@ use PHPMailer\PHPMailer\Exception as PHPMailerException;
 // Pretend success so bots don't learn to avoid the field.
 if (honeypot_tripped($payload)) {
     http_response_code(200);
-    echo json_encode(['success' => true, 'message' => 'Application received! Thank you for joining the Alabama Falcons family.']);
+    echo json_encode(['success' => true, 'message' => 'Application received! Thank you for joining the West Point Parents Club of Alabama.']);
     exit();
 }
 
@@ -55,6 +55,15 @@ function sanitize_header($val) {
 
 function s(array $p, string $key): string {
     return trim($p[$key] ?? '');
+}
+
+start_verification_session();
+$membership_token = s($payload, 'membershipToken');
+$verification = $_SESSION['membership_verified'][$membership_token] ?? null;
+if (!$verification || ($verification['expires'] ?? 0) < time()) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Your verification session expired. Please verify your information again.']);
+    exit();
 }
 
 // Required fields mirror the `required` attributes on membership.html —
@@ -90,6 +99,24 @@ if (!filter_var(s($payload, 'parent1Email'), FILTER_VALIDATE_EMAIL)) {
     echo json_encode(['success' => false, 'error' => 'Invalid primary contact email address.']);
     exit();
 }
+if (
+    strip_name_suffix(normalize_name(s($payload, 'cadetLastName'))) !== $verification['last_name']
+    || s($payload, 'cadetDOB') !== $verification['birthday']
+) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'The verified cadet name or birthday changed. Please verify the details again.']);
+    exit();
+}
+$verified_email_field = [
+    'cadet' => 'cadetEmail',
+    'primary' => 'parent1Email',
+    'secondary' => 'parent2Email',
+][$verification['email_owner']] ?? '';
+if ($verified_email_field === '' || strtolower(s($payload, $verified_email_field)) !== $verification['email']) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'The verified email was changed. Please verify the details again.']);
+    exit();
+}
 // Gender is optional (blank allowed) but, like graduationYear, is a <select>
 // of known values — reject anything else rather than writing a tampered value.
 if (s($payload, 'cadetGender') !== '' && !in_array(s($payload, 'cadetGender'), ['Male', 'Female'], true)) {
@@ -121,7 +148,7 @@ try {
 
     if (rate_limited($pdo, 'membership_form')) {
         http_response_code(429);
-        echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email us directly at secretary@alabamafalcons.org.']);
+        echo json_encode(['success' => false, 'error' => 'Too many submissions from your network. Please try again later or email secretary@bamablackknights.org.']);
         exit();
     }
 
@@ -133,118 +160,37 @@ try {
     $dob = s($payload, 'cadetDOB');
     if ($dob === '') $dob = null;
 
-    // ── Duplicate detection: same last name + class year, AND a matching
-    // parent email (either submitted parent against either stored parent
-    // column, so a resubmission that lists parents in the opposite order
-    // still matches). Matching on name+class-year alone — without an email
-    // check — would let two unrelated families who happen to share a last
-    // name, class year, and cadet first name silently overwrite each other.
-    //
-    // Last-name comparison is done in PHP against a normalized form (strip
-    // punctuation, collapse whitespace, lowercase) rather than a strict SQL
-    // `=` — a name typed as "Jimmerson, Jr" vs "Jimmerson, Jr." on separate
-    // submissions is the same family, but a literal `=` treats them as two
-    // different rows and silently inserts a duplicate instead of updating.
-    // normalize_name() lives in admin/lib.php, shared with the admin panel's
-    // own duplicate check, so the two never disagree on what counts as a match.
-    // Also stripped of a trailing suffix token via strip_name_suffix() — a
-    // legacy record whose suffix is still crammed into cadet_last_name (the
-    // exact "Jimmerson, Jr" case this field exists to fix) would otherwise
-    // never match the same family's new clean-last-name submission, and get
-    // inserted as a duplicate instead of updated.
-    $parent1_email = s($payload, 'parent1Email');
-    $parent2_email = s($payload, 'parent2Email');
-    $submitted_emails = array_map('strtolower', array_filter([$parent1_email, $parent2_email], fn($e) => $e !== ''));
-    $cand = $pdo->prepare(
-        'SELECT id, cadet_last_name, parent1_email, parent2_email FROM members
-         WHERE class_year = :class_year
-           AND (
-                (:parent1_email <> "" AND (parent1_email = :parent1_email OR parent2_email = :parent1_email))
-             OR (:parent2_email <> "" AND (parent1_email = :parent2_email OR parent2_email = :parent2_email))
-           )'
+    $submitted_emails = array_values(array_unique(array_map('strtolower', array_filter([
+        s($payload, 'cadetEmail'),
+        s($payload, 'parent1Email'),
+        s($payload, 'parent2Email'),
+    ], fn($email) => $email !== ''))));
+    $email_placeholders = implode(',', array_fill(0, count($submitted_emails), '?'));
+    $duplicate_stmt = $pdo->prepare(
+        "SELECT id, cadet_last_name FROM members
+         WHERE archived = 0 AND class_year = ?
+           AND (LOWER(cadet_email) IN ($email_placeholders)
+             OR LOWER(parent1_email) IN ($email_placeholders)
+             OR LOWER(parent2_email) IN ($email_placeholders))"
     );
-    $cand->execute([
-        'class_year'    => s($payload, 'graduationYear'),
-        'parent1_email' => $parent1_email,
-        'parent2_email' => $parent2_email,
-    ]);
+    $duplicate_stmt->execute(array_merge(
+        [s($payload, 'graduationYear')],
+        $submitted_emails,
+        $submitted_emails,
+        $submitted_emails
+    ));
     $target_norm = strip_name_suffix(normalize_name(s($payload, 'cadetLastName')));
-    $existing_id = null;
-    foreach ($cand->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        if (strip_name_suffix(normalize_name($row['cadet_last_name'])) !== $target_norm) continue;
-        // Identity check: every email already on file for this family must be
-        // present among the submitted emails, not just one of them — matching
-        // on just one (the old rule) meant anyone who learned a single parent
-        // email on file could silently overwrite the whole record. A family
-        // that genuinely only remembers one of two emails on file gets a new
-        // row instead (visible to the secretary via the admin duplicate-check
-        // tools), which is a far safer failure mode than an unauthorized overwrite.
-        $stored_emails = array_map('strtolower', array_filter([$row['parent1_email'], $row['parent2_email']], fn($e) => $e !== ''));
-        if (empty(array_diff($stored_emails, $submitted_emails))) { $existing_id = $row['id']; break; }
+    foreach ($duplicate_stmt->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
+        if (strip_name_suffix(normalize_name($candidate['cadet_last_name'])) === $target_norm) {
+            http_response_code(409);
+            echo json_encode([
+                'success' => false,
+                'error' => 'A member record already uses this cadet name, class year, and email. Please return to verification and update the existing record, or contact the club if you need help.',
+            ]);
+            exit();
+        }
     }
 
-    if ($existing_id) {
-        // Returning member — update their record instead of inserting
-        $upd = $pdo->prepare("
-            UPDATE members SET
-                cadet_suffix=:cadet_suffix,
-                cadet_first_name=:cadet_first_name, cadet_middle_name=:cadet_middle_name, nickname=:nickname,
-                cadet_gender=:cadet_gender,
-                cadet_birthday=:cadet_birthday, cadet_po_box=:cadet_po_box,
-                cadet_email=:cadet_email, cadet_cell=:cadet_cell,
-                company=:company,
-                parent1_last_name=:parent1_last_name, parent1_first_name=:parent1_first_name,
-                parent1_relationship=:parent1_relationship,
-                parent1_email_updates=:parent1_email_updates,
-                parent1_email=:parent1_email, parent1_cell=:parent1_cell,
-                parent1_street=:parent1_street, parent1_city=:parent1_city,
-                parent1_state=:parent1_state, parent1_zip=:parent1_zip,
-                parent2_last_name=:parent2_last_name, parent2_first_name=:parent2_first_name,
-                parent2_relationship=:parent2_relationship,
-                parent2_email_updates=:parent2_email_updates,
-                parent2_email=:parent2_email, parent2_cell=:parent2_cell,
-                parent2_street=:parent2_street, parent2_city=:parent2_city,
-                parent2_state=:parent2_state, parent2_zip=:parent2_zip,
-                photo_consent=:photo_consent, directory_consent=:directory_consent
-            WHERE id = :id
-        ");
-        $upd->execute([
-            'cadet_suffix'       => $suffix,
-            'cadet_first_name'   => $first,
-            'cadet_middle_name'  => $middle,
-            'nickname'           => s($payload,'nickname'),
-            'cadet_gender'       => s($payload,'cadetGender'),
-            'cadet_birthday'     => $dob,
-            'cadet_po_box'       => s($payload,'poBox'),
-            'cadet_email'        => s($payload,'cadetEmail'),
-            'cadet_cell'         => s($payload,'cadetPhone'),
-            'company'            => s($payload,'company'),
-            'parent1_last_name'  => s($payload,'parent1LastName'),
-            'parent1_first_name' => s($payload,'parent1FirstName'),
-            'parent1_relationship' => s($payload,'parent1Relationship'),
-            'parent1_email_updates' => $parent1_email_updates,
-            'parent1_email'      => s($payload,'parent1Email'),
-            'parent1_cell'       => s($payload,'parent1Phone'),
-            'parent1_street'     => s($payload,'streetAddress'),
-            'parent1_city'       => s($payload,'city'),
-            'parent1_state'      => s($payload,'state'),
-            'parent1_zip'        => s($payload,'zipCode'),
-            'parent2_last_name'  => s($payload,'parent2LastName'),
-            'parent2_first_name' => s($payload,'parent2FirstName'),
-            'parent2_relationship' => s($payload,'parent2Relationship'),
-            'parent2_email_updates' => $parent2_email_updates,
-            'parent2_email'      => s($payload,'parent2Email'),
-            'parent2_cell'       => s($payload,'parent2Phone'),
-            'parent2_street'     => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'streetAddress') : s($payload,'parent2Street'),
-            'parent2_city'       => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'city')          : s($payload,'parent2City'),
-            'parent2_state'      => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'state')         : s($payload,'parent2State'),
-            'parent2_zip'        => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'zipCode')       : s($payload,'parent2Zip'),
-            'photo_consent'      => s($payload,'photoConsent'),
-            'directory_consent'  => s($payload,'directoryConsent'),
-            'id'                 => $existing_id,
-        ]);
-        $db_success = true;
-    } else {
     $stmt = $pdo->prepare("
         INSERT INTO members (
             class_year, cadet_last_name, cadet_suffix, cadet_first_name, cadet_middle_name, nickname,
@@ -308,8 +254,8 @@ try {
         'directory_consent'   => s($payload, 'directoryConsent'),
     ]);
 
+    $new_member_id = (int)$pdo->lastInsertId();
     $db_success = true;
-    } // end else (new member insert)
 
 } catch (PDOException $e) {
     $db_success = false;
@@ -320,13 +266,13 @@ if (!$db_success) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'error'   => 'Database error. Please email secretary@alabamafalcons.org directly.'
+        'error'   => 'Database error. Please email secretary@bamablackknights.org directly.'
     ]);
     exit();
 }
 
 // ── 2. Send secretary notification email ──────────────────────────────────
-$secretary_email = 'secretary@alabamafalcons.org';
+$secretary_email = 'secretary@bamablackknights.org';
 $subject = 'New Membership Application: '
          . sanitize_header(s($payload, 'cadetFirstName')) . ' '
          . sanitize_header(s($payload, 'cadetLastName'))
@@ -382,11 +328,11 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     $conf_subject = 'Membership Application Received — West Point Parents Club of Alabama';
     $conf_body    = "Dear $parent_name,\n\n"
                   . "We have received your membership application for $cadet_name (Class of " . s($payload,'graduationYear') . ").\n\n"
-                  . "Your information has been recorded. You will be redirected to our payment page to complete your membership.\n\n"
-                  . "If you have any questions, please contact us at info@alabamafalcons.org.\n\n"
+                  . "Your information has been recorded. Continue through the online dues checkout to complete your membership.\n\n"
+                  . "If you have any questions, please contact us at secretary@bamablackknights.org.\n\n"
                   . "Aim High · Fly · Fight · Win\n"
                   . "West Point Parents Club of Alabama\n"
-                  . "alabamafalcons.org";
+                  . "bamablackknights.org";
     $conf_mail = new PHPMailer(true);
     try {
         configure_smtp_relay($conf_mail);
@@ -402,9 +348,26 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     }
 }
 
+start_verification_session();
+$dues_token = bin2hex(random_bytes(24));
+if (!isset($_SESSION['dues_verified']) || !is_array($_SESSION['dues_verified'])) {
+    $_SESSION['dues_verified'] = [];
+}
+$_SESSION['dues_verified'][$dues_token] = [
+    'member_id' => $new_member_id,
+    'expires' => time() + 1800,
+    'pending_order' => null,
+];
+unset($_SESSION['membership_verified'][$membership_token]);
+$payable_years = cadet_dues_years(s($payload, 'graduationYear'));
+
 // ── 4. Return success (DB write already succeeded) ────────────────────────
 http_response_code(200);
 echo json_encode([
     'success' => true,
-    'message' => 'Application received! Thank you for joining the Alabama Falcons family. Redirecting to payment page...'
+    'message' => 'Your information has been saved. Continue to checkout to pay your selected membership years.',
+    'duesVerifyToken' => $dues_token,
+    'cadetYears' => $payable_years,
+    'paidYears' => [],
+    'payableYears' => $payable_years,
 ]);

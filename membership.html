@@ -52,9 +52,9 @@
     .cta-button:hover { background: linear-gradient(180deg, #2166cc 0%, #003080 100%); box-shadow: 0 2px 0 #001535, 0 4px 8px rgba(0,0,0,.2); top: 2px; }
     .cta-button:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    #formStatus { margin: 1rem 0; padding: 1rem; border-radius: 4px; display: none; font-weight: 600; }
-    #formStatus.success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
-    #formStatus.error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+    #formStatus, #membershipLookupStatus, #membershipPaymentStatus { margin: 1rem 0; padding: 1rem; border-radius: 4px; display: none; font-weight: 600; }
+    #formStatus.success, #membershipLookupStatus.success, #membershipPaymentStatus.success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
+    #formStatus.error, #membershipLookupStatus.error, #membershipPaymentStatus.error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
 
     /* INFO BOX */
     .info-box { background: var(--light); border-left: 4px solid var(--blue); border-radius: 4px; padding: 1.5rem 2rem; margin: 2rem 0; }
@@ -128,9 +128,44 @@
       </p>
     </div>
 
-    <div class="form-section">
+    <div class="form-section" id="membershipLookupSection">
+      <h3>Find or Start Your Membership</h3>
+      <p>Enter the cadet’s last name and birthday, plus an email already on file. If no record matches, we’ll start a new application.</p>
+      <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+        <label for="lookupWebsite">Leave this field empty</label>
+        <input type="text" id="lookupWebsite" autocomplete="off" tabindex="-1" />
+      </div>
+      <div class="form-row-3">
+        <div class="form-group">
+          <label for="lookupCadetLastName">Cadet Last Name *</label>
+          <input type="text" id="lookupCadetLastName" autocomplete="family-name" required />
+        </div>
+        <div class="form-group">
+          <label for="lookupCadetBirthday">Cadet Date of Birth *</label>
+          <input type="date" id="lookupCadetBirthday" required />
+        </div>
+        <div class="form-group">
+          <label for="lookupEmail">Email Address *</label>
+          <input type="email" id="lookupEmail" autocomplete="email" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lookupEmailOwner">This email belongs to *</label>
+        <select id="lookupEmailOwner" required>
+          <option value="">Select who owns this email</option>
+          <option value="cadet">Cadet</option>
+          <option value="primary">Primary contact</option>
+          <option value="secondary">Secondary contact</option>
+        </select>
+      </div>
+      <div id="membershipLookupStatus" role="status" aria-live="polite"></div>
+      <button type="button" id="membershipLookupButton" class="cta-button">Continue</button>
+      <p class="hint" style="margin-top:.75rem">Use the exact email address saved for the cadet or a family contact.</p>
+    </div>
+
+    <div class="form-section" id="membershipDetailsSection" style="display:none">
       <h3>Member Information</h3>
-      <p>Please fill in the information below to complete your membership application.</p>
+      <p id="membershipFormIntro">Complete the information below to apply and choose membership years.</p>
 
       <!-- Progress indicator -->
       <div style="display:flex;gap:0;margin-bottom:1.75rem;overflow:hidden;border-radius:4px">
@@ -144,6 +179,9 @@
       </div>
 
       <form id="membershipForm">
+        <input type="hidden" id="membershipToken" name="membershipToken" />
+        <input type="hidden" id="updateVerifyToken" name="verifyToken" />
+        <input type="hidden" id="verifiedEmailOwner" name="verifiedEmailOwner" />
         <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
           <label for="website">Leave this field empty</label>
           <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
@@ -201,10 +239,11 @@
               <option value="2030">2030</option>
               <option value="USMAPS">USMAPS</option>
             </select>
+            <input type="hidden" id="verifiedGraduationYear" name="graduationYear" disabled />
           </div>
           <div class="form-group">
             <label for="cadetDOB">Date of Birth</label>
-            <input type="date" id="cadetDOB" name="cadetDOB" />
+            <input type="date" id="cadetDOB" name="cadetDOB" required />
           </div>
           <div class="form-group">
             <label for="poBox">PO Box</label>
@@ -415,9 +454,30 @@
         </div>
         <p class="hint">Only contacts who opt in are included in routine club email lists. These choices do not affect account or payment notices.</p>
 
+        <div class="form-group" id="membershipDuesSection" style="margin-top:1.5rem">
+          <label>Membership Years</label>
+          <p class="hint">Select the unpaid membership years you’d like to pay for. The total is confirmed by the server at checkout.</p>
+          <div id="membershipDuesOptions" class="dues-years-list"></div>
+          <div id="membershipDuesTotal" class="dues-years-total"></div>
+          <div id="membershipDuesStatus" class="hint" role="status" aria-live="polite"></div>
+        </div>
+
         <div id="formStatus"></div>
-        <button type="submit" class="cta-button">Proceed to Payment Options</button>
+        <button type="submit" class="cta-button">Save Information &amp; Continue</button>
       </form>
+    </div>
+
+    <div class="form-section" id="membershipPaymentSection" style="display:none">
+      <h3>Complete Membership Payment</h3>
+      <p id="membershipPaymentSummary">Your information has been saved. Select the years and complete checkout below.</p>
+      <div id="savedDuesOptions" class="dues-years-list"></div>
+      <div id="savedDuesTotal" class="dues-years-total"></div>
+      <div id="membershipPaymentStatus" role="status" aria-live="polite"></div>
+      <div id="membershipPaypalButtons"></div>
+      <div id="membershipPaypalUnavailable" style="display:none" class="info-box">
+        <p>Online payment is not configured yet. Your information is saved and dues remain unpaid. You can return to the Pay Dues page later or contact the Treasurer.</p>
+        <a href="payment.html" class="btn btn-gold">Open Pay Dues</a>
+      </div>
     </div>
   </section>
 
@@ -429,158 +489,365 @@
   </footer>
 
   <script>
+    var membershipMode = '';
+    var duesVerifyToken = '';
+    var duesCadetYears = [];
+    var duesPaidYears = [];
+    var availableDuesYears = [];
+    var paypalState = 'loading';
+    var paypalButtonsRendered = false;
 
-    // Form validation helper functions
     function validateEmail(email) {
-      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
     function validatePhoneNumber(phone) {
-      // Remove all non-digit characters
-      var digitsOnly = phone.replace(/\D/g, '');
-      // Must be at least 10 digits
-      return digitsOnly.length >= 10;
+      return phone.replace(/\D/g, '').length >= 10;
     }
 
-    // Progress indicator — highlight active step on scroll
-    (function() {
-      var steps = [
-        {id:'fs-cadet',   idx:0},
-        {id:'fs-consent', idx:1},
-        {id:'fs-parents', idx:2},
-        {id:'fs-address', idx:3},
-        {id:'fs-contact', idx:4}
-      ];
-      var bars = document.querySelectorAll('#form-progress > div');
-      function updateProgress() {
-        var active = 0;
-        steps.forEach(function(s) {
-          var el = document.getElementById(s.id);
-          if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.6) active = s.idx;
-        });
-        bars.forEach(function(b, i) {
-          b.style.background = i <= active ? '#000000' : '#e1e5eb';
-          b.style.color      = i <= active ? '#fff'    : '#5a6a7a';
-        });
-      }
-      window.addEventListener('scroll', updateProgress, {passive:true});
-      updateProgress();
-    })();
-
     function toggleParent2Address(radio) {
-      document.getElementById('parent2-address').style.display =
-        radio.value === 'No' ? 'block' : 'none';
+      document.getElementById('parent2-address').style.display = radio.value === 'No' ? 'block' : 'none';
     }
 
     function validateForm(formData) {
       var errors = [];
-
-      // Validate primary email
-      var parent1Email = formData.get('parent1Email');
-      if (parent1Email && !validateEmail(parent1Email)) {
-        errors.push('Primary Contact Email must be a valid email address (e.g., user@example.com)');
-      }
-
-      // Validate secondary email if provided
-      var parent2Email = formData.get('parent2Email');
-      if (parent2Email && !validateEmail(parent2Email)) {
-        errors.push('Secondary Contact Email must be a valid email address (e.g., user@example.com)');
-      }
-
-      // Validate cadet email if provided
-      var cadetEmail = formData.get('cadetEmail');
-      if (cadetEmail && !validateEmail(cadetEmail)) {
-        errors.push('Cadet Email must be a valid email address (e.g., user@example.com)');
-      }
-
-      // Validate primary phone
-      var parent1Phone = formData.get('parent1Phone');
-      if (parent1Phone && !validatePhoneNumber(parent1Phone)) {
-        errors.push('Primary Contact Phone must contain at least 10 digits (numbers only)');
-      }
-
-      // Validate secondary phone if provided
-      var parent2Phone = formData.get('parent2Phone');
-      if (parent2Phone && !validatePhoneNumber(parent2Phone)) {
-        errors.push('Secondary Contact Phone must contain at least 10 digits (numbers only)');
-      }
-
+      ['parent1Email', 'parent2Email', 'cadetEmail'].forEach(function(field) {
+        var value = formData.get(field);
+        if (value && !validateEmail(value)) errors.push(field + ' must be a valid email address.');
+      });
+      [['parent1Phone', 'Primary Contact Phone'], ['parent2Phone', 'Secondary Contact Phone']].forEach(function(entry) {
+        var value = formData.get(entry[0]);
+        if (value && !validatePhoneNumber(value)) errors.push(entry[1] + ' must contain at least 10 digits.');
+      });
       return errors;
     }
 
-    // Form submission
-    document.getElementById('membershipForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+    function membershipDuesPrice(paidYears, cadetYears) {
+      var uniquePaid = paidYears.filter(function(year, index) { return paidYears.indexOf(year) === index; });
+      if (!cadetYears.length) return uniquePaid.length * 100;
+      var undergrad = cadetYears.slice(-4);
+      var hasFullUndergrad = undergrad.length === 4 && undergrad.every(function(year) { return uniquePaid.indexOf(year) !== -1; });
+      if (!hasFullUndergrad) {
+        return cadetYears.filter(function(year) { return uniquePaid.indexOf(year) !== -1; }).length * 100;
+      }
+      return 375 + (cadetYears.length === 5 && uniquePaid.indexOf(cadetYears[0]) !== -1 ? 100 : 0);
+    }
 
-      var form = this;
-      var statusEl = document.getElementById('formStatus');
-      var btn = form.querySelector('button[type="submit"]');
+    function selectedDuesYears(containerId) {
+      return Array.prototype.slice.call(document.querySelectorAll('#' + containerId + ' input[type="checkbox"]:checked'))
+        .map(function(input) { return input.value; });
+    }
 
-      statusEl.style.display = 'none';
-      statusEl.className = '';
+    function updateDuesTotal(containerId, totalId, cadetYears, paidYears) {
+      var selected = paidYears.concat(selectedDuesYears(containerId));
+      var total = membershipDuesPrice(selected, cadetYears) - membershipDuesPrice(paidYears, cadetYears);
+      var totalElement = document.getElementById(totalId);
+      totalElement.textContent = selectedDuesYears(containerId).length ? 'Total: $' + total : '';
+    }
 
-      // Get all form values
-      var formData = new FormData(form);
-
-      // Validate form before submission
-      var validationErrors = validateForm(formData);
-      if (validationErrors.length > 0) {
-        statusEl.innerHTML = '<strong>Please fix the following errors:</strong><ul style="margin: 0.5rem 0 0 1.5rem;"><li>' + validationErrors.join('</li><li>') + '</li></ul>';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
-        window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
+    function renderDuesOptions(containerId, totalId, years, cadetYears, paidYears, selectedYears) {
+      var container = document.getElementById(containerId);
+      container.replaceChildren();
+      var uniqueYears = Array.from(new Set(years || []));
+      if (!uniqueYears.length) {
+        container.textContent = 'No unpaid membership years are available for this record.';
+        document.getElementById(totalId).textContent = '';
         return;
       }
-
-      btn.textContent = 'Submitting...';
-      btn.disabled = true;
-
-      // Convert FormData to JSON object
-      var jsonData = {};
-      for (let [key, value] of formData.entries()) {
-        jsonData[key] = value;
-      }
-
-      try {
-        // Submit to PHP backend
-        var resp = await fetch('membership-handler.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(jsonData)
+      uniqueYears.forEach(function(year) {
+        var label = document.createElement('label');
+        label.style.cssText = 'display:flex;align-items:center;gap:.5rem;margin:.4rem 0;font-weight:400';
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = year;
+        checkbox.style.width = 'auto';
+        checkbox.checked = (selectedYears || []).indexOf(year) !== -1;
+        checkbox.addEventListener('change', function() {
+          updateDuesTotal(containerId, totalId, cadetYears, paidYears);
         });
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(year));
+        container.appendChild(label);
+      });
+      updateDuesTotal(containerId, totalId, cadetYears, paidYears);
+    }
 
-        var result = await resp.json();
+    function setLookupMessage(message, isError) {
+      var status = document.getElementById('membershipLookupStatus');
+      status.textContent = message;
+      status.className = isError ? 'error' : 'success';
+      status.style.display = 'block';
+    }
 
-        if (result.success) {
-          statusEl.textContent = result.message;
-          statusEl.className = 'success';
-          statusEl.style.display = 'block';
-          btn.textContent = 'Submit Application';
-          btn.disabled = false;
+    function populateMembershipForm(member) {
+      var fields = [
+        'cadetFirstName','cadetMiddleName','cadetLastName','cadetSuffix','nickname','cadetEmail','cadetGender',
+        'graduationYear','cadetDOB','poBox','company','parent1FirstName','parent1LastName','parent1Relationship',
+        'parent1Phone','parent1Email','parent2FirstName','parent2LastName','parent2Relationship','parent2Phone',
+        'parent2Email','streetAddress','city','state','zipCode','parent2Street','parent2City','parent2State','parent2Zip'
+      ];
+      fields.forEach(function(name) {
+        var element = document.getElementById(name);
+        if (element && member[name] !== undefined && member[name] !== null) element.value = member[name];
+      });
+      var yearSelect = document.getElementById('graduationYear');
+      if (membershipMode === 'existing' && member.graduationYear === 'Graduate' && !yearSelect.querySelector('option[value="Graduate"]')) {
+        var graduateOption = document.createElement('option');
+        graduateOption.value = 'Graduate';
+        graduateOption.textContent = 'Graduate';
+        yearSelect.appendChild(graduateOption);
+      }
+      if (member.graduationYear) yearSelect.value = member.graduationYear;
+      document.getElementById('parent1EmailUpdates').checked = member.parent1EmailUpdates === 1 || member.parent1EmailUpdates === '1';
+      document.getElementById('parent2EmailUpdates').checked = member.parent2EmailUpdates === 1 || member.parent2EmailUpdates === '1';
+      ['photoConsent', 'directoryConsent'].forEach(function(name) {
+        var value = member[name];
+        if (!value) return;
+        Array.prototype.forEach.call(document.querySelectorAll('[name="' + name + '"]'), function(radio) {
+          radio.checked = radio.value === value;
+        });
+      });
+      var sameAddress = !member.parent2Street || (member.parent2Street === member.streetAddress && member.parent2City === member.city);
+      var addressChoice = document.querySelector('[name="parent2AddressSame"][value="' + (sameAddress ? 'Yes' : 'No') + '"]');
+      if (addressChoice) {
+        addressChoice.checked = true;
+        toggleParent2Address(addressChoice);
+      }
+    }
 
-          // Redirect to payment page after 2 seconds
-          setTimeout(function() {
-            window.location.href = 'payment.html';
-          }, 2000);
-        } else {
-          statusEl.textContent = 'Error: ' + (result.error || 'Unknown error') + '. Please try again or contact info@alabamafalcons.org';
-          statusEl.className = 'error';
-          statusEl.style.display = 'block';
-          btn.textContent = 'Submit Application';
-          btn.disabled = false;
-          window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
-        }
+    function applyVerification(result) {
+      membershipMode = result.recordType;
+      var member = result.member || {};
+      populateMembershipForm(member);
+      document.getElementById('membershipToken').value = result.membershipToken || '';
+      document.getElementById('updateVerifyToken').value = result.verifyToken || '';
+      var yearSelect = document.getElementById('graduationYear');
+      var verifiedYear = document.getElementById('verifiedGraduationYear');
+      yearSelect.disabled = membershipMode === 'existing';
+      verifiedYear.disabled = membershipMode !== 'existing';
+      verifiedYear.value = member.graduationYear || '';
+      document.getElementById('membershipFormIntro').textContent = membershipMode === 'existing'
+        ? 'We found your family record. Review or update the information below.'
+        : 'We did not find an existing record. Complete the new application below.';
+      document.getElementById('membershipLookupSection').style.display = 'none';
+      document.getElementById('membershipDetailsSection').style.display = 'block';
+      if (membershipMode === 'existing') {
+        duesCadetYears = result.cadetYears || [];
+        duesPaidYears = result.paidYears || [];
+        availableDuesYears = result.payableYears || [];
+        renderDuesOptions('membershipDuesOptions', 'membershipDuesTotal', availableDuesYears, duesCadetYears, duesPaidYears, []);
+      } else {
+        renderDuesOptions('membershipDuesOptions', 'membershipDuesTotal', [], [], [], []);
+        if (yearSelect.value) loadNewMemberDuesOptions(yearSelect.value);
+      }
+      window.scrollTo({ top: document.getElementById('membershipDetailsSection').offsetTop - 90, behavior: 'smooth' });
+    }
+
+    async function loadNewMemberDuesOptions(classYear) {
+      var status = document.getElementById('membershipDuesStatus');
+      if (!classYear || membershipMode !== 'new') return;
+      status.textContent = 'Loading eligible membership years…';
+      try {
+        var response = await fetch('membership-dues-options.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ graduationYear: classYear })
+        });
+        var result = await response.json();
+        if (!result.success) throw new Error(result.error || 'Could not load membership years.');
+        duesCadetYears = result.years || [];
+        duesPaidYears = [];
+        availableDuesYears = duesCadetYears;
+        renderDuesOptions('membershipDuesOptions', 'membershipDuesTotal', availableDuesYears, duesCadetYears, duesPaidYears, []);
+        status.textContent = '';
       } catch (error) {
-        console.error('Form submission error:', error);
-        statusEl.textContent = 'Error submitting form. Please try again or contact info@alabamafalcons.org';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
-        btn.textContent = 'Submit Application';
-        btn.disabled = false;
-        window.scrollTo({ top: statusEl.offsetTop - 100, behavior: 'smooth' });
+        status.textContent = 'Could not load dues years. Please try again.';
+      }
+    }
+
+    document.getElementById('graduationYear').addEventListener('change', function() {
+      loadNewMemberDuesOptions(this.value);
+    });
+
+    document.getElementById('membershipLookupButton').addEventListener('click', async function() {
+      var button = this;
+      var lastName = document.getElementById('lookupCadetLastName').value.trim();
+      var birthday = document.getElementById('lookupCadetBirthday').value;
+      var email = document.getElementById('lookupEmail').value.trim();
+      var emailOwner = document.getElementById('lookupEmailOwner').value;
+      var status = document.getElementById('membershipLookupStatus');
+      status.style.display = 'none';
+      status.className = '';
+      if (!lastName || !birthday || !validateEmail(email) || !emailOwner) {
+        setLookupMessage('Enter the cadet’s last name and birthday, a valid email, and who owns that email address.', true);
+        return;
+      }
+      button.disabled = true;
+      button.textContent = 'Verifying…';
+      try {
+        var response = await fetch('membership-lookup.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cadetLastName: lastName,
+            cadetBirthday: birthday,
+            email: email,
+            emailOwner: emailOwner,
+            website: document.getElementById('lookupWebsite').value
+          })
+        });
+        var result = await response.json();
+        if (!result.success) throw new Error(result.error || 'We could not verify those details.');
+        applyVerification(result);
+      } catch (error) {
+        setLookupMessage(error.message || 'Could not verify those details. Please try again or contact the club.', true);
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Continue';
+      }
+    });
+
+    function loadPayPalSdk() {
+      fetch('paypal-client-id.php').then(function(response) {
+        return response.ok ? response.json() : null;
+      }).then(function(config) {
+        if (!config || !config.success || !config.clientId) {
+          paypalState = 'unavailable';
+          if (document.getElementById('membershipPaymentSection').style.display !== 'none') {
+            document.getElementById('membershipPaypalUnavailable').style.display = 'block';
+          }
+          return;
+        }
+        var script = document.createElement('script');
+        script.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(config.clientId) + '&currency=USD&intent=capture&disable-funding=paylater';
+        script.onload = function() {
+          paypalState = 'ready';
+          renderPayPalButtonsIfReady();
+        };
+        script.onerror = function() {
+          paypalState = 'unavailable';
+          if (document.getElementById('membershipPaymentSection').style.display !== 'none') {
+            document.getElementById('membershipPaypalUnavailable').style.display = 'block';
+          }
+        };
+        document.head.appendChild(script);
+      }).catch(function() {
+        paypalState = 'unavailable';
+        if (document.getElementById('membershipPaymentSection').style.display !== 'none') {
+          document.getElementById('membershipPaypalUnavailable').style.display = 'block';
+        }
+      });
+    }
+    loadPayPalSdk();
+
+    function showPaymentStage(result, selectedYears) {
+      duesVerifyToken = result.duesVerifyToken || '';
+      duesCadetYears = result.cadetYears || duesCadetYears;
+      duesPaidYears = result.paidYears || duesPaidYears;
+      availableDuesYears = result.payableYears || [];
+      var stillPayable = selectedYears.filter(function(year) { return availableDuesYears.indexOf(year) !== -1; });
+      renderDuesOptions('savedDuesOptions', 'savedDuesTotal', availableDuesYears, duesCadetYears, duesPaidYears, stillPayable);
+      document.getElementById('membershipDetailsSection').style.display = 'none';
+      document.getElementById('membershipPaymentSection').style.display = 'block';
+      document.getElementById('membershipPaymentSummary').textContent = result.message || 'Your information is saved. Select membership years and continue to checkout.';
+      window.scrollTo({ top: document.getElementById('membershipPaymentSection').offsetTop - 90, behavior: 'smooth' });
+      renderPayPalButtonsIfReady();
+      if (paypalState === 'unavailable') document.getElementById('membershipPaypalUnavailable').style.display = 'block';
+    }
+
+    function renderPayPalButtonsIfReady() {
+      if (paypalState !== 'ready' || !duesVerifyToken || !availableDuesYears.length || paypalButtonsRendered || typeof paypal === 'undefined') return;
+      paypalButtonsRendered = true;
+      paypal.Buttons({
+        createOrder: function() {
+          var status = document.getElementById('membershipPaymentStatus');
+          var years = selectedDuesYears('savedDuesOptions');
+          if (!years.length) {
+            status.textContent = 'Select at least one unpaid membership year.';
+            status.className = 'error';
+            status.style.display = 'block';
+            return Promise.reject(new Error('No membership years selected.'));
+          }
+          return fetch('dues-pay-create-order.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ verifyToken: duesVerifyToken, years: years })
+          }).then(function(response) { return response.json(); }).then(function(result) {
+            if (!result.success) throw new Error(result.error || 'Could not start PayPal checkout.');
+            return result.orderId;
+          });
+        },
+        onApprove: function(data) {
+          var status = document.getElementById('membershipPaymentStatus');
+          return fetch('dues-pay-capture-order.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ verifyToken: duesVerifyToken, orderId: data.orderID })
+          }).then(function(response) { return response.json(); }).then(function(result) {
+            if (!result.success) throw new Error(result.error || 'Payment could not be completed.');
+            if (result.applied === false) {
+              document.getElementById('membershipPaymentSection').innerHTML = '<h3>Payment Received — Review Needed</h3><p>' + (result.message || 'The Treasurer has been notified. Please do not pay again.') + '</p>';
+              return;
+            }
+            document.getElementById('membershipPaymentSection').innerHTML = '<h3>Payment Received</h3><p>Your membership dues are recorded for ' + (result.years || []).join(', ') + '. Thank you!</p>';
+          }).catch(function(error) {
+            status.textContent = error.message || 'Payment could not be completed. Please contact the Treasurer.';
+            status.className = 'error';
+            status.style.display = 'block';
+          });
+        },
+        onCancel: function() {
+          var status = document.getElementById('membershipPaymentStatus');
+          status.textContent = 'Checkout cancelled. Your information is saved; you can try payment again.';
+          status.className = '';
+          status.style.display = 'block';
+        },
+        onError: function() {
+          var status = document.getElementById('membershipPaymentStatus');
+          status.textContent = 'PayPal could not complete checkout. Your information is saved and dues remain unpaid.';
+          status.className = 'error';
+          status.style.display = 'block';
+        }
+      }).render('#membershipPaypalButtons');
+    }
+
+    document.getElementById('membershipForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      var form = this;
+      var status = document.getElementById('formStatus');
+      var button = form.querySelector('button[type="submit"]');
+      status.style.display = 'none';
+      status.className = '';
+      var formData = new FormData(form);
+      var validationErrors = validateForm(formData);
+      if (validationErrors.length) {
+        status.textContent = validationErrors.join(' ');
+        status.className = 'error';
+        status.style.display = 'block';
+        return;
+      }
+      var selectedYears = selectedDuesYears('membershipDuesOptions');
+      var payload = {};
+      for (var pair of formData.entries()) payload[pair[0]] = pair[1];
+      button.disabled = true;
+      button.textContent = 'Saving…';
+      try {
+        var endpoint = membershipMode === 'existing' ? 'update-handler.php' : 'membership-handler.php';
+        var response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        var result = await response.json();
+        if (!result.success) throw new Error(result.error || 'Could not save your information.');
+        showPaymentStage(result, selectedYears);
+      } catch (error) {
+        status.textContent = error.message || 'Could not save your information. Please try again or contact the club.';
+        status.className = 'error';
+        status.style.display = 'block';
+        button.disabled = false;
+        button.textContent = 'Save Information & Continue';
+        window.scrollTo({ top: status.offsetTop - 100, behavior: 'smooth' });
       }
     });
   </script>

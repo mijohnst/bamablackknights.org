@@ -83,7 +83,7 @@ if (!$track) {
 // Idempotent no-op: this order was already fully applied by an earlier
 // call (e.g. a duplicate onApprove firing twice in the browser).
 if ($track['status'] === 'applied') {
-    echo json_encode(['success' => true, 'years' => explode(',', $track['years'])]);
+    echo json_encode(['success' => true, 'applied' => true, 'years' => explode(',', $track['years'])]);
     exit();
 }
 
@@ -128,7 +128,13 @@ if (abs((float)$captured_amount - (float)$track['amount']) > 0.001) {
         "{$capture_note_prefix}PayPal dues amount mismatch — needs review",
         "Order $order_id / capture $capture_id captured \$$captured_amount but was expected to be \${$track['amount']} for member #$member_id (years: {$track['years']}). Please reconcile manually in the Income Ledger."
     );
-    echo json_encode(['success' => true, 'years' => explode(',', $track['years'])]);
+    echo json_encode([
+        'success' => true,
+        'applied' => false,
+        'needsReview' => true,
+        'message' => 'PayPal received the payment, but the dues need manual review. The Treasurer has been notified; please do not pay again.',
+        'years' => explode(',', $track['years']),
+    ]);
     exit();
 }
 
@@ -152,10 +158,17 @@ if (!$still_needed) {
         "{$capture_note_prefix}PayPal dues payment needs manual review",
         "Order $order_id / capture $capture_id for member #$member_id (\${$track['amount']}) captured successfully, but years {$track['years']} were already marked paid by the time we went to apply it. Please confirm this isn't a double payment and reconcile in the Income Ledger."
     );
-    echo json_encode(['success' => true, 'years' => $order_years]);
+    echo json_encode([
+        'success' => true,
+        'applied' => false,
+        'needsReview' => true,
+        'message' => 'PayPal received the payment, but the dues need manual review. The Treasurer has been notified; please do not pay again.',
+        'years' => $order_years,
+    ]);
     exit();
 }
 
+$dues_applied = false;
 try {
     save_dues_years(
         $pdo,
@@ -167,6 +180,7 @@ try {
         "{$capture_note_prefix}PayPal order $order_id, capture $capture_id"
     );
     $pdo->prepare("UPDATE paypal_dues_orders SET status='applied', applied_at=NOW() WHERE id=?")->execute([$track['id']]);
+    $dues_applied = true;
 } catch (\Throwable $e) {
     error_log('dues-pay-capture-order: save_dues_years failed for order ' . $order_id . ': ' . $e->getMessage());
     // One retry, in case of a transient DB hiccup, before giving up and
@@ -183,6 +197,7 @@ try {
             "{$capture_note_prefix}PayPal order $order_id, capture $capture_id"
         );
         $pdo->prepare("UPDATE paypal_dues_orders SET status='applied', applied_at=NOW() WHERE id=?")->execute([$track['id']]);
+        $dues_applied = true;
     } catch (\Throwable $e2) {
         error_log('dues-pay-capture-order: save_dues_years retry failed for order ' . $order_id . ': ' . $e2->getMessage());
         $pdo->prepare("UPDATE paypal_dues_orders SET status='capture_ok_apply_failed', error_note=? WHERE id=?")
@@ -198,4 +213,12 @@ try {
 // paying for multiple non-contiguous years doesn't need to re-verify.
 $_SESSION['dues_verified'][$token]['pending_order'] = null;
 
-echo json_encode(['success' => true, 'years' => $order_years]);
+echo json_encode([
+    'success' => true,
+    'applied' => $dues_applied,
+    'needsReview' => !$dues_applied,
+    'message' => $dues_applied
+        ? 'Payment received and dues recorded.'
+        : 'PayPal received the payment, but the dues need manual review. The Treasurer has been notified; please do not pay again.',
+    'years' => $order_years,
+]);
