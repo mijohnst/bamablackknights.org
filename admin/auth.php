@@ -608,7 +608,18 @@ function member_form(array $m = [], bool $is_edit = false): void {
 
     echo '<fieldset><legend>Cadet Company</legend>';
     echo '<div class="form-row">';
-    echo '<div class="form-group"><label>Company</label><input name="company" value="' . $v('company') . '"></div>';
+    echo '<div class="form-group"><label>Company</label><select name="company">';
+    echo '<option value="">— select company —</option>';
+    for ($regiment = 1; $regiment <= 4; $regiment++) {
+        echo '<optgroup label="Regiment ' . $regiment . '">';
+        foreach (range('A', 'I') as $letter) {
+            $company = $letter . '-' . $regiment;
+            $selected = ($m['company'] ?? '') === $company ? ' selected' : '';
+            echo '<option value="' . $company . '"' . $selected . '>' . $company . '</option>';
+        }
+        echo '</optgroup>';
+    }
+    echo '</select></div>';
     echo '</div></fieldset>';
 
     echo '<fieldset><legend>Parent / Contact 1</legend>';
