@@ -46,7 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cols = implode(', ', array_map(fn($f) => "`$f`", FIELDS));
             $placeholders = implode(', ', array_map(fn($f) => ":$f", FIELDS));
             $stmt = $pdo->prepare("INSERT INTO members ($cols) VALUES ($placeholders)");
-            $stmt->execute($m);
+            $params = [];
+            foreach (FIELDS as $field) $params[$field] = $m[$field];
+            $stmt->execute($params);
             save_dues_years($pdo, (int)$pdo->lastInsertId(), $dues_years);
             $pdo->commit();
             flash('success', 'Member added successfully.');
