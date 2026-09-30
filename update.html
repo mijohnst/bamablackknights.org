@@ -139,18 +139,26 @@
         <!-- FIND YOUR RECORD -->
         <div id="lookupSection">
           <div class="form-divider-label" id="fs-lookup">Find Your Record</div>
-          <p style="color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem">Enter your cadet's last name, birthday, and a parent email address already on file to pull up your family's current information.</p>
+          <p style="color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem">Enter your cadet's graduation year, last name, and an email address already on file for a parent, guardian, or cadet.</p>
           <div class="form-row-3">
+            <div class="form-group">
+              <label for="lookupGraduationYear">Graduation Year *</label>
+              <select id="lookupGraduationYear" required>
+                <option value="">Select graduation year</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="Prep School">Prep School</option>
+                <option value="Graduate">Graduate</option>
+              </select>
+            </div>
             <div class="form-group">
               <label for="lookupLastName">Cadet Last Name *</label>
               <input type="text" id="lookupLastName" required />
             </div>
             <div class="form-group">
-              <label for="lookupBirthday">Cadet Birthday *</label>
-              <input type="date" id="lookupBirthday" required />
-            </div>
-            <div class="form-group">
-              <label for="lookupEmail">Either Parent's Email on File *</label>
+              <label for="lookupEmail">Parent or Cadet Email on File *</label>
               <input type="email" id="lookupEmail" required />
             </div>
           </div>
@@ -159,9 +167,6 @@
           <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact site support at <a href="mailto:mijohnst@alabamafalcons.org" style="color:var(--blue)">mijohnst@alabamafalcons.org</a>.</p>
         </div>
 
-        <input type="hidden" id="verifiedLastName" name="verifiedLastName" />
-        <input type="hidden" id="verifiedBirthday" name="verifiedBirthday" />
-        <input type="hidden" id="verifiedEmail" name="verifiedEmail" />
         <input type="hidden" id="verifyToken" name="verifyToken" />
 
         <div id="formBody" style="display:none">
@@ -526,21 +531,21 @@
       if (e.key === 'Enter') { e.preventDefault(); document.getElementById('lookupBtn').click(); }
     }
     document.getElementById('lookupLastName').addEventListener('keydown', lookupEnterKey);
-    document.getElementById('lookupBirthday').addEventListener('keydown', lookupEnterKey);
+    document.getElementById('lookupGraduationYear').addEventListener('keydown', lookupEnterKey);
     document.getElementById('lookupEmail').addEventListener('keydown', lookupEnterKey);
 
     document.getElementById('lookupBtn').addEventListener('click', async function() {
       var btn = this;
       var statusEl = document.getElementById('lookupStatus');
       var last     = document.getElementById('lookupLastName').value.trim();
-      var birthday = document.getElementById('lookupBirthday').value;
+      var graduationYear = document.getElementById('lookupGraduationYear').value;
       var email    = document.getElementById('lookupEmail').value.trim();
 
       statusEl.style.display = 'none';
       statusEl.className = '';
 
-      if (!last || !birthday || !email) {
-        statusEl.textContent = 'Please enter the cadet last name, birthday, and the email on file.';
+      if (!graduationYear || !last || !email) {
+        statusEl.textContent = 'Please enter the cadet graduation year, last name, and an email address on file.';
         statusEl.className = 'error';
         statusEl.style.display = 'block';
         return;
@@ -555,7 +560,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             cadetLastName: last,
-            cadetBirthday: birthday,
+            graduationYear: graduationYear,
             email: email,
             website: document.getElementById('website').value
           })
@@ -564,9 +569,6 @@
 
         if (result.success) {
           populateForm(result.member);
-          document.getElementById('verifiedLastName').value = last;
-          document.getElementById('verifiedBirthday').value = birthday;
-          document.getElementById('verifiedEmail').value = email;
           document.getElementById('verifyToken').value = result.verifyToken;
           document.getElementById('lookupSection').style.display = 'none';
           document.getElementById('formBody').style.display = 'block';
@@ -635,7 +637,7 @@
 
       // Shouldn't be reachable (formBody is hidden until lookup succeeds), but
       // guard anyway in case of a stray Enter-key submit before that point.
-      if (!document.getElementById('verifiedEmail').value) {
+      if (!document.getElementById('verifyToken').value) {
         document.getElementById('lookupBtn').click();
         return;
       }

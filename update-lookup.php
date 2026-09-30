@@ -1,12 +1,9 @@
 <?php
 /**
  * Update-Your-Information Lookup
- * Same identity check as job-drop-lookup.php and parent-letters-lookup.php
- * (cadet last name + birthday + a parent email already on file) — kept
- * identical across all three public lookup forms so families see one
- * consistent standard. Verifies before returning that family's current
- * record, so the Update form can be pre-filled. Never creates or modifies
- * anything.
+ * Verifies a member using graduation year, normalized cadet last name, and
+ * any parent or cadet email already on file. Returns that family's current
+ * record for the Update form; never creates or modifies anything.
  */
 
 header('Content-Type: application/json');
@@ -59,12 +56,12 @@ function s(array $p, string $key): string {
 }
 
 $last     = s($payload, 'cadetLastName');
-$birthday = s($payload, 'cadetBirthday');
+$class_year = s($payload, 'graduationYear');
 $email    = s($payload, 'email');
 
-if ($last === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)) {
+if ($last === '' || !in_array($class_year, CLASS_YEAR_LIST, true) || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => "Please enter the cadet's last name, birthday, and the email address on file."]);
+    echo json_encode(['success' => false, 'error' => "Please enter the cadet's graduation year and last name, and a valid email address on file."]);
     exit();
 }
 
@@ -75,23 +72,26 @@ if ($last === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) 
 // a parent naturally types now that Suffix is its own field.
 $stmt = $pdo->prepare(
     'SELECT * FROM members
-     WHERE archived = 0 AND cadet_birthday = :birthday
-       AND (parent1_email = :email OR parent2_email = :email)'
+     WHERE archived = 0 AND class_year = :class_year
+       AND (LOWER(parent1_email) = :email OR LOWER(parent2_email) = :email OR LOWER(cadet_email) = :email)'
 );
-$stmt->execute(['birthday' => $birthday, 'email' => $email]);
+$stmt->execute(['class_year' => $class_year, 'email' => strtolower($email)]);
 $target_norm = strip_name_suffix(normalize_name($last));
-$m = null;
+$matches = [];
 foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_norm) { $m = $row; break; }
+    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_norm) $matches[] = $row;
 }
 
-if (!$m) {
+if (count($matches) !== 1) {
     echo json_encode([
         'success' => false,
-        'error'   => "We couldn't find a matching record. Please double-check the cadet's last name, birthday, and the email on file, or contact secretary@alabamafalcons.org."
+        'error'   => count($matches) > 1
+            ? 'More than one record matched those details. Please contact the club for help.'
+            : "We couldn't find a matching record. Please double-check the graduation year, last name, and email on file, or contact secretary@alabamafalcons.org."
     ]);
     exit();
 }
+$m = $matches[0];
 
 // Bind this specific record to a random per-lookup token, not one shared
 // session slot — a single slot meant a second "Find My Record" lookup in
@@ -150,7 +150,7 @@ echo json_encode([
         'parent2City'      => $g('parent2_city'),
         'parent2State'     => $g('parent2_state'),
         'parent2Zip'       => $g('parent2_zip'),
-        'parent1EmailUpdates' => (int)($member['parent1_email_updates'] ?? 0),
-        'parent2EmailUpdates' => (int)($member['parent2_email_updates'] ?? 0),
+        'parent1EmailUpdates' => (int)($m['parent1_email_updates'] ?? 0),
+        'parent2EmailUpdates' => (int)($m['parent2_email_updates'] ?? 0),
     ],
 ]);
