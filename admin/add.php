@@ -39,18 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors) && (!$duplicates || !empty($_POST['confirm_duplicate']))) {
-        // Two separate writes (the new member row, then its dues years) —
-        // wrapped in a transaction so a failure partway through can't leave
-        // a member row committed with no dues state (or vice versa).
-        $pdo->beginTransaction();
-        $cols = implode(', ', array_map(fn($f) => "`$f`", FIELDS));
-        $placeholders = implode(', ', array_map(fn($f) => ":$f", FIELDS));
-        $stmt = $pdo->prepare("INSERT INTO members ($cols) VALUES ($placeholders)");
-        $stmt->execute($m);
-        save_dues_years($pdo, (int)$pdo->lastInsertId(), $dues_years);
-        $pdo->commit();
-        flash('success', 'Member added successfully.');
-        header('Location: index.php'); exit;
+        try {
+            // Keep the member and dues writes atomic so a failure cannot
+            // leave a partially created record.
+            $pdo->beginTransaction();
+            $cols = implode(', ', array_map(fn($f) => "`$f`", FIELDS));
+            $placeholders = implode(', ', array_map(fn($f) => ":$f", FIELDS));
+            $stmt = $pdo->prepare("INSERT INTO members ($cols) VALUES ($placeholders)");
+            $stmt->execute($m);
+            save_dues_years($pdo, (int)$pdo->lastInsertId(), $dues_years);
+            $pdo->commit();
+            flash('success', 'Member added successfully.');
+            header('Location: index.php'); exit;
+        } catch (Throwable $e) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            error_log('admin/add.php member save failed: ' . $e->getMessage());
+            $errors[] = 'Member could not be saved: ' . $e->getMessage();
+        }
     }
 }
 
