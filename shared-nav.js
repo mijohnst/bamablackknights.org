@@ -30,6 +30,16 @@ document.querySelectorAll('.nav-links > li').forEach(function(item) {
     menu.appendChild(listItem);
   });
 });
+var navLinks = document.querySelector('.nav-links');
+if (navLinks && !navLinks.querySelector('.nav-admin-login')) {
+  var adminItem = document.createElement('li');
+  var adminLink = document.createElement('a');
+  adminLink.className = 'nav-login-btn nav-admin-login';
+  adminLink.href = '/admin/login.php';
+  adminLink.textContent = 'Admin Login';
+  adminItem.appendChild(adminLink);
+  navLinks.appendChild(adminItem);
+}
 document.querySelectorAll('.nav-links a').forEach(function(link) {
   link.addEventListener('click', function() {
     var isDropdownToggle = link.parentElement.classList.contains('nav-dropdown');
