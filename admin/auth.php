@@ -619,7 +619,7 @@ function member_form(array $m = [], bool $is_edit = false): void {
     echo '<div class="form-group"><label>Cell</label><input type="tel" name="parent1_cell" value="' . $v('parent1_cell') . '"></div>';
     echo '</div>';
     echo '<div class="form-row col-4">';
-    echo '<div class="form-group"><label>Street</label><input name="parent1_street" value="' . $v('parent1_street') . '"></div>';
+    echo '<div class="form-group"><label>Street Address or PO Box</label><input name="parent1_street" value="' . $v('parent1_street') . '"></div>';
     echo '<div class="form-group"><label>City</label><input name="parent1_city" value="' . $v('parent1_city') . '"></div>';
     echo '<div class="form-group"><label>State</label><input name="parent1_state" maxlength="2" value="' . $v('parent1_state') . '"></div>';
     echo '<div class="form-group"><label>Zip</label><input name="parent1_zip" value="' . $v('parent1_zip') . '"></div>';
@@ -664,7 +664,7 @@ function member_form(array $m = [], bool $is_edit = false): void {
     echo '</div></div>';
     echo '<div id="p2-addr-fields" style="' . ($addr_same ? 'opacity:.5;pointer-events:none' : '') . '">';
     echo '<div class="form-row col-4">';
-    echo '<div class="form-group"><label>Street</label><input id="p2_street" name="parent2_street" value="' . $v('parent2_street') . '"></div>';
+    echo '<div class="form-group"><label>Street Address or PO Box</label><input id="p2_street" name="parent2_street" value="' . $v('parent2_street') . '"></div>';
     echo '<div class="form-group"><label>City</label><input id="p2_city" name="parent2_city" value="' . $v('parent2_city') . '"></div>';
     echo '<div class="form-group"><label>State</label><input id="p2_state" name="parent2_state" maxlength="2" value="' . $v('parent2_state') . '"></div>';
     echo '<div class="form-group"><label>Zip</label><input id="p2_zip" name="parent2_zip" value="' . $v('parent2_zip') . '"></div>';
