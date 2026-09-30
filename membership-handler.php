@@ -97,6 +97,16 @@ if (s($payload, 'cadetGender') !== '' && !in_array(s($payload, 'cadetGender'), [
     echo json_encode(['success' => false, 'error' => 'Invalid gender.']);
     exit();
 }
+$valid_relationships = ['', 'Parent', 'Legal guardian', 'Grandparent', 'Sibling', 'Other family member', 'Other'];
+foreach (['parent1Relationship', 'parent2Relationship'] as $field) {
+    if (!in_array(s($payload, $field), $valid_relationships, true)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid family relationship.']);
+        exit();
+    }
+}
+$parent1_email_updates = ($payload['parent1EmailUpdates'] ?? '') === '1' ? 1 : 0;
+$parent2_email_updates = ($payload['parent2EmailUpdates'] ?? '') === '1' && s($payload, 'parent2Email') !== '' ? 1 : 0;
 
 // ── 1. Write to MySQL (primary) ────────────────────────────────────────────
 require_once __DIR__ . '/admin/config.php';
@@ -184,10 +194,14 @@ try {
                 cadet_email=:cadet_email, cadet_cell=:cadet_cell,
                 company=:company,
                 parent1_last_name=:parent1_last_name, parent1_first_name=:parent1_first_name,
+                parent1_relationship=:parent1_relationship,
+                parent1_email_updates=:parent1_email_updates,
                 parent1_email=:parent1_email, parent1_cell=:parent1_cell,
                 parent1_street=:parent1_street, parent1_city=:parent1_city,
                 parent1_state=:parent1_state, parent1_zip=:parent1_zip,
                 parent2_last_name=:parent2_last_name, parent2_first_name=:parent2_first_name,
+                parent2_relationship=:parent2_relationship,
+                parent2_email_updates=:parent2_email_updates,
                 parent2_email=:parent2_email, parent2_cell=:parent2_cell,
                 parent2_street=:parent2_street, parent2_city=:parent2_city,
                 parent2_state=:parent2_state, parent2_zip=:parent2_zip,
@@ -207,6 +221,8 @@ try {
             'company'            => s($payload,'company'),
             'parent1_last_name'  => s($payload,'parent1LastName'),
             'parent1_first_name' => s($payload,'parent1FirstName'),
+            'parent1_relationship' => s($payload,'parent1Relationship'),
+            'parent1_email_updates' => $parent1_email_updates,
             'parent1_email'      => s($payload,'parent1Email'),
             'parent1_cell'       => s($payload,'parent1Phone'),
             'parent1_street'     => s($payload,'streetAddress'),
@@ -215,6 +231,8 @@ try {
             'parent1_zip'        => s($payload,'zipCode'),
             'parent2_last_name'  => s($payload,'parent2LastName'),
             'parent2_first_name' => s($payload,'parent2FirstName'),
+            'parent2_relationship' => s($payload,'parent2Relationship'),
+            'parent2_email_updates' => $parent2_email_updates,
             'parent2_email'      => s($payload,'parent2Email'),
             'parent2_cell'       => s($payload,'parent2Phone'),
             'parent2_street'     => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'streetAddress') : s($payload,'parent2Street'),
@@ -233,9 +251,9 @@ try {
             cadet_gender,
             cadet_birthday, cadet_po_box, cadet_email, cadet_cell,
             company,
-            parent1_last_name, parent1_first_name, parent1_email, parent1_cell,
+            parent1_last_name, parent1_first_name, parent1_email, parent1_cell, parent1_relationship, parent1_email_updates,
             parent1_street, parent1_city, parent1_state, parent1_zip,
-            parent2_last_name, parent2_first_name, parent2_email, parent2_cell,
+            parent2_last_name, parent2_first_name, parent2_email, parent2_cell, parent2_relationship, parent2_email_updates,
             parent2_street, parent2_city, parent2_state, parent2_zip,
             photo_consent, directory_consent,
             membership_paid, membership_year
@@ -244,9 +262,9 @@ try {
             :cadet_gender,
             :cadet_birthday, :cadet_po_box, :cadet_email, :cadet_cell,
             :company,
-            :parent1_last_name, :parent1_first_name, :parent1_email, :parent1_cell,
+            :parent1_last_name, :parent1_first_name, :parent1_email, :parent1_cell, :parent1_relationship, :parent1_email_updates,
             :parent1_street, :parent1_city, :parent1_state, :parent1_zip,
-            :parent2_last_name, :parent2_first_name, :parent2_email, :parent2_cell,
+            :parent2_last_name, :parent2_first_name, :parent2_email, :parent2_cell, :parent2_relationship, :parent2_email_updates,
             :parent2_street, :parent2_city, :parent2_state, :parent2_zip,
             :photo_consent, :directory_consent,
             0, ''
@@ -268,6 +286,8 @@ try {
         'company'             => s($payload, 'company'),
         'parent1_last_name'   => s($payload, 'parent1LastName'),
         'parent1_first_name'  => s($payload, 'parent1FirstName'),
+        'parent1_relationship' => s($payload, 'parent1Relationship'),
+        'parent1_email_updates' => $parent1_email_updates,
         'parent1_email'       => s($payload, 'parent1Email'),
         'parent1_cell'        => s($payload, 'parent1Phone'),
         'parent1_street'      => s($payload, 'streetAddress'),
@@ -276,6 +296,8 @@ try {
         'parent1_zip'         => s($payload, 'zipCode'),
         'parent2_last_name'   => s($payload, 'parent2LastName'),
         'parent2_first_name'  => s($payload, 'parent2FirstName'),
+        'parent2_relationship' => s($payload, 'parent2Relationship'),
+        'parent2_email_updates' => $parent2_email_updates,
         'parent2_email'       => s($payload, 'parent2Email'),
         'parent2_cell'        => s($payload, 'parent2Phone'),
         'parent2_street'      => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'streetAddress') : s($payload,'parent2Street'),
@@ -320,10 +342,14 @@ $email_body .= "Graduation Year: " . s($payload,'graduationYear') . "\n";
 $email_body .= "Company: " . s($payload,'company') . "\n\n";
 $email_body .= "PARENT/FAMILY INFORMATION\n";
 $email_body .= "Primary: " . s($payload,'parent1FirstName') . " " . s($payload,'parent1LastName') . "\n";
+$email_body .= "Primary relationship: " . s($payload,'parent1Relationship') . "\n";
+$email_body .= "Primary contact opted in to routine club emails: " . ($parent1_email_updates ? 'Yes' : 'No') . "\n";
 $email_body .= "Email: " . s($payload,'parent1Email') . "\n";
 $email_body .= "Phone: " . s($payload,'parent1Phone') . "\n";
 if (s($payload,'parent2FirstName') !== '') {
     $email_body .= "\nSecondary: " . s($payload,'parent2FirstName') . " " . s($payload,'parent2LastName') . "\n";
+    $email_body .= "Secondary relationship: " . s($payload,'parent2Relationship') . "\n";
+    $email_body .= "Secondary contact opted in to routine club emails: " . ($parent2_email_updates ? 'Yes' : 'No') . "\n";
     $email_body .= "Email: " . s($payload,'parent2Email') . "\n";
     $email_body .= "Phone: " . s($payload,'parent2Phone') . "\n";
 }

@@ -9,6 +9,8 @@ $duplicates = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verify();
     foreach (FIELDS as $f) $m[$f] = trim($_POST[$f] ?? '');
+    $m['parent1_email_updates'] = isset($_POST['parent1_email_updates']) ? 1 : 0;
+    $m['parent2_email_updates'] = isset($_POST['parent2_email_updates']) ? 1 : 0;
     $m['parent1_is_board_member'] = isset($_POST['parent1_is_board_member']) ? 1 : 0;
     $m['parent2_is_board_member'] = isset($_POST['parent2_is_board_member']) ? 1 : 0;
     $dues_years = array_intersect((array)($_POST['dues_years'] ?? []), cadet_dues_years($m['class_year']));
@@ -16,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($m['class_year'] === '') $errors[] = 'Class Year is required.';
     if ($m['cadet_last_name'] === '') $errors[] = 'Cadet Last Name is required.';
+    foreach (['parent1_relationship', 'parent2_relationship'] as $field) {
+      if (!in_array($m[$field], CONTACT_RELATIONSHIPS, true)) $errors[] = 'Select a valid contact relationship.';
+    }
     if ($m['cadet_birthday'] === '') $m['cadet_birthday'] = null;
 
     $pdo = get_pdo();

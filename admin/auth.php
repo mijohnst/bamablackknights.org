@@ -502,6 +502,7 @@ const CLASS_YEAR_LIST = ['2027', '2028', '2029', '2030', 'Prep School', 'Graduat
 // ({he_she}, {him_her}, {his_her}) in the automated birthday emails. Left
 // blank on a profile, those placeholders fall back to "they/them/their".
 const GENDERS = ['', 'Male', 'Female'];
+const CONTACT_RELATIONSHIPS = ['', 'Parent', 'Legal guardian', 'Grandparent', 'Sibling', 'Other family member', 'Other'];
 
 // "Missing Data" filter — shared by the Member Directory and Compose Email
 // pages so both stay in sync on the same set of options/SQL.
@@ -528,9 +529,9 @@ function missing_data_sql(string $key): ?string {
 const FIELDS = [
     'class_year','cadet_last_name','cadet_suffix','cadet_first_name','cadet_middle_name','nickname','cadet_gender','cadet_birthday','cadet_po_box',
     'cadet_email','cadet_cell','company',
-    'parent1_last_name','parent1_first_name','parent1_email','parent1_cell',
+    'parent1_last_name','parent1_first_name','parent1_relationship','parent1_email','parent1_cell','parent1_email_updates',
     'parent1_street','parent1_city','parent1_state','parent1_zip',
-    'parent2_last_name','parent2_first_name','parent2_email','parent2_cell',
+    'parent2_last_name','parent2_first_name','parent2_relationship','parent2_email','parent2_cell','parent2_email_updates',
     'parent2_street','parent2_city','parent2_state','parent2_zip',
     'al_region','remarks','photo_consent','directory_consent','parent1_is_board_member','parent2_is_board_member'
     // Deliberately excludes membership_paid / membership_year /
@@ -717,6 +718,18 @@ function syncP2Addr(radio) {
   });
 });
 </script>';
+
+    echo '<fieldset><legend>Family &amp; Communication</legend>';
+    echo '<div class="form-row col-2">';
+    echo '<div class="form-group"><label>Primary Contact Relationship</label>' . $sel('parent1_relationship', CONTACT_RELATIONSHIPS) . '</div>';
+    echo '<div class="form-group"><label>Secondary Contact Relationship</label>' . $sel('parent2_relationship', CONTACT_RELATIONSHIPS) . '</div>';
+    echo '</div>';
+    $primary_updates = !empty($m['parent1_email_updates']);
+    $secondary_updates = !empty($m['parent2_email_updates']);
+    echo '<div class="form-row col-2">';
+    echo '<label style="display:flex;align-items:center;gap:.5rem;font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="parent1_email_updates" value="1" style="width:auto"' . ($primary_updates ? ' checked' : '') . '> Primary contact opted in to routine club emails</label>';
+    echo '<label style="display:flex;align-items:center;gap:.5rem;font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="parent2_email_updates" value="1" style="width:auto"' . ($secondary_updates ? ' checked' : '') . '> Secondary contact opted in to routine club emails</label>';
+    echo '</div></fieldset>';
 
     echo '<fieldset><legend>Region, Consents &amp; Notes</legend>';
     echo '<div class="form-row col-2">';

@@ -143,6 +143,13 @@ try {
     if (!in_array($gender, ['Male', 'Female'], true)) {
         $gender = '';
     }
+    $valid_relationships = ['', 'Parent', 'Legal guardian', 'Grandparent', 'Sibling', 'Other family member', 'Other'];
+    $parent1_relationship = s($payload, 'parent1Relationship');
+    $parent2_relationship = s($payload, 'parent2Relationship');
+    if (!in_array($parent1_relationship, $valid_relationships, true)) $parent1_relationship = '';
+    if (!in_array($parent2_relationship, $valid_relationships, true)) $parent2_relationship = '';
+    $parent1_email_updates = ($payload['parent1EmailUpdates'] ?? '') === '1' && e($payload, 'parent1Email') !== '' ? 1 : 0;
+    $parent2_email_updates = ($payload['parent2EmailUpdates'] ?? '') === '1' && e($payload, 'parent2Email') !== '' ? 1 : 0;
 
     $upd = $pdo->prepare("
         UPDATE members SET
@@ -159,6 +166,8 @@ try {
             company           = COALESCE(NULLIF(:company, ''), company),
             parent1_last_name  = COALESCE(NULLIF(:parent1_last_name, ''), parent1_last_name),
             parent1_first_name = COALESCE(NULLIF(:parent1_first_name, ''), parent1_first_name),
+            parent1_relationship = COALESCE(NULLIF(:parent1_relationship, ''), parent1_relationship),
+            parent1_email_updates = :parent1_email_updates,
             parent1_email      = COALESCE(NULLIF(:parent1_email, ''), parent1_email),
             parent1_cell       = COALESCE(NULLIF(:parent1_cell, ''), parent1_cell),
             parent1_street     = COALESCE(NULLIF(:parent1_street, ''), parent1_street),
@@ -167,6 +176,8 @@ try {
             parent1_zip        = COALESCE(NULLIF(:parent1_zip, ''), parent1_zip),
             parent2_last_name  = COALESCE(NULLIF(:parent2_last_name, ''), parent2_last_name),
             parent2_first_name = COALESCE(NULLIF(:parent2_first_name, ''), parent2_first_name),
+            parent2_relationship = COALESCE(NULLIF(:parent2_relationship, ''), parent2_relationship),
+            parent2_email_updates = :parent2_email_updates,
             parent2_email      = COALESCE(NULLIF(:parent2_email, ''), parent2_email),
             parent2_cell       = COALESCE(NULLIF(:parent2_cell, ''), parent2_cell),
             parent2_street     = COALESCE(NULLIF(:parent2_street, ''), parent2_street),
@@ -191,6 +202,8 @@ try {
         'company'            => s($payload, 'company'),
         'parent1_last_name'  => s($payload, 'parent1LastName'),
         'parent1_first_name' => s($payload, 'parent1FirstName'),
+        'parent1_relationship' => $parent1_relationship,
+        'parent1_email_updates' => $parent1_email_updates,
         'parent1_email'      => e($payload, 'parent1Email'),
         'parent1_cell'       => s($payload, 'parent1Phone'),
         'parent1_street'     => s($payload, 'streetAddress'),
@@ -199,6 +212,8 @@ try {
         'parent1_zip'        => s($payload, 'zipCode'),
         'parent2_last_name'  => s($payload, 'parent2LastName'),
         'parent2_first_name' => s($payload, 'parent2FirstName'),
+        'parent2_relationship' => $parent2_relationship,
+        'parent2_email_updates' => $parent2_email_updates,
         'parent2_email'      => e($payload, 'parent2Email'),
         'parent2_cell'       => s($payload, 'parent2Phone'),
         'parent2_street'     => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'streetAddress') : s($payload,'parent2Street'),
@@ -241,6 +256,7 @@ $diff_labels = [
     'company'             => 'Company',
     'parent1_first_name'  => 'Primary Contact First Name',
     'parent1_last_name'   => 'Primary Contact Last Name',
+    'parent1_relationship' => 'Primary Contact Relationship',
     'parent1_email'       => 'Primary Contact Email',
     'parent1_cell'        => 'Primary Contact Phone',
     'parent1_street'      => 'Primary Contact Street',
@@ -249,6 +265,7 @@ $diff_labels = [
     'parent1_zip'         => 'Primary Contact Zip',
     'parent2_first_name'  => 'Secondary Contact First Name',
     'parent2_last_name'   => 'Secondary Contact Last Name',
+    'parent2_relationship' => 'Secondary Contact Relationship',
     'parent2_email'       => 'Secondary Contact Email',
     'parent2_cell'        => 'Secondary Contact Phone',
     'parent2_street'      => 'Secondary Contact Street',
@@ -257,6 +274,8 @@ $diff_labels = [
     'parent2_zip'         => 'Secondary Contact Zip',
     'photo_consent'       => 'Photo Consent',
     'directory_consent'   => 'Directory Consent',
+    'parent1_email_updates' => 'Primary Contact Email Updates Consent',
+    'parent2_email_updates' => 'Secondary Contact Email Updates Consent',
 ];
 $changes = [];
 foreach ($diff_labels as $col => $label) {
@@ -284,10 +303,14 @@ $email_body .= "Company: " . $g('company') . "\n";
 $email_body .= "USAFA Mailbox: " . $g('cadet_po_box') . "\n\n";
 $email_body .= "PARENT/FAMILY INFORMATION\n";
 $email_body .= "Primary: " . trim($g('parent1_first_name') . ' ' . $g('parent1_last_name')) . "\n";
+$email_body .= "Primary relationship: " . $g('parent1_relationship') . "\n";
+$email_body .= "Primary contact opted in to routine club emails: " . ($g('parent1_email_updates') === '1' ? 'Yes' : 'No') . "\n";
 $email_body .= "Email: " . $g('parent1_email') . "\n";
 $email_body .= "Phone: " . $g('parent1_cell') . "\n";
 if ($g('parent2_first_name') !== '') {
     $email_body .= "\nSecondary: " . trim($g('parent2_first_name') . ' ' . $g('parent2_last_name')) . "\n";
+    $email_body .= "Secondary relationship: " . $g('parent2_relationship') . "\n";
+    $email_body .= "Secondary contact opted in to routine club emails: " . ($g('parent2_email_updates') === '1' ? 'Yes' : 'No') . "\n";
     $email_body .= "Email: " . $g('parent2_email') . "\n";
     $email_body .= "Phone: " . $g('parent2_cell') . "\n";
 }
@@ -297,6 +320,8 @@ $email_body .= $g('parent1_city') . ", " . $g('parent1_state') . " " . $g('paren
 $email_body .= "CONSENTS\n";
 $email_body .= "Photo: " . $g('photo_consent') . "\n";
 $email_body .= "Directory: " . $g('directory_consent') . "\n";
+$email_body .= "Routine club email updates — Primary: " . ($g('parent1_email_updates') === '1' ? 'Opted in' : 'Not opted in') . "\n";
+$email_body .= "Routine club email updates — Secondary: " . ($g('parent2_email_updates') === '1' ? 'Opted in' : 'Not opted in') . "\n";
 
 $mail = new PHPMailer(true);
 try {

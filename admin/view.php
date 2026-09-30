@@ -101,6 +101,7 @@ a.vf-val{color:#000000}
     <h3>Parent / Contact 1</h3>
     <?php
     field('Name',   trim($m['parent1_first_name'] . ' ' . $m['parent1_last_name']));
+    field('Relationship', $m['parent1_relationship'] ?? '');
     field('Email',  $m['parent1_email'], true);
     field('Cell',   $m['parent1_cell'], false, true);
     field('Street', $m['parent1_street']);
@@ -114,12 +115,21 @@ a.vf-val{color:#000000}
     <h3>Parent / Contact 2</h3>
     <?php
     field('Name',   trim($m['parent2_first_name'] . ' ' . $m['parent2_last_name']));
+    field('Relationship', $m['parent2_relationship'] ?? '');
     field('Email',  $m['parent2_email'], true);
     field('Cell',   $m['parent2_cell'], false, true);
     field('Street', $m['parent2_street']);
     field('City',   $m['parent2_city']);
     field('State',  $m['parent2_state']);
     field('Zip',    $m['parent2_zip']);
+    ?>
+  </div>
+
+  <div class="vsection">
+    <h3>Communication Preferences</h3>
+    <?php
+    field('Primary Contact Email Updates', !empty($m['parent1_email_updates']) ? 'Opted in' : 'Not opted in');
+    field('Secondary Contact Email Updates', !empty($m['parent2_email_updates']) ? 'Opted in' : 'Not opted in');
     ?>
   </div>
 

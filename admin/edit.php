@@ -21,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // rendered against, not a class_year this same save might also change.
     $old_class_year = $member['class_year'];
     foreach (FIELDS as $f) $member[$f] = trim($_POST[$f] ?? '');
+    $member['parent1_email_updates'] = isset($_POST['parent1_email_updates']) ? 1 : 0;
+    $member['parent2_email_updates'] = isset($_POST['parent2_email_updates']) ? 1 : 0;
     $member['parent1_is_board_member'] = isset($_POST['parent1_is_board_member']) ? 1 : 0;
     $member['parent2_is_board_member'] = isset($_POST['parent2_is_board_member']) ? 1 : 0;
     $dues_years = array_intersect((array)($_POST['dues_years'] ?? []), cadet_dues_years($old_class_year));
@@ -29,6 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($member['class_year'] === '') $errors[] = 'Class Year is required.';
     if ($member['cadet_last_name'] === '') $errors[] = 'Cadet Last Name is required.';
+    foreach (['parent1_relationship', 'parent2_relationship'] as $field) {
+      if (!in_array($member[$field], CONTACT_RELATIONSHIPS, true)) $errors[] = 'Select a valid contact relationship.';
+    }
 
     if (empty($errors)) {
         // Two separate writes (dues years, then the rest of the fields) —
