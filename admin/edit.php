@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // rendered against, not a class_year this same save might also change.
     $old_class_year = $member['class_year'];
     foreach (FIELDS as $f) $member[$f] = trim($_POST[$f] ?? '');
+    foreach (['cadet_cell', 'parent1_cell', 'parent2_cell'] as $f) $member[$f] = format_phone($member[$f]);
     $member['parent1_email_updates'] = isset($_POST['parent1_email_updates']) ? 1 : 0;
     $member['parent2_email_updates'] = isset($_POST['parent2_email_updates']) ? 1 : 0;
     $member['parent1_is_board_member'] = isset($_POST['parent1_is_board_member']) ? 1 : 0;

@@ -9,6 +9,7 @@ $duplicates = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verify();
     foreach (FIELDS as $f) $m[$f] = trim($_POST[$f] ?? '');
+    foreach (['cadet_cell', 'parent1_cell', 'parent2_cell'] as $f) $m[$f] = format_phone($m[$f]);
     $m['parent1_email_updates'] = isset($_POST['parent1_email_updates']) ? 1 : 0;
     $m['parent2_email_updates'] = isset($_POST['parent2_email_updates']) ? 1 : 0;
     $m['parent1_is_board_member'] = isset($_POST['parent1_is_board_member']) ? 1 : 0;

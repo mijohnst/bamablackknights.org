@@ -20,6 +20,17 @@ function strip_name_suffix(string $normalized): string {
     return trim(preg_replace('/\s+(jr|sr|ii|iii|iv|v)$/i', '', $normalized));
 }
 
+// Stores US phone numbers as xxx-xxx-xxxx however they were typed
+// ("2566179825", "(256) 617-9825", "256.617.9825", "+1 256 617 9825").
+// Anything that isn't 10 digits (or 11 with a leading 1) — an overseas or
+// partial number — is kept as entered rather than mangled.
+function format_phone(string $raw): string {
+    $digits = preg_replace('/\D/', '', $raw);
+    if (strlen($digits) === 11 && $digits[0] === '1') $digits = substr($digits, 1);
+    if (strlen($digits) !== 10) return trim($raw);
+    return substr($digits, 0, 3) . '-' . substr($digits, 3, 3) . '-' . substr($digits, 6);
+}
+
 // Starts a session under its own cookie name, distinct from the admin
 // panel's 'wppc_admin' session (auth.php's start_session()) — used to bind
 // a successful public-form identity lookup (see update-lookup.php) to the

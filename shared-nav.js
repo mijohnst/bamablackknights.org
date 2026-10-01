@@ -56,6 +56,16 @@ document.querySelectorAll('.nav-dropdown > a').forEach(function(a) {
     }
   });
 });
+// Phone fields: show US numbers as xxx-xxx-xxxx once the visitor leaves the
+// field (the handlers store the same format via format_phone()). Numbers
+// that aren't 10 digits are left exactly as typed.
+document.addEventListener('blur', function(e) {
+  var el = e.target;
+  if (!el || el.tagName !== 'INPUT' || el.type !== 'tel') return;
+  var d = el.value.replace(/\D/g, '');
+  if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1);
+  if (d.length === 10) el.value = d.slice(0, 3) + '-' + d.slice(3, 6) + '-' + d.slice(6);
+}, true);
 // Facebook links marked data-facebook-link follow the "Facebook Group URL"
 // site setting; the hardcoded href stays as the fallback if the feed fails.
 // (index.html applies the setting itself as part of its own settings load.)

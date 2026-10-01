@@ -228,14 +228,14 @@ try {
         'cadet_birthday'      => $dob,
         'cadet_po_box'        => s($payload, 'poBox'),
         'cadet_email'         => s($payload, 'cadetEmail'),
-        'cadet_cell'          => s($payload, 'cadetPhone'),
+        'cadet_cell'          => format_phone(s($payload, 'cadetPhone')),
         'company'             => s($payload, 'company'),
         'parent1_last_name'   => s($payload, 'parent1LastName'),
         'parent1_first_name'  => s($payload, 'parent1FirstName'),
         'parent1_relationship' => s($payload, 'parent1Relationship'),
         'parent1_email_updates' => $parent1_email_updates,
         'parent1_email'       => s($payload, 'parent1Email'),
-        'parent1_cell'        => s($payload, 'parent1Phone'),
+        'parent1_cell'        => format_phone(s($payload, 'parent1Phone')),
         'parent1_street'      => s($payload, 'streetAddress'),
         'parent1_city'        => s($payload, 'city'),
         'parent1_state'       => s($payload, 'state'),
@@ -245,7 +245,7 @@ try {
         'parent2_relationship' => s($payload, 'parent2Relationship'),
         'parent2_email_updates' => $parent2_email_updates,
         'parent2_email'       => s($payload, 'parent2Email'),
-        'parent2_cell'        => s($payload, 'parent2Phone'),
+        'parent2_cell'        => format_phone(s($payload, 'parent2Phone')),
         'parent2_street'      => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'streetAddress') : s($payload,'parent2Street'),
         'parent2_city'        => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'city')          : s($payload,'parent2City'),
         'parent2_state'       => s($payload,'parent2AddressSame')==='Yes' ? s($payload,'state')         : s($payload,'parent2State'),
@@ -283,7 +283,7 @@ $email_body .= "CADET INFORMATION\n";
 $email_body .= "Name: " . trim(preg_replace('/\s+/', ' ', s($payload,'cadetFirstName') . " " . s($payload,'cadetMiddleName') . " " . s($payload,'cadetLastName') . " $suffix")) . "\n";
 $email_body .= "Nickname: " . s($payload,'nickname') . "\n";
 $email_body .= "Email: " . s($payload,'cadetEmail') . "\n";
-$email_body .= "Phone: " . s($payload,'cadetPhone') . "\n";
+$email_body .= "Phone: " . format_phone(s($payload,'cadetPhone')) . "\n";
 $email_body .= "Graduation Year: " . s($payload,'graduationYear') . "\n";
 $email_body .= "Company: " . s($payload,'company') . "\n\n";
 $email_body .= "PARENT/FAMILY INFORMATION\n";
@@ -291,13 +291,13 @@ $email_body .= "Primary: " . s($payload,'parent1FirstName') . " " . s($payload,'
 $email_body .= "Primary relationship: " . s($payload,'parent1Relationship') . "\n";
 $email_body .= "Primary contact opted in to routine club emails: " . ($parent1_email_updates ? 'Yes' : 'No') . "\n";
 $email_body .= "Email: " . s($payload,'parent1Email') . "\n";
-$email_body .= "Phone: " . s($payload,'parent1Phone') . "\n";
+$email_body .= "Phone: " . format_phone(s($payload,'parent1Phone')) . "\n";
 if (s($payload,'parent2FirstName') !== '') {
     $email_body .= "\nSecondary: " . s($payload,'parent2FirstName') . " " . s($payload,'parent2LastName') . "\n";
     $email_body .= "Secondary relationship: " . s($payload,'parent2Relationship') . "\n";
     $email_body .= "Secondary contact opted in to routine club emails: " . ($parent2_email_updates ? 'Yes' : 'No') . "\n";
     $email_body .= "Email: " . s($payload,'parent2Email') . "\n";
-    $email_body .= "Phone: " . s($payload,'parent2Phone') . "\n";
+    $email_body .= "Phone: " . format_phone(s($payload,'parent2Phone')) . "\n";
 }
 $email_body .= "\nADDRESS\n";
 $email_body .= s($payload,'streetAddress') . "\n";
