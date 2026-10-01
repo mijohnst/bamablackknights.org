@@ -257,6 +257,10 @@
 
         <div class="form-row">
           <div class="form-group">
+            <label for="cadetDOB">Cadet Date of Birth *</label>
+            <input type="date" id="cadetDOB" name="cadetDOB" required />
+          </div>
+          <div class="form-group">
             <label for="cadetPhone">Cadet Cell Phone</label>
             <input type="tel" id="cadetPhone" name="cadetPhone" />
           </div>
@@ -490,7 +494,7 @@
     // ── Find Your Record ──────────────────────────────────────────────────
     function populateForm(m) {
       var fields = ['cadetFirstName','cadetMiddleName','cadetLastName','cadetSuffix','graduationYear','nickname','poBox',
-        'cadetEmail','cadetGender','cadetPhone','company','parent1FirstName','parent1LastName','parent1Phone','parent1Email',
+        'cadetEmail','cadetGender','cadetDOB','cadetPhone','company','parent1FirstName','parent1LastName','parent1Phone','parent1Email',
         'parent2FirstName','parent2LastName','parent2Phone','parent2Email',
         'parent1Relationship','parent2Relationship',
         'streetAddress','city','state','zipCode','parent2Street','parent2City','parent2State','parent2Zip'];

@@ -126,6 +126,7 @@ echo json_encode([
         'graduationYear'   => $g('class_year'),
         'nickname'         => $g('nickname'),
         'cadetGender'      => $g('cadet_gender'),
+        'cadetDOB'         => $g('cadet_birthday'),
         'poBox'            => $g('cadet_po_box'),
         'cadetEmail'       => $g('cadet_email'),
         'cadetPhone'       => $g('cadet_cell'),
