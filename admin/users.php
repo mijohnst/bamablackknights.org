@@ -93,8 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($send_invite) {
                 require_once __DIR__ . '/mailer.php';
-                send_portal_invite($email, $name, $invite_token);
-                flash('success', "User '$name' added — invite email sent.");
+                if (send_portal_invite($email, $name, $invite_token)) {
+                    flash('success', "User '$name' added — invite email sent.");
+                } else {
+                    flash('error', "User '$name' was added, but the invite email could not be sent. Check the mail settings, then use Resend Invite.");
+                }
             } else {
                 flash('success', "User '$name' " . ($action === 'add' ? 'added.' : 'updated.'));
             }
@@ -125,8 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($u) {
             $token = bin2hex(random_bytes(24));
             $pdo->prepare('UPDATE users SET invite_token=?, invite_expires=DATE_ADD(NOW(), INTERVAL 14 DAY) WHERE id=?')->execute([$token, $id]);
-            send_portal_invite($u['email'], $u['name'], $token);
-            flash('success', 'Invite resent to ' . $u['name'] . '.');
+            if (send_portal_invite($u['email'], $u['name'], $token)) {
+                flash('success', 'Invite resent to ' . $u['name'] . '.');
+            } else {
+                flash('error', 'The invite to ' . $u['name'] . ' could not be sent. Check the mail settings and try again.');
+            }
         }
         header('Location: users.php'); exit;
 

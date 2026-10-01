@@ -2,12 +2,14 @@
 /**
  * Centralized email sender
  * ─────────────────────────────────────────────────────────────────────────────
- * Sends via Google Workspace's SMTP relay service (smtp-relay.gmail.com),
- * authenticated by the sending server's IP being allowlisted in the Google
- * Admin console — no password/app-password is stored here. Replaced PHP's
- * bare mail(), which broke once bamablackknights.org's MX moved to Google:
- * cPanel's mail routing no longer considered itself authoritative for the
- * domain, so local mail() delivery silently failed.
+ * bamablackknights.org's mail is hosted on the cPanel/Namecheap side (MX =
+ * *.jellyfish.systems), not Google Workspace. The Google SMTP relay this
+ * code inherited from the USAFA site only accepts mail for a Workspace
+ * domain from an allowlisted IP, so every send through it failed.
+ *
+ * Now: if admin/config.php defines SMTP_HOST (plus SMTP_USER / SMTP_PASS,
+ * optional SMTP_PORT), send through that mailbox with SMTP auth. Otherwise
+ * fall back to PHP's mail() via the hosting server's local mailer.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -32,14 +34,29 @@ define('ADMIN_URL',       'https://bamablackknights.org/admin/');
 define('SITE_URL',        'https://bamablackknights.org/');
 define('CLUB_TAX_ID',     '61-1791020');
 
-// Shared SMTP relay setup — used here and by email.php's Compose Email tool.
+// SMTP credentials live in config.php (server-only, gitignored). Some entry
+// points reach this file without having loaded config.php yet.
+if (!defined('SMTP_HOST') && is_file(__DIR__ . '/config.php')) {
+    require_once __DIR__ . '/config.php';
+}
+
+// Shared mail transport setup — used by every sender on the site (this
+// file, email.php's Compose Email tool, and the public form handlers).
+// Name kept for its many existing callers.
 function configure_smtp_relay(PHPMailer $mail): void {
-    $mail->isSMTP();
-    $mail->Host       = 'smtp-relay.gmail.com';
-    $mail->Port       = 587;
-    $mail->SMTPAuth   = false; // authenticated by the server's IP being allowlisted in Google Admin
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->CharSet    = 'UTF-8';
+    if (defined('SMTP_HOST') && SMTP_HOST !== '') {
+        $port = defined('SMTP_PORT') ? (int)SMTP_PORT : 465;
+        $mail->isSMTP();
+        $mail->Host       = SMTP_HOST;
+        $mail->Port       = $port;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = defined('SMTP_USER') ? SMTP_USER : CLUB_FROM_EMAIL;
+        $mail->Password   = defined('SMTP_PASS') ? SMTP_PASS : '';
+        $mail->SMTPSecure = $port === 465 ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
+    } else {
+        $mail->isMail();
+    }
+    $mail->CharSet = 'UTF-8';
 }
 
 function send_notification(string $to, string $subject, string $body): bool {
