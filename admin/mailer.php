@@ -39,7 +39,11 @@ define('CLUB_TAX_ID',     '61-1791020');
 // applies the domain's DKIM signing; no external relay or login.
 function configure_smtp_relay(PHPMailer $mail): void {
     $mail->isMail();
-    $mail->CharSet = 'UTF-8';
+    $mail->CharSet  = 'UTF-8';
+    // Message-ID on our own domain (not the shared host's name) and no
+    // "X-Mailer: PHPMailer" banner — both are mild spam-filter signals.
+    $mail->Hostname = 'bamablackknights.org';
+    $mail->XMailer  = ' ';
 }
 
 function send_notification(string $to, string $subject, string $body): bool {
