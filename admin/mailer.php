@@ -7,9 +7,7 @@
  * code inherited from the USAFA site only accepts mail for a Workspace
  * domain from an allowlisted IP, so every send through it failed.
  *
- * Now: if admin/config.php defines SMTP_HOST (plus SMTP_USER / SMTP_PASS,
- * optional SMTP_PORT), send through that mailbox with SMTP auth. Otherwise
- * fall back to PHP's mail() via the hosting server's local mailer.
+ * Now all mail goes out through the hosting server itself (PHP mail()).
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -34,28 +32,13 @@ define('ADMIN_URL',       'https://bamablackknights.org/admin/');
 define('SITE_URL',        'https://bamablackknights.org/');
 define('CLUB_TAX_ID',     '61-1791020');
 
-// SMTP credentials live in config.php (server-only, gitignored). Some entry
-// points reach this file without having loaded config.php yet.
-if (!defined('SMTP_HOST') && is_file(__DIR__ . '/config.php')) {
-    require_once __DIR__ . '/config.php';
-}
-
 // Shared mail transport setup — used by every sender on the site (this
 // file, email.php's Compose Email tool, and the public form handlers).
-// Name kept for its many existing callers.
+// Name kept for its many existing callers. Mail is handed to the web
+// server's own mailer (PHP mail() -> cPanel's Exim), which delivers it and
+// applies the domain's DKIM signing; no external relay or login.
 function configure_smtp_relay(PHPMailer $mail): void {
-    if (defined('SMTP_HOST') && SMTP_HOST !== '') {
-        $port = defined('SMTP_PORT') ? (int)SMTP_PORT : 465;
-        $mail->isSMTP();
-        $mail->Host       = SMTP_HOST;
-        $mail->Port       = $port;
-        $mail->SMTPAuth   = true;
-        $mail->Username   = defined('SMTP_USER') ? SMTP_USER : CLUB_FROM_EMAIL;
-        $mail->Password   = defined('SMTP_PASS') ? SMTP_PASS : '';
-        $mail->SMTPSecure = $port === 465 ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
-    } else {
-        $mail->isMail();
-    }
+    $mail->isMail();
     $mail->CharSet = 'UTF-8';
 }
 
