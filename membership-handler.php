@@ -321,9 +321,13 @@ try {
 }
 
 // ── 3. Confirmation email to parent ──────────────────────────────────────
-$parent_email = s($payload, 'parent1Email');
-if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
-    $parent_name  = s($payload, 'parent1FirstName');
+// Both parents get the confirmation, in one email.
+$family = family_recipients(
+    s($payload, 'parent1Email'), s($payload, 'parent1FirstName'),
+    s($payload, 'parent2Email'), s($payload, 'parent2FirstName')
+);
+if ($family['emails']) {
+    $parent_name  = $family['greeting'];
     $cadet_name   = trim(preg_replace('/\s+/', ' ', "$first $middle " . s($payload, 'cadetLastName') . " $suffix"));
     $conf_subject = 'Membership Application Received — West Point Parents Club of Alabama';
     $conf_body    = "Dear $parent_name,\n\n"
@@ -338,7 +342,7 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
         configure_smtp_relay($conf_mail);
         $conf_mail->setFrom(CLUB_FROM_EMAIL, CLUB_NAME);
         $conf_mail->addReplyTo(CLUB_FROM_EMAIL, CLUB_NAME);
-        $conf_mail->addAddress($parent_email);
+        foreach ($family['emails'] as $addr) $conf_mail->addAddress($addr);
         $conf_mail->isHTML(false);
         $conf_mail->Subject = $conf_subject;
         $conf_mail->Body    = $conf_body;

@@ -346,9 +346,14 @@ try {
 }
 
 // ── Confirmation email to parent ──────────────────────────────────────────
-$parent_email = $g('parent1_email');
-if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
-    $parent_name  = $g('parent1_first_name') ?: 'there';
+// Both parents get the confirmation, in one email — the "if this wasn't
+// intentional" notice matters most to the parent who didn't make the change.
+$family = family_recipients(
+    $g('parent1_email'), $g('parent1_first_name'),
+    $g('parent2_email'), $g('parent2_first_name')
+);
+if ($family['emails']) {
+    $parent_name  = $family['greeting'];
     $cadet_name   = trim(preg_replace('/\s+/', ' ', $g('cadet_first_name') . ' ' . $g('cadet_middle_name') . ' ' . $g('cadet_last_name') . ' ' . $g('cadet_suffix'))) ?: 'your cadet';
     $conf_subject = 'Your Information Has Been Updated — West Point Parents Club of Alabama';
     $conf_body    = "Dear $parent_name,\n\n"
@@ -362,7 +367,7 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
         configure_smtp_relay($conf_mail);
         $conf_mail->setFrom('secretary@bamablackknights.org', CLUB_NAME);
         $conf_mail->addReplyTo('secretary@bamablackknights.org', CLUB_NAME);
-        $conf_mail->addAddress($parent_email);
+        foreach ($family['emails'] as $addr) $conf_mail->addAddress($addr);
         $conf_mail->isHTML(false);
         $conf_mail->Subject = $conf_subject;
         $conf_mail->Body    = $conf_body;

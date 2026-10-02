@@ -31,6 +31,26 @@ function format_phone(string $raw): string {
     return substr($digits, 0, 3) . '-' . substr($digits, 3, 3) . '-' . substr($digits, 6);
 }
 
+// Recipients + greeting for a family confirmation email: both parents'
+// valid emails (deduplicated — couples often share one address), and a
+// greeting like "Kari and Mike". Returns ['emails' => [...], 'greeting' => ''].
+function family_recipients(string $email1, string $name1, string $email2, string $name2): array {
+    $emails = [];
+    $names  = [];
+    foreach ([[$email1, $name1], [$email2, $name2]] as [$email, $name]) {
+        $email = trim($email);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) continue;
+        if (in_array(strtolower($email), array_map('strtolower', $emails), true)) {
+            if (trim($name) !== '') $names[] = trim($name);
+            continue;
+        }
+        $emails[] = $email;
+        if (trim($name) !== '') $names[] = trim($name);
+    }
+    $names = array_values(array_unique($names));
+    return ['emails' => $emails, 'greeting' => $names ? implode(' and ', $names) : 'there'];
+}
+
 // Starts a session under its own cookie name, distinct from the admin
 // panel's 'wppc_admin' session (auth.php's start_session()) — used to bind
 // a successful public-form identity lookup (see update-lookup.php) to the
