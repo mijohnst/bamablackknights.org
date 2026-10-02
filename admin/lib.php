@@ -137,30 +137,6 @@ function membership_year(): string {
 // don't need to know about the underlying set — see save_dues_years()
 // below, the one place that writes all of these.
 
-// One row per parent-on-file for the Parents Club Badges tracker (badges.php,
-// badges-report.php) — not per cadet, since cadets don't get a badge but both
-// parents on a member record can. Always rebuilt from `members` rather than
-// trusted from a form, and shared by both pages so their notion of "who's a
-// badge candidate" can't drift apart.
-function badge_slots(PDO $pdo): array {
-    $stmt = $pdo->query("SELECT id, class_year, cadet_first_name, cadet_middle_name, cadet_last_name, cadet_suffix,
-                   parent1_first_name, parent1_last_name, parent1_city,
-                   parent2_first_name, parent2_last_name, parent2_city, membership_paid
-            FROM members WHERE archived = 0
-            ORDER BY class_year ASC, cadet_last_name ASC, cadet_first_name ASC");
-
-    $slots = [];
-    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $mem) {
-        $cadet = cadet_full_name($mem);
-        $paid = !empty($mem['membership_paid']);
-        $p1 = trim($mem['parent1_first_name'] . ' ' . $mem['parent1_last_name']);
-        $p2 = trim(($mem['parent2_first_name'] ?? '') . ' ' . ($mem['parent2_last_name'] ?? ''));
-        if ($p1 !== '') $slots[] = ['member_id' => (int)$mem['id'], 'slot' => 1, 'name' => $p1, 'cadet' => $cadet, 'class_year' => $mem['class_year'], 'city' => $mem['parent1_city'], 'paid' => $paid];
-        if ($p2 !== '') $slots[] = ['member_id' => (int)$mem['id'], 'slot' => 2, 'name' => $p2, 'cadet' => $cadet, 'class_year' => $mem['class_year'], 'city' => $mem['parent2_city'], 'paid' => $paid];
-    }
-    return $slots;
-}
-
 // The ordered list of club-year strings ("2026-2027") this cadet's dues
 // can ever apply to: their 4 years as an undergrad, computed backward
 // from their graduating class_year, plus one earlier USMAPS year for

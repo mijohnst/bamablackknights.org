@@ -207,24 +207,6 @@ if (can_manage_members()) {
     try { $vcount_v = (int)get_pdo()->query('SELECT COUNT(*) FROM volunteers')->fetchColumn(); } catch(Exception $e) { $vcount_v=0; }
     $sections['Member Management'][] = ['icon'=>'🙋','label'=>'Volunteers','sub'=>$vcount_v>0?"$vcount_v submission".($vcount_v>1?'s':''):'View signups','href'=>'volunteers.php','color'=>'#1b5e20','badge'=>$vcount_v>0?$vcount_v:0];
     $sections['Member Management'][] = ['icon'=>'👥','label'=>'Leadership','sub'=>'Update officer profiles','href'=>'leadership.php','color'=>'#000000'];
-    // Counts parent slots (not members) still needing a badge, matching the
-    // "Needs a badge" filter on badges.php — paid members with no member_badges
-    // row, or one with done=0, for that parent slot.
-    try {
-        $badge_pending = (int)get_pdo()->query("
-            SELECT COALESCE(SUM(
-                (CASE WHEN TRIM(CONCAT(m.parent1_first_name,' ',m.parent1_last_name)) <> ''
-                      AND NOT EXISTS (SELECT 1 FROM member_badges b WHERE b.member_id=m.id AND b.parent_slot=1 AND b.done=1)
-                 THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN TRIM(CONCAT(COALESCE(m.parent2_first_name,''),' ',COALESCE(m.parent2_last_name,''))) <> ''
-                      AND NOT EXISTS (SELECT 1 FROM member_badges b WHERE b.member_id=m.id AND b.parent_slot=2 AND b.done=1)
-                 THEN 1 ELSE 0 END)
-            ), 0)
-            FROM members m WHERE m.archived=0 AND m.membership_paid=1
-        ")->fetchColumn();
-    } catch (Exception $e) { $badge_pending = 0; }
-    $sections['Member Management'][] = ['icon'=>'🏅','label'=>'Badges','sub'=>$badge_pending>0?"$badge_pending pending":'Track parent badge orders','href'=>'badges.php','color'=>'#8A8D8F','badge'=>$badge_pending];
     $sections['Site Management'][] = ['icon'=>'📣','label'=>'Announcements','sub'=>'Site banner notices','href'=>'announcements.php','color'=>'#b71c1c'];
     $sections['Site Management'][] = ['icon'=>'🖼️','label'=>'Homepage Gallery','sub'=>'Direct-upload homepage photos','href'=>'gallery.php','color'=>'#1b5e20'];
     $sections['Site Management'][] = ['icon'=>'📸','label'=>'Event Albums','sub'=>'Photos for a specific club event','href'=>'event-albums.php','color'=>'#1565c0'];
