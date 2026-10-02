@@ -330,7 +330,7 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
                   . "We have received your membership application for $cadet_name (Class of " . s($payload,'graduationYear') . ").\n\n"
                   . "Your information has been recorded. Continue through the online dues checkout to complete your membership.\n\n"
                   . "If you have any questions, please contact us at secretary@bamablackknights.org.\n\n"
-                  . "Aim High · Fly · Fight · Win\n"
+                  . "Duty · Honor · Country\n"
                   . "West Point Parents Club of Alabama\n"
                   . "bamablackknights.org";
     $conf_mail = new PHPMailer(true);

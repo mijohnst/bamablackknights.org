@@ -99,7 +99,7 @@ send_notification(
     "Thanks for volunteering with the West Point Parents Club of Alabama!\n\n"
     . "You're signed up for: $title\n\n"
     . "A club officer may follow up with details beforehand. If your plans change, just reply to this email and let us know.\n\n"
-    . "Aim High \xC2\xB7 Fly \xC2\xB7 Fight \xC2\xB7 Win\nWest Point Parents Club of Alabama\nbamablackknights.org"
+    . "Duty \xC2\xB7 Honor \xC2\xB7 Country\nWest Point Parents Club of Alabama\nbamablackknights.org"
 );
 
 foreach (['secretary@bamablackknights.org', 'president@bamablackknights.org'] as $notify_to) {

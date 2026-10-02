@@ -354,7 +354,7 @@ if (filter_var($parent_email, FILTER_VALIDATE_EMAIL)) {
     $conf_body    = "Dear $parent_name,\n\n"
                   . "Your family's information for $cadet_name has been updated in our records.\n\n"
                   . "If any of this wasn't intentional, or you have questions, please contact us at secretary@bamablackknights.org.\n\n"
-                  . "Aim High · Fly · Fight · Win\n"
+                  . "Duty · Honor · Country\n"
                   . "West Point Parents Club of Alabama\n"
                   . "bamablackknights.org";
     $conf_mail = new PHPMailer(true);

@@ -101,7 +101,7 @@ $conf = "Thank you for your interest in volunteering with the West Point Parents
       . "Your submission:\n"
       . "  Areas of interest: " . ($areas ?: 'Not specified') . "\n"
       . "  Availability: " . ($availability ?: 'Not specified') . "\n\n"
-      . "Aim High · Fly · Fight · Win\n"
+      . "Duty · Honor · Country\n"
       . "West Point Parents Club of Alabama\nbamablackknights.org";
 $conf_mail = new PHPMailer(true);
 try {
