@@ -178,7 +178,7 @@
         </div>
       </div>
 
-      <form id="membershipForm">
+      <form id="membershipForm" novalidate>
         <input type="hidden" id="membershipToken" name="membershipToken" />
         <input type="hidden" id="updateVerifyToken" name="verifyToken" />
         <input type="hidden" id="verifiedEmailOwner" name="verifiedEmailOwner" />
@@ -509,6 +509,26 @@
       document.getElementById('parent2-address').style.display = radio.value === 'No' ? 'block' : 'none';
     }
 
+    // The form is novalidate: the browser's own required-field check could
+    // block the submit with no visible message (notably on iPhones), so the
+    // button looked dead. Instead, list every empty required field by name
+    // in the status box and outline it.
+    function missingRequiredFields(form) {
+      var missing = [];
+      form.querySelectorAll('[required]').forEach(function(el) {
+        if (el.offsetParent === null) return; // hidden section — not asked
+        var empty = el.type === 'checkbox' ? !el.checked : el.value.trim() === '';
+        var label = document.querySelector('label[for="' + el.id + '"]');
+        el.style.outline = empty ? '2px solid #c0392b' : '';
+        el.style.outlineOffset = empty ? '2px' : '';
+        if (empty) missing.push({ el: el, name: (label ? label.textContent : el.name).replace('*', '').trim() });
+      });
+      return missing;
+    }
+    document.getElementById('membershipForm').addEventListener('input', function(e) {
+      if (e.target.style) { e.target.style.outline = ''; e.target.style.outlineOffset = ''; }
+    });
+
     function validateForm(formData) {
       var errors = [];
       ['parent1Email', 'parent2Email', 'cadetEmail'].forEach(function(field) {
@@ -819,9 +839,22 @@
       status.style.display = 'none';
       status.className = '';
       var formData = new FormData(form);
-      var validationErrors = validateForm(formData);
+      var missing = missingRequiredFields(form);
+      var validationErrors = missing.map(function(m) { return m.name + ' is required'; })
+        .concat(validateForm(formData));
       if (validationErrors.length) {
-        status.textContent = validationErrors.join(' ');
+        status.innerHTML = '';
+        var heading = document.createElement('strong');
+        heading.textContent = 'Please fix the following before saving:';
+        var list = document.createElement('ul');
+        list.style.margin = '0.5rem 0 0 1.5rem';
+        validationErrors.forEach(function(msg) {
+          var li = document.createElement('li');
+          li.textContent = msg;
+          list.appendChild(li);
+        });
+        status.appendChild(heading);
+        status.appendChild(list);
         status.className = 'error';
         status.style.display = 'block';
         return;
