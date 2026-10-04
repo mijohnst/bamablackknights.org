@@ -85,12 +85,13 @@ echo show_flash();
 </style>
 
 <div class="page-head">
-  <h1>Volunteer Opportunities</h1>
+  <h1>Manage Volunteers</h1>
   <div style="display:flex;gap:.5rem">
     <?php if (!$edit): ?><a href="volunteer-opportunities.php?edit=new" class="btn btn-primary">+ Add Opportunity</a><?php endif; ?>
     <a href="dashboard.php" class="btn btn-secondary">← Dashboard</a>
   </div>
 </div>
+<?php volunteer_admin_tabs(get_pdo(), 'volunteer-opportunities.php'); ?>
 <p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem">
   Post specific volunteer needs here — members claim them from their own dashboard instead of you manually matching up general interest submissions.
 </p>

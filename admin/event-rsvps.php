@@ -18,7 +18,7 @@ $rows = $pdo->query(
 )->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $r) $rosters[$r['event_id']][] = $r;
 
-admin_header('Event RSVPs');
+admin_header('Event Sign-Ups');
 ?>
 <style>
 .er-row{border-left:3px solid #1565c0;padding:.75rem .9rem;margin-bottom:.6rem;background:#fff;border-radius:0 4px 4px 0}
@@ -27,7 +27,7 @@ admin_header('Event RSVPs');
 </style>
 
 <div class="page-head">
-  <h1>Event RSVPs</h1>
+  <h1>Event Sign-Ups</h1>
   <div style="display:flex;gap:.5rem">
     <a href="events.php" class="btn btn-secondary">Manage Events</a>
     <a href="dashboard.php" class="btn btn-secondary">← Dashboard</a>

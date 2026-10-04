@@ -773,9 +773,9 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
         </ul>
       </div>
       <div class="card mt1">
-        <h3>Volunteers</h3>
+        <h3>Manage Volunteers</h3>
         <ul>
-          <li>Submissions from the <em>Volunteer with Us</em> form on the main site</li>
+          <li>One tile with three tabs: <strong>Opportunities</strong> (post dated needs), <strong>General Interest</strong> (submissions from the <em>Volunteer with Us</em> form on the main site), and <strong>Committees</strong> (who flagged which areas)</li>
           <li>View name, contact, availability, and areas of interest</li>
           <li>Tech Support, Officer, and Secretary access</li>
         </ul>
@@ -792,19 +792,19 @@ html,body{height:100%;overflow:hidden;background:var(--navy);font-family:var(--d
 <!-- 19: Member Support Tools -->
 <div class="slide s-content" id="s19">
   <p class="label">Section · Member Support</p>
-  <h2>Volunteer Sign-Ups · Event RSVP · Photo Submissions · Committees</h2>
+  <h2>Sign Up to Volunteer · My Events · Photo Submissions · Committees</h2>
   <div class="rule"></div>
   <div class="three-col">
     <div class="card">
       <h3>Volunteer Opportunities</h3>
       <ul>
         <li>Officers post opportunities with a date, location, and number of spots needed</li>
-        <li>Members sign up right from their dashboard — no double sign-ups thanks to a duplicate check</li>
+        <li>Members sign up from the <strong>Sign Up to Volunteer</strong> tile — no double sign-ups thanks to a duplicate check. Its <strong>My Committees</strong> tab is where they flag ongoing interest</li>
         <li>Officers see a live roster of who's signed up for each opportunity, and can toggle an opportunity inactive or delete it</li>
       </ul>
     </div>
     <div class="card">
-      <h3>Event RSVP</h3>
+      <h3>My Events / Event Sign-Ups</h3>
       <ul>
         <li>Members RSVP to upcoming events and note a guest count</li>
         <li>Re-submitting updates their existing RSVP instead of creating a duplicate</li>

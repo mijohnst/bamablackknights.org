@@ -11,7 +11,7 @@ $rows = $pdo->query(
 $by_committee = [];
 foreach ($rows as $r) $by_committee[$r['committee']][] = $r;
 
-admin_header('Committee Interest');
+admin_header('Manage Volunteers — Committees');
 ?>
 <style>
 .ci-group{margin-bottom:1.25rem}
@@ -20,9 +20,10 @@ admin_header('Committee Interest');
 </style>
 
 <div class="page-head">
-  <h1>Committee Interest</h1>
+  <h1>Manage Volunteers</h1>
   <a href="dashboard.php" class="btn btn-secondary">← Dashboard</a>
 </div>
+<?php volunteer_admin_tabs(get_pdo(), 'committee-interest.php'); ?>
 <p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem">Members who've flagged interest in helping with each area, from their own dashboard.</p>
 
 <?php if (empty($by_committee)): ?>

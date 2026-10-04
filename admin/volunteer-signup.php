@@ -45,7 +45,7 @@ if (!empty($opportunities)) {
     $my_signups = array_flip($mine->fetchAll(PDO::FETCH_COLUMN));
 }
 
-admin_header('Volunteer Sign-Ups');
+admin_header('Sign Up to Volunteer');
 echo show_flash();
 ?>
 <style>
@@ -55,10 +55,11 @@ echo show_flash();
 </style>
 
 <div class="page-head">
-  <h1>Volunteer Sign-Ups</h1>
+  <h1>Sign Up to Volunteer</h1>
   <a href="dashboard.php" class="btn btn-secondary">← Dashboard</a>
 </div>
-<p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem">Claim a specific need below — no need to wait to be asked.</p>
+<?php member_volunteer_tabs('volunteer-signup.php'); ?>
+<p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem">Claim a spot on a specific, dated need below. For ongoing help, tell us which committees interest you on the <a href="my-committees.php">My Committees</a> tab.</p>
 
 <?php if (empty($opportunities)): ?>
   <p style="color:#9aa5b4">No open volunteer opportunities right now — check back soon.</p>

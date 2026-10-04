@@ -35,7 +35,7 @@ if (!empty($events)) {
     foreach ($mine->fetchAll(PDO::FETCH_ASSOC) as $r) $my_rsvps[$r['event_id']] = $r['guest_count'];
 }
 
-admin_header('Event RSVP');
+admin_header('My Events');
 echo show_flash();
 ?>
 <style>
@@ -46,7 +46,7 @@ echo show_flash();
 </style>
 
 <div class="page-head">
-  <h1>Event RSVP</h1>
+  <h1>My Events</h1>
   <a href="dashboard.php" class="btn btn-secondary">← Dashboard</a>
 </div>
 <p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem">Let us know you're coming so we can plan headcount.</p>

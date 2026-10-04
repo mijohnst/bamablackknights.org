@@ -103,7 +103,7 @@ if (isset($_GET['edit'])) {
     if ($edit) $edit_tags = $tags_by_vol[$edit['id']] ?? [];
 }
 
-admin_header('Volunteer Submissions');
+admin_header('Manage Volunteers — General Interest');
 echo show_flash();
 ?>
 <style>
@@ -116,9 +116,11 @@ echo show_flash();
 </style>
 
 <div class="page-head">
-  <h1>Volunteer Interest <span style="font-size:.85rem;font-weight:400;color:#5a6a7a">(<?= $total ?> total)</span></h1>
+  <h1>Manage Volunteers</h1>
   <a href="dashboard.php" class="btn btn-secondary">← Dashboard</a>
 </div>
+<?php volunteer_admin_tabs(get_pdo(), 'volunteers.php'); ?>
+<p style="font-size:.82rem;color:#5a6a7a;margin-bottom:1rem">General interest from the homepage <strong>Volunteer with Us</strong> form (<?= $total ?> total) — people offering to help without picking a specific opportunity.</p>
 
 <div class="card" style="padding:.85rem 1.25rem;margin-bottom:1rem">
   <form method="GET" style="display:flex;gap:.75rem;align-items:flex-end">

@@ -453,6 +453,51 @@ function admin_footer(): void {
     echo '</div></body></html>';
 }
 
+// A row of tabs that makes two or more related admin pages read as one —
+// e.g. Opportunities + General Interest + Committees (officers) or
+// Opportunities + My Committees (members). Each tab is its own page, so
+// every form on it still does a normal full-page POST (fresh CSRF token
+// each load); this is navigation only. $tabs: [href => label]; $active is
+// the href of the current page; $badges optionally [href => count].
+function admin_tabs(array $tabs, string $active, array $badges = []): void {
+    echo '<style>.adm-tabs{display:flex;gap:.25rem;border-bottom:2px solid #e2ddd0;margin:0 0 1.25rem;flex-wrap:wrap}'
+       . '.adm-tabs a{padding:.6rem 1.1rem;font-weight:700;font-size:.9rem;color:#6B6E70;text-decoration:none;border-bottom:3px solid transparent;margin-bottom:-2px}'
+       . '.adm-tabs a:hover{color:#000}.adm-tabs a.on{color:#000;border-bottom-color:#D4BF91}'
+       . '.adm-tabs .n{display:inline-block;margin-left:.4rem;background:#A6192E;color:#fff;font-size:.68rem;padding:.05rem .45rem;border-radius:99px;vertical-align:middle}</style>';
+    echo '<nav class="adm-tabs">';
+    foreach ($tabs as $href => $label) {
+        $n = (int)($badges[$href] ?? 0);
+        echo '<a href="' . h($href) . '"' . ($href === $active ? ' class="on" aria-current="page"' : '') . '>'
+           . h($label) . ($n > 0 ? '<span class="n">' . $n . '</span>' : '') . '</a>';
+    }
+    echo '</nav>';
+}
+
+// Officer-side volunteer tabs, shared by volunteer-opportunities.php,
+// volunteers.php and committee-interest.php so the three read as one
+// "Manage Volunteers" area. Badges: open opportunities still short of
+// people, and general-interest submissions still marked "new".
+function volunteer_admin_tabs(PDO $pdo, string $active): void {
+    $need = 0; $new = 0;
+    try {
+        $need = (int)$pdo->query(
+            "SELECT COUNT(*) FROM volunteer_opportunities o WHERE o.active=1
+             AND (SELECT COUNT(*) FROM volunteer_signups WHERE opportunity_id=o.id) < o.spots_needed"
+        )->fetchColumn();
+    } catch (PDOException $e) {}
+    try { $new = (int)$pdo->query("SELECT COUNT(*) FROM volunteers WHERE status = 'new'")->fetchColumn(); } catch (PDOException $e) {}
+    admin_tabs(
+        ['volunteer-opportunities.php' => 'Opportunities', 'volunteers.php' => 'General Interest', 'committee-interest.php' => 'Committees'],
+        $active,
+        ['volunteer-opportunities.php' => $need, 'volunteers.php' => $new]
+    );
+}
+
+// Member-side volunteer tabs: claim a dated spot, or flag committees.
+function member_volunteer_tabs(string $active): void {
+    admin_tabs(['volunteer-signup.php' => 'Opportunities', 'my-committees.php' => 'My Committees'], $active);
+}
+
 const ELECTION_POSITIONS = ['President', 'Vice President', 'Secretary', 'Treasurer'];
 
 // Shared by my-committees.php (member self-service) and volunteers.php
