@@ -55,6 +55,13 @@
     /* CLASS JOURNEY */
     #class-journey{background:var(--light);}
     .class-journey-intro{max-width:680px;margin-bottom:2rem;}
+    .usma-news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;}
+    .usma-news-card{display:flex;flex-direction:column;background:var(--white);border:1px solid #e6e1d3;border-top:4px solid #D4BF91;border-radius:4px;padding:1.4rem 1.4rem 1.2rem;box-shadow:0 2px 8px rgba(0,0,0,.06);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease;}
+    .usma-news-card:hover,.usma-news-card:focus-visible{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.12);}
+    .usma-news-date{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8a7a4f;font-weight:700;margin-bottom:.55rem;}
+    .usma-news-card h3{font-family:var(--font-display);font-size:1.05rem;line-height:1.35;color:#000;margin:0 0 1rem;flex:1;}
+    .usma-news-more{font-size:.8rem;font-weight:700;letter-spacing:.06em;color:#000;}
+    .usma-news-card:hover .usma-news-more{text-decoration:underline;}
     .class-ladder-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;}
     .class-ladder-card{background:var(--white);border-radius:4px;padding:1.75rem 1.5rem;border-top:4px solid #D4BF91;box-shadow:0 2px 8px rgba(0,0,0,.06);}
     .class-ladder-year{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);}
@@ -588,6 +595,19 @@
         <p>Expanding club participation so more parents can contribute, connect, and strengthen the network.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- USMA NEWS — latest stories from the westpoint.edu RSS feed (usma-news.php) -->
+<section id="usma-news" style="background:var(--white);display:none">
+  <div class="container">
+    <p class="section-label">From the Academy</p>
+    <h2 class="section-title">West Point News</h2>
+    <div class="divider"></div>
+    <div class="usma-news-grid" id="usma-news-list"></div>
+    <p style="margin-top:1.75rem;text-align:center">
+      <a href="https://www.westpoint.edu/news" target="_blank" rel="noopener" class="btn btn-outline">More News at westpoint.edu</a>
+    </p>
   </div>
 </section>
 
@@ -1342,6 +1362,30 @@ function footballScheduleHtml() {
     + '<div style="margin-top:1rem;text-align:center"><a href="https://www.westpoint.edu/about/academic-calendar" target="_blank" rel="noopener" style="display:inline-block;padding:.5rem 1.5rem;background:var(--blue);color:#fff;border-radius:3px;font-family:var(--font-display);font-size:.75rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;">View Academy Calendar &amp; Key Dates &rarr;</a></div>'
     + '</div>';
 }
+
+// ── West Point News (westpoint.edu RSS via usma-news.php) ─────────────────
+// The section stays hidden unless at least one story loads, so a feed
+// outage never leaves an empty box on the homepage.
+(function loadUsmaNews() {
+  var section = document.getElementById('usma-news');
+  var list = document.getElementById('usma-news-list');
+  if (!section || !list) return;
+  fetchWithTimeout('usma-news.php', 8000)
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || !d.success || !d.items || !d.items.length) return;
+      list.innerHTML = d.items.map(function (it) {
+        var dt = it.date ? new Date(it.date) : null;
+        var when = dt && !isNaN(dt) ? dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        return '<a class="usma-news-card" href="' + escHtml(safeHref(it.link)) + '" target="_blank" rel="noopener">'
+          + (when ? '<div class="usma-news-date">' + escHtml(when) + '</div>' : '')
+          + '<h3>' + escHtml(it.title) + '</h3>'
+          + '<span class="usma-news-more">Read on westpoint.edu &rarr;</span></a>';
+      }).join('');
+      section.style.display = '';
+    })
+    .catch(function () { /* leave the section hidden */ });
+})();
 
 async function loadEvents() {
   var list = document.getElementById('events-list');
