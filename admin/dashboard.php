@@ -25,7 +25,10 @@ if (can_view_member_pii()) {
                               SUM(membership_paid) as paid,
                               SUM(CASE WHEN membership_paid=0 THEN 1 ELSE 0 END) as unpaid,
                               SUM(CASE WHEN created_at>=DATE_FORMAT(NOW(),'%Y-%m-01') THEN 1 ELSE 0 END) as new_month
-                       FROM members WHERE archived=0")->fetch();
+                       FROM members WHERE archived=0 AND class_year <> 'Graduate'")->fetch();
+    // Same population as the Members page (index.php), which leaves
+    // graduated classes out of its totals — otherwise the tile said 132
+    // while the roster said 90.
     $stats['members'] = $ms;
 }
 
