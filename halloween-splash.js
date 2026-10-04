@@ -1,21 +1,15 @@
 // Halloween splash for the homepage — a small animated night scene behind a
-// greeting card that closes itself after a few seconds. Shows only during
-// October (visitor's local date), at most
-// once per day per browser, and removes itself completely on close. From
-// November 1 it never shows; leave the <script> tag in index.html and it
-// comes back next October.
+// greeting card that closes itself after about 5 seconds. Shows on every
+// homepage visit during October (visitor's local date) and removes itself
+// completely on close. From November 1 it never shows; leave the <script>
+// tag in index.html and it comes back next October.
 //
-// Preview anytime (ignores the date and the once-a-day limit):
+// Preview anytime (ignores the date):
 //   https://bamablackknights.org/?halloween-preview
 (function () {
   var preview = /[?&]halloween-preview\b/.test(location.search);
   var now = new Date();
   if (!preview && now.getMonth() !== 9) return; // October only (months are 0-based)
-
-  var seenKey = 'wppc-halloween-' + now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-  if (!preview) {
-    try { if (localStorage.getItem(seenKey)) return; } catch (e) { /* storage blocked — just show it */ }
-  }
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ORANGE = '#E87722', GOLD = '#D4BF91';
@@ -222,7 +216,6 @@
     if (closed) return;
     closed = true;
     clearTimeout(timer); timer = null;
-    if (!preview) { try { localStorage.setItem(seenKey, '1'); } catch (e) {} }
     overlay.classList.remove('on');
     document.removeEventListener('keydown', onKey);
     document.documentElement.style.overflow = prevOverflow;
