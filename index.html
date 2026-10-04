@@ -59,8 +59,9 @@
     .usma-news-card{display:flex;flex-direction:column;background:var(--white);border:1px solid #e6e1d3;border-top:4px solid #D4BF91;border-radius:4px;padding:1.4rem 1.4rem 1.2rem;box-shadow:0 2px 8px rgba(0,0,0,.06);text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease;}
     .usma-news-card:hover,.usma-news-card:focus-visible{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.12);}
     .usma-news-date{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8a7a4f;font-weight:700;margin-bottom:.55rem;}
-    .usma-news-card h3{font-family:var(--font-display);font-size:1.05rem;line-height:1.35;color:#000;margin:0 0 1rem;flex:1;}
-    .usma-news-more{font-size:.8rem;font-weight:700;letter-spacing:.06em;color:#000;}
+    .usma-news-card h3{font-family:var(--font-display);font-size:1.05rem;line-height:1.35;color:#000;margin:0 0 1rem;}
+    .usma-news-summary{font-size:.9rem;line-height:1.5;color:#5a6a7a;margin:-.4rem 0 1rem;}
+    .usma-news-more{margin-top:auto;font-size:.8rem;font-weight:700;letter-spacing:.06em;color:#000;}
     .usma-news-card:hover .usma-news-more{text-decoration:underline;}
     .class-ladder-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;}
     .class-ladder-card{background:var(--white);border-radius:4px;padding:1.75rem 1.5rem;border-top:4px solid #D4BF91;box-shadow:0 2px 8px rgba(0,0,0,.06);}
@@ -598,7 +599,7 @@
   </div>
 </section>
 
-<!-- USMA NEWS — latest stories from the westpoint.edu RSS feed (usma-news.php) -->
+<!-- USMA NEWS — latest stories from the westpoint.edu RSS feed (news-feed.php?source=usma) -->
 <section id="usma-news" style="background:var(--white);display:none">
   <div class="container">
     <p class="section-label">From the Academy</p>
@@ -619,6 +620,19 @@
     <div class="divider" style="margin-left:auto; margin-right:auto;"></div>
     <p style="color:#5a6a7a; margin-bottom:2rem; font-size:1.02rem;">Receive club updates, event notices, and important announcements directly in your inbox.</p>
     <a href="mailto:info@bamablackknights.org?subject=Sign%20Up%20for%20West%20Point%20Parents%20Club%20updates" class="btn btn-gold">Sign Up for Updates</a>
+  </div>
+</section>
+
+<!-- WPAOG NEWS — latest stories from the West Point AOG News Room (news-feed.php?source=wpaog) -->
+<section id="wpaog-news" style="background:var(--light);display:none;padding-top:1rem">
+  <div class="container">
+    <p class="section-label">West Point Association of Graduates</p>
+    <h2 class="section-title">WPAOG News</h2>
+    <div class="divider"></div>
+    <div class="usma-news-grid" id="wpaog-news-list"></div>
+    <p style="margin-top:1.75rem;text-align:center">
+      <a href="https://www.westpointaog.org/news/news-room/" target="_blank" rel="noopener" class="btn btn-outline">More from the WPAOG News Room</a>
+    </p>
   </div>
 </section>
 
@@ -1363,14 +1377,14 @@ function footballScheduleHtml() {
     + '</div>';
 }
 
-// ── West Point News (westpoint.edu RSS via usma-news.php) ─────────────────
-// The section stays hidden unless at least one story loads, so a feed
+// ── News feeds (news-feed.php): West Point News + WPAOG News ─────────────
+// Each section stays hidden unless at least one story loads, so a feed
 // outage never leaves an empty box on the homepage.
-(function loadUsmaNews() {
-  var section = document.getElementById('usma-news');
-  var list = document.getElementById('usma-news-list');
+function loadNewsFeed(source, sectionId, listId, siteName) {
+  var section = document.getElementById(sectionId);
+  var list = document.getElementById(listId);
   if (!section || !list) return;
-  fetchWithTimeout('usma-news.php', 8000)
+  fetchWithTimeout('news-feed.php?source=' + source, 8000)
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (d) {
       if (!d || !d.success || !d.items || !d.items.length) return;
@@ -1380,12 +1394,15 @@ function footballScheduleHtml() {
         return '<a class="usma-news-card" href="' + escHtml(safeHref(it.link)) + '" target="_blank" rel="noopener">'
           + (when ? '<div class="usma-news-date">' + escHtml(when) + '</div>' : '')
           + '<h3>' + escHtml(it.title) + '</h3>'
-          + '<span class="usma-news-more">Read on westpoint.edu &rarr;</span></a>';
+          + (it.summary ? '<p class="usma-news-summary">' + escHtml(it.summary) + '</p>' : '')
+          + '<span class="usma-news-more">Read on ' + escHtml(siteName) + ' &rarr;</span></a>';
       }).join('');
       section.style.display = '';
     })
     .catch(function () { /* leave the section hidden */ });
-})();
+}
+loadNewsFeed('usma', 'usma-news', 'usma-news-list', 'westpoint.edu');
+loadNewsFeed('wpaog', 'wpaog-news', 'wpaog-news-list', 'westpointaog.org');
 
 async function loadEvents() {
   var list = document.getElementById('events-list');
