@@ -20,7 +20,7 @@
     // @property just step between lengths — still works, less smooth).
     + '@property --len{syntax:"<length>";inherits:true;initial-value:10px}'
     // Overlay + night sky
-    + '.hw-splash{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;'
+    + '.hw-splash{position:fixed;inset:0;z-index:10000;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;'
     + 'background:radial-gradient(ellipse at 50% 120%,#3a1a4a 0%,#160a22 45%,#050308 100%);opacity:0;transition:opacity .5s ease}'
     + '.hw-splash.on{opacity:1}'
     + '.hw-sky{position:absolute;inset:0;pointer-events:none}'
@@ -62,7 +62,7 @@
     + 'background:linear-gradient(180deg,rgba(20,12,26,.96),rgba(8,6,10,.97));border:2px solid ' + GOLD + ';border-radius:16px;'
     + 'padding:2.6rem 1.75rem 1.9rem;box-shadow:0 0 0 6px rgba(232,119,34,.22),0 0 60px rgba(232,119,34,.25),0 24px 60px rgba(0,0,0,.7);'
     + 'transform:translateY(30px) scale(.92);opacity:0;transition:transform .6s cubic-bezier(.2,1.4,.4,1),opacity .5s ease}'
-    + '.hw-splash.on .hw-card{transform:none;opacity:1}'
+    + '.hw-splash.on .hw-card{transform:none;opacity:1}.hw-card:focus{outline:none}'
     // Cobweb (corner)
     + '.hw-web{position:absolute;top:-2px;left:-2px;width:86px;height:86px;opacity:.55;pointer-events:none}'
     // Spider on a thread
@@ -72,37 +72,25 @@
     + '@keyframes hw-dangle{0%,100%{--len:10px;transform:rotate(0)}30%{--len:70px;transform:rotate(4deg)}55%{--len:58px;transform:rotate(-4deg)}75%{--len:72px;transform:rotate(2deg)}}'
     + '@keyframes hw-wiggle{from{transform:rotate(-12deg)}to{transform:rotate(12deg)}}'
     // Pumpkin
-    + '.hw-pumpkin{position:relative;display:inline-block;font-size:4.6rem;line-height:1;margin-bottom:.4rem;cursor:pointer;'
+    + '.hw-pumpkin{position:relative;display:inline-block;font-size:4.6rem;line-height:1;margin-bottom:.4rem;'
     + 'animation:hw-bob 2.6s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(232,119,34,.75))}'
     + '.hw-pumpkin::after{content:"";position:absolute;inset:18% 15% 12%;border-radius:50%;background:radial-gradient(circle,rgba(255,200,60,.55),transparent 70%);'
     + 'mix-blend-mode:screen;animation:hw-flicker 1.7s steps(1) infinite;pointer-events:none}'
-    + '.hw-pumpkin.boo{animation:hw-boo .6s ease}'
     + '@keyframes hw-bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}'
     + '@keyframes hw-flicker{0%{opacity:.9}12%{opacity:.4}20%{opacity:1}34%{opacity:.6}48%{opacity:.95}61%{opacity:.35}70%{opacity:.85}86%{opacity:.55}}'
-    + '@keyframes hw-boo{0%{transform:scale(1)}35%{transform:scale(1.35) rotate(-10deg)}65%{transform:scale(.9) rotate(8deg)}100%{transform:scale(1)}}'
     // Title with waving, glowing letters
     + '.hw-card h2{font-family:"Cinzel",serif;font-size:clamp(1.45rem,5.5vw,1.9rem);letter-spacing:.05em;color:' + ORANGE + ';margin:0 0 .6rem}.hw-card h2 .w{display:inline-block;white-space:nowrap}'
     + '.hw-card h2 span:not(.w){display:inline-block;animation:hw-wave 2.2s ease-in-out infinite,hw-glow 3s ease-in-out infinite;animation-delay:calc(var(--i) * .08s),calc(var(--i) * .11s)}'
     + '@keyframes hw-wave{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}'
     + '@keyframes hw-glow{0%,100%{text-shadow:0 0 6px rgba(232,119,34,.5)}50%{text-shadow:0 0 14px rgba(255,160,60,.95),0 0 28px rgba(232,119,34,.6)}}'
-    + '.hw-card p{font-family:"Source Sans 3",sans-serif;font-size:1.03rem;line-height:1.55;margin:0 0 1.5rem;color:#e9e4d6}'
+    + '.hw-card p{font-family:"Source Sans 3",sans-serif;font-size:1.03rem;line-height:1.55;margin:0;color:#e9e4d6}'
     + '.hw-card .hw-gold{color:' + GOLD + ';font-weight:600}'
     // Buttons
-    + '.hw-btn{font-family:"Source Sans 3",sans-serif;font-weight:700;font-size:1rem;letter-spacing:.04em;cursor:pointer;'
-    + 'background:' + GOLD + ';color:#000;border:0;border-radius:7px;padding:.8rem 1.8rem;animation:hw-pulse 2.2s ease-in-out infinite}'
-    + '.hw-btn:hover{background:' + ORANGE + '}.hw-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}'
-    + '@keyframes hw-pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,191,145,.55)}50%{box-shadow:0 0 0 10px rgba(212,191,145,0)}}'
-    // Countdown bar along the bottom of the card (auto-close timer)
-    + '.hw-timer{position:absolute;left:14px;right:14px;bottom:8px;height:3px;border-radius:2px;background:rgba(212,191,145,.18);overflow:hidden}'
-    + '.hw-timer span{display:block;height:100%;width:100%;background:' + ORANGE + ';transform-origin:left center;'
-    + 'animation:hw-countdown var(--secs) linear forwards}'
-    + '.hw-card.paused .hw-timer span{animation-play-state:paused}'
-    + '@keyframes hw-countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}'
     + '.hw-x{position:absolute;top:.45rem;right:.55rem;z-index:3;background:none;border:0;color:' + GOLD + ';font-size:1.7rem;line-height:1;cursor:pointer;padding:.25rem .5rem}'
     + '.hw-x:focus-visible{outline:2px solid #fff;border-radius:4px}'
     // Calm version for reduced motion: keep the scene, drop the movement
     + '@media (prefers-reduced-motion:reduce){.hw-splash,.hw-card{transition:none}'
-    + '.hw-star,.hw-moon,.hw-fog,.hw-pumpkin,.hw-pumpkin::after,.hw-card h2 span,.hw-btn,.hw-spider,.hw-spider span{animation:none}'
+    + '.hw-star,.hw-moon,.hw-fog,.hw-pumpkin,.hw-pumpkin::after,.hw-card h2 span,.hw-spider,.hw-spider span{animation:none}'
     + '.hw-bat,.hw-ghost,.hw-leaf{display:none}.hw-spider{--len:46px}}';
 
   var style = document.createElement('style');
@@ -183,34 +171,22 @@
       web
     + '<div class="hw-spider" aria-hidden="true"><span>🕷️</span></div>'
     + '<button type="button" class="hw-x" aria-label="Close">&times;</button>'
-    + '<span class="hw-pumpkin" aria-hidden="true" title="Boo!">🎃</span>'
+    + '<span class="hw-pumpkin" aria-hidden="true">🎃</span>'
     + '<h2 id="hw-title" aria-label="' + title + '">' + letters + '</h2>'
     + '<p id="hw-msg">From all of us at the <span class="hw-gold">West Point Parents Club of Alabama</span>, '
-    + 'have a happy and spook-tacular Halloween! Go Army!</p>'
-    + '<button type="button" class="hw-btn">Enter Site</button>'
-    + '<div class="hw-timer" aria-hidden="true"><span></span></div>');
+    + 'have a happy and spook-tacular Halloween! Go Army!</p>');
   // Screen readers read the aria-label on the title, not the letter spans.
   card.querySelector('#hw-title').querySelectorAll('.w').forEach(function (n) { n.setAttribute('aria-hidden', 'true'); });
+  card.setAttribute('tabindex', '-1');
   overlay.appendChild(card);
 
   // ── Behavior ──────────────────────────────────────────────────────────
   var lastFocus = null;
   var closed = false;
 
-  // Auto-close after a few seconds. Hovering the card pauses the countdown
-  // (and its progress bar) so someone mid-read isn't cut off.
+  // Closes itself after a few seconds; a click anywhere (or Esc) closes it sooner.
   var AUTO_CLOSE_SECONDS = 5;
-  card.style.setProperty('--secs', AUTO_CLOSE_SECONDS + 's');
-  var remaining = AUTO_CLOSE_SECONDS * 1000, startedAt = 0, timer = null;
-  function startTimer() { startedAt = Date.now(); timer = setTimeout(close, remaining); card.classList.remove('paused'); }
-  function pauseTimer() {
-    if (!timer) return;
-    clearTimeout(timer); timer = null;
-    remaining = Math.max(0, remaining - (Date.now() - startedAt));
-    card.classList.add('paused');
-  }
-  card.addEventListener('mouseenter', pauseTimer);
-  card.addEventListener('mouseleave', function () { if (!closed && !timer) startTimer(); });
+  var timer = null;
 
   function close() {
     if (closed) return;
@@ -223,13 +199,8 @@
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   function onKey(e) {
-    if (e.key === 'Escape') { close(); return; }
-    if (e.key === 'Tab') { // keep focus on the two buttons while open
-      var btns = card.querySelectorAll('button');
-      var first = btns[0], last = btns[btns.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
+    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); close(); return; }
+    if (e.key === 'Tab') e.preventDefault(); // keep focus inside the splash while open
   }
 
   var prevOverflow = '';
@@ -238,19 +209,12 @@
     prevOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden'; // no page scroll behind the splash
     document.body.appendChild(overlay);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay || e.target === sky) close(); });
-    card.querySelector('.hw-btn').addEventListener('click', close);
-    card.querySelector('.hw-x').addEventListener('click', close);
-    var pumpkin = card.querySelector('.hw-pumpkin');
-    pumpkin.addEventListener('click', function () {
-      pumpkin.classList.remove('boo'); void pumpkin.offsetWidth; pumpkin.classList.add('boo');
-    });
-    pumpkin.addEventListener('animationend', function (e) { if (e.animationName === 'hw-boo') pumpkin.classList.remove('boo'); });
+    overlay.addEventListener('click', close); // anywhere — card included
     document.addEventListener('keydown', onKey);
     requestAnimationFrame(function () {
       overlay.classList.add('on');
-      card.querySelector('.hw-btn').focus({ preventScroll: true });
-      startTimer();
+      card.focus({ preventScroll: true }); // focus the card itself — no ring on the ×
+      timer = setTimeout(close, AUTO_CLOSE_SECONDS * 1000);
     });
   }
 
