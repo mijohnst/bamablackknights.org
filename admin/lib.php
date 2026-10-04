@@ -20,6 +20,14 @@ function strip_name_suffix(string $normalized): string {
     return trim(preg_replace('/\s+(jr|sr|ii|iii|iv|v)$/i', '', $normalized));
 }
 
+// Duplicate-cadet check (members list DUP? badge, Add Member warning): two
+// records with the same last name + class year are only "possibly the same
+// cadet" when their normalized first names match, or either is blank.
+// Siblings in the same class with different first names are not duplicates.
+function likely_same_cadet_first(string $a, string $b): bool {
+    return $a === '' || $b === '' || $a === $b;
+}
+
 // Stores US phone numbers as xxx-xxx-xxxx however they were typed
 // ("2566179825", "(256) 617-9825", "256.617.9825", "+1 256 617 9825").
 // Anything that isn't 10 digits (or 11 with a leading 1) — an overseas or

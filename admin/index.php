@@ -50,14 +50,26 @@ $next_dir = $dir === 'asc' ? 'desc' : 'asc';
 // alert count below.
 $dup_ids = []; // member id => true, for every member that's part of a group
 $dup_groups = [];
-$dup_scan = $pdo->prepare('SELECT id, cadet_last_name, class_year FROM members WHERE archived = ?');
+$dup_scan = $pdo->prepare('SELECT id, cadet_first_name, cadet_last_name, class_year FROM members WHERE archived = ?');
 $dup_scan->execute([$archived === '1' ? 1 : 0]);
 foreach ($dup_scan->fetchAll(PDO::FETCH_ASSOC) as $row) {
     $key = normalize_name($row['cadet_last_name']) . '|' . $row['class_year'];
-    $dup_groups[$key][] = (int)$row['id'];
+    $dup_groups[$key][] = ['id' => (int)$row['id'], 'first' => normalize_name((string)$row['cadet_first_name'])];
 }
-foreach ($dup_groups as $ids) {
-    if (count($ids) > 1) foreach ($ids as $id) $dup_ids[$id] = true;
+// Within a last-name + class-year group, two records are only a possible
+// duplicate when their first names also match — or one is blank, so it
+// could be the same cadet. Siblings in the same class (e.g. twins) with
+// different first names are not flagged.
+foreach ($dup_groups as $group) {
+    $n = count($group);
+    for ($i = 0; $i < $n; $i++) {
+        for ($j = $i + 1; $j < $n; $j++) {
+            if (likely_same_cadet_first($group[$i]['first'], $group[$j]['first'])) {
+                $dup_ids[$group[$i]['id']] = true;
+                $dup_ids[$group[$j]['id']] = true;
+            }
+        }
+    }
 }
 $dup_count = count($dup_ids);
 
@@ -280,7 +292,7 @@ if ($fin_approved) $alerts[] = ['color'=>'#e3f2fd','border'=>'#90caf9','text'=>'
 if ($new_this_month) $alerts[] = ['color'=>'#e8f5e9','border'=>'#a5d6a7','text'=>'#1b5e20','icon'=>'👤','msg'=>"$new_this_month new member".($new_this_month>1?'s':'')." this month",'href'=>'index.php?q='];
 if (!empty($upcoming_bdays)) $alerts[] = ['color'=>'#f3e5f5','border'=>'#ce93d8','text'=>'#4a148c','icon'=>'🎂','msg'=>count($upcoming_bdays)." birthday".( count($upcoming_bdays)>1?'s':'')." in the next 30 days",'href'=>'#bday-panel','onclick'=>'openBirthdays()'];
 if ($needs_split_count) $alerts[] = ['color'=>'#fff3cd','border'=>'#ffc107','text'=>'#5f4c00','icon'=>'✂️','msg'=>"$needs_split_count cadet name".($needs_split_count>1?'s':'')." still need First/Middle split",'href'=>'index.php?split=1'];
-if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a1425','icon'=>'👥','msg'=>"$dup_count possible duplicate cadet".($dup_count>1?'s':'')." (same last name + class year)",'href'=>'index.php?dup=1'];
+if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a1425','icon'=>'👥','msg'=>"$dup_count possible duplicate cadet".($dup_count>1?'s':'')." (same name + class year)",'href'=>'index.php?dup=1'];
 ?>
 <?php if (!empty($alerts)): ?>
 <div style="display:grid;grid-template-columns:repeat(<?= count($alerts) ?>,1fr);gap:.6rem;margin-bottom:1.25rem">

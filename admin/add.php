@@ -33,9 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $cand = $pdo->prepare('SELECT id, cadet_first_name, cadet_last_name, cadet_suffix, al_region, parent1_first_name, parent1_last_name FROM members WHERE archived=0 AND class_year=?');
         $cand->execute([$m['class_year']]);
-        $target_norm = normalize_name($m['cadet_last_name']);
+        $target_norm  = normalize_name($m['cadet_last_name']);
+        $target_first = normalize_name($m['cadet_first_name']);
         foreach ($cand->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            if (normalize_name($row['cadet_last_name']) === $target_norm) $duplicates[] = $row;
+            if (normalize_name($row['cadet_last_name']) === $target_norm
+                && likely_same_cadet_first($target_first, normalize_name((string)$row['cadet_first_name']))) {
+                $duplicates[] = $row;
+            }
         }
     }
 
@@ -75,7 +79,7 @@ admin_header('Add Member');
 
 <?php if ($duplicates): ?>
   <div class="alert alert-error">
-    <strong>Possible duplicate<?= count($duplicates) > 1 ? 's' : '' ?>:</strong> an active member with the same last name and class year already exists.
+    <strong>Possible duplicate<?= count($duplicates) > 1 ? 's' : '' ?>:</strong> an active member with the same name and class year already exists.
     <ul style="margin:.5rem 0 0 1.25rem">
       <?php foreach ($duplicates as $d): ?>
         <li><a href="edit.php?id=<?= (int)$d['id'] ?>" target="_blank"><?= h(cadet_full_name($d)) ?></a> — Parent: <?= h(trim($d['parent1_first_name'] . ' ' . $d['parent1_last_name'])) ?><?= $d['al_region'] ? ' (' . h($d['al_region']) . ')' : '' ?></li>
