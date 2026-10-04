@@ -1,5 +1,6 @@
 // Halloween splash for the homepage — a small animated night scene behind a
-// greeting card. Shows only during October (visitor's local date), at most
+// greeting card that closes itself after a few seconds. Shows only during
+// October (visitor's local date), at most
 // once per day per browser, and removes itself completely on close. From
 // November 1 it never shows; leave the <script> tag in index.html and it
 // comes back next October.
@@ -97,6 +98,12 @@
     + 'background:' + GOLD + ';color:#000;border:0;border-radius:7px;padding:.8rem 1.8rem;animation:hw-pulse 2.2s ease-in-out infinite}'
     + '.hw-btn:hover{background:' + ORANGE + '}.hw-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}'
     + '@keyframes hw-pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,191,145,.55)}50%{box-shadow:0 0 0 10px rgba(212,191,145,0)}}'
+    // Countdown bar along the bottom of the card (auto-close timer)
+    + '.hw-timer{position:absolute;left:14px;right:14px;bottom:8px;height:3px;border-radius:2px;background:rgba(212,191,145,.18);overflow:hidden}'
+    + '.hw-timer span{display:block;height:100%;width:100%;background:' + ORANGE + ';transform-origin:left center;'
+    + 'animation:hw-countdown var(--secs) linear forwards}'
+    + '.hw-card.paused .hw-timer span{animation-play-state:paused}'
+    + '@keyframes hw-countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}'
     + '.hw-x{position:absolute;top:.45rem;right:.55rem;z-index:3;background:none;border:0;color:' + GOLD + ';font-size:1.7rem;line-height:1;cursor:pointer;padding:.25rem .5rem}'
     + '.hw-x:focus-visible{outline:2px solid #fff;border-radius:4px}'
     // Calm version for reduced motion: keep the scene, drop the movement
@@ -185,15 +192,36 @@
     + '<span class="hw-pumpkin" aria-hidden="true" title="Boo!">🎃</span>'
     + '<h2 id="hw-title" aria-label="' + title + '">' + letters + '</h2>'
     + '<p id="hw-msg">From all of us at the <span class="hw-gold">West Point Parents Club of Alabama</span>, '
-    + 'have a spook-tacular October. Don\'t forget a little Halloween boodle for your cadet!</p>'
-    + '<button type="button" class="hw-btn">Enter Site</button>');
+    + 'have a happy and spook-tacular Halloween! Go Army!</p>'
+    + '<button type="button" class="hw-btn">Enter Site</button>'
+    + '<div class="hw-timer" aria-hidden="true"><span></span></div>');
   // Screen readers read the aria-label on the title, not the letter spans.
   card.querySelector('#hw-title').querySelectorAll('.w').forEach(function (n) { n.setAttribute('aria-hidden', 'true'); });
   overlay.appendChild(card);
 
   // ── Behavior ──────────────────────────────────────────────────────────
   var lastFocus = null;
+  var closed = false;
+
+  // Auto-close after a few seconds. Hovering the card pauses the countdown
+  // (and its progress bar) so someone mid-read isn't cut off.
+  var AUTO_CLOSE_SECONDS = 5;
+  card.style.setProperty('--secs', AUTO_CLOSE_SECONDS + 's');
+  var remaining = AUTO_CLOSE_SECONDS * 1000, startedAt = 0, timer = null;
+  function startTimer() { startedAt = Date.now(); timer = setTimeout(close, remaining); card.classList.remove('paused'); }
+  function pauseTimer() {
+    if (!timer) return;
+    clearTimeout(timer); timer = null;
+    remaining = Math.max(0, remaining - (Date.now() - startedAt));
+    card.classList.add('paused');
+  }
+  card.addEventListener('mouseenter', pauseTimer);
+  card.addEventListener('mouseleave', function () { if (!closed && !timer) startTimer(); });
+
   function close() {
+    if (closed) return;
+    closed = true;
+    clearTimeout(timer); timer = null;
     if (!preview) { try { localStorage.setItem(seenKey, '1'); } catch (e) {} }
     overlay.classList.remove('on');
     document.removeEventListener('keydown', onKey);
@@ -229,6 +257,7 @@
     requestAnimationFrame(function () {
       overlay.classList.add('on');
       card.querySelector('.hw-btn').focus({ preventScroll: true });
+      startTimer();
     });
   }
 
