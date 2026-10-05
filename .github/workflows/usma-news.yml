@@ -32,7 +32,14 @@ jobs:
   relay:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
+      # Surfaces westpoint.edu's response as a public annotation on the run,
+      # so a block (403) or outage is visible without opening the logs.
+      - name: Check westpoint.edu is reachable from GitHub
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' -m 30 -A 'Mozilla/5.0 (compatible; WPPC-Alabama-News/1.0; +https://bamablackknights.org/)' https://www.westpoint.edu/news/west-point-news || true)
+          echo "::notice title=westpoint.edu::West Point News page answered HTTP $code"
 
       - name: Check out the news-data branch (create it the first time)
         run: |
