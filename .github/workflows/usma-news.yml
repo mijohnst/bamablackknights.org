@@ -1,0 +1,65 @@
+# West Point News relay.
+#
+# westpoint.edu blocks the hosting server's IP (403), so the homepage can't
+# read the "West Point News" page directly. This job reads it from GitHub
+# every 3 hours and commits the latest stories to the `news-data` branch as
+# usma-news.json. news-feed.php on the server reads that file from
+# raw.githubusercontent.com. Nothing here touches `main`.
+#
+# Run it by hand anytime: GitHub → Actions → "West Point News relay" → Run workflow.
+
+name: West Point News relay
+
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/usma-news.yml
+      - tools/usma-news-relay.php
+      - admin/lib/news.php
+
+permissions:
+  contents: write
+
+concurrency:
+  group: usma-news-relay
+  cancel-in-progress: false
+
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out the news-data branch (create it the first time)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin news-data >/dev/null; then
+            git fetch --depth=1 origin news-data
+            git worktree add -B news-data "$RUNNER_TEMP/data" origin/news-data
+          else
+            git worktree add --detach "$RUNNER_TEMP/data"
+            cd "$RUNNER_TEMP/data"
+            git checkout --orphan news-data
+            git rm -rqf .
+            printf '%s\n' "Data branch for the homepage West Point News section." \
+              "Written by .github/workflows/usma-news.yml on main. Do not edit by hand." > README.md
+          fi
+
+      - name: Read West Point News
+        run: php tools/usma-news-relay.php "$RUNNER_TEMP/data/usma-news.json"
+
+      - name: Commit if the stories changed
+        working-directory: ${{ runner.temp }}/data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -q -m "Update West Point News"
+            git push origin news-data
+          fi
