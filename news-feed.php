@@ -1,31 +1,37 @@
 <?php
 /**
  * News feeds for the homepage:
- *   news-feed.php?source=usma   → "West Point News"   (westpoint.edu)
+ *   news-feed.php?source=usma   → "West Point News"   (westpoint.edu/news/west-point-news)
  *   news-feed.php?source=wpaog  → "WPAOG News"         (westpointaog.org News Room)
  *
- * Fetches the source's RSS feed, keeps the latest few items, and caches
- * them for 30 minutes in news-cache-<source>.json (gitignored) so the
- * homepage never waits on the other site. If a refresh fails, the last
- * good copy is served. Only these two whitelisted feeds can be fetched.
+ * Fetches the source (an RSS feed, or for USMA its news listing page),
+ * keeps the latest few items, and caches them for 30 minutes in
+ * news-cache-<source>.json (gitignored) so the homepage never waits on the
+ * other site. If a refresh fails, the last good copy is served. Only these
+ * two whitelisted sources can be fetched.
  *
- * westpoint.edu's feed is wrapped in Drupal "THEME DEBUG" HTML comments —
- * before the <?xml declaration and after </rss>, which strict XML parsers
- * reject — and its <description> fields are full of the same debug markup.
- * So the wrapper is trimmed before parsing, and that source skips
- * descriptions. WPAOG's (WordPress) descriptions are clean summaries.
+ * USMA: westpoint.edu has no feed for just the "West Point News" category
+ * (its only RSS mixes in sports and is wrapped in Drupal debug markup), so
+ * this reads the category's listing page instead: each story is a
+ * <div class="views-row"> with a .pao-news-link, a .pao-news-title and a
+ * summary <p>. The page has no dates, so USMA items carry none. If the page
+ * layout changes and nothing parses, the last good cache keeps serving and
+ * the failure is logged ("news-feed: ... parsed 0 stories").
+ * WPAOG: the News Room's WordPress RSS feed, with clean summaries.
  */
 header('Content-Type: application/json');
 header('Cache-Control: public, max-age=300');
 
 const NEWS_SOURCES = [
     'usma' => [
-        'feed'         => 'https://www.westpoint.edu/rss.xml',
-        'link_pattern' => '#^https://(www\.)?westpoint\.edu/#i',
-        'more'         => 'https://www.westpoint.edu/news',
-        'summaries'    => false,
+        'type'         => 'page',
+        'feed'         => 'https://www.westpoint.edu/news/west-point-news',
+        'link_pattern' => '#^https://(www\.)?westpoint\.edu/news/west-point-news/#i',
+        'more'         => 'https://www.westpoint.edu/news/west-point-news',
+        'summaries'    => true,
     ],
     'wpaog' => [
+        'type'         => 'rss',
         'feed'         => 'https://www.westpointaog.org/feed/',
         'link_pattern' => '#^https://(www\.)?westpointaog\.org/#i',
         'more'         => 'https://www.westpointaog.org/news/news-room/',
@@ -64,8 +70,8 @@ function news_summary(string $s, int $max = 170): string {
     return rtrim(mb_substr($cut, 0, $sp ?: $max), " ,.;:-") . '…';
 }
 
-function news_fetch_items(array $source): ?array {
-    $ch = curl_init($source['feed']);
+function news_http_get(string $url): ?string {
+    $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
@@ -79,8 +85,39 @@ function news_fetch_items(array $source): ?array {
     $err  = curl_error($ch);
     curl_close($ch);
     if ($body === false || $code !== 200) {
-        error_log("news-feed: fetch failed for {$source['feed']} (HTTP $code) $err");
+        error_log("news-feed: fetch failed for $url (HTTP $code) $err");
         return null;
+    }
+    return $body;
+}
+
+// USMA listing page → items (see the header comment for the markup it expects).
+function news_parse_usma_page(string $html, array $source): array {
+    $html  = preg_replace('/<!--.*?-->/s', '', $html); // Drupal debug comments
+    $items = [];
+    foreach (array_slice(preg_split('/<div class="views-row">/', $html), 1) as $row) {
+        if (!preg_match('/class="[^"]*pao-news-link[^"]*"\s+href="([^"]+)"/', $row, $lm)) continue;
+        if (!preg_match('/class="[^"]*pao-news-title[^"]*"[^>]*>(.*?)<\/h4>/s', $row, $tm)) continue;
+        $link  = html_entity_decode(trim($lm[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $title = news_clean_text($tm[1]);
+        if ($title === '' || !preg_match($source['link_pattern'], $link)) continue;
+        $summary = preg_match('/<\/h4>.*?<p[^>]*>(.*?)<\/p>/s', $row, $pm)
+            ? news_summary(preg_replace('/\.{3,}\s*$/', '', news_clean_text($pm[1])))
+            : '';
+        $items[] = ['title' => $title, 'link' => $link, 'date' => '', 'summary' => $summary];
+        if (count($items) >= NEWS_MAX_ITEMS) break;
+    }
+    return $items;
+}
+
+function news_fetch_items(array $source): ?array {
+    $body = news_http_get($source['feed']);
+    if ($body === null) return null;
+
+    if ($source['type'] === 'page') {
+        $items = news_parse_usma_page($body, $source);
+        if (!$items) error_log("news-feed: {$source['feed']} parsed 0 stories (page layout changed?)");
+        return $items ?: null;
     }
 
     // Keep only <rss ...> ... </rss>; drop anything wrapped around it.
