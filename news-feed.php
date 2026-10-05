@@ -1,21 +1,17 @@
 <?php
 /**
  * News feeds for the homepage:
- *   news-feed.php?source=usma   → "West Point News"   (westpoint.edu/news/west-point-news, via GitHub relay)
- *   news-feed.php?source=wpaog  → "WPAOG News"         (westpointaog.org News Room RSS)
+ *   news-feed.php?source=cadets → "Cadet News"  (WPAOG News Room, Cadet News category)
+ *   news-feed.php?source=wpaog  → "WPAOG News"  (WPAOG News Room, all news)
  *
- * Keeps the latest few items and caches them for 30 minutes in
- * news-cache-<source>.json (gitignored) so the homepage never waits on the
- * other site. If a refresh fails, the last good copy is served. Only these
- * two whitelisted sources can be fetched.
+ * Reads the source's RSS feed, keeps the latest few items, and caches them
+ * for 30 minutes in news-cache-<source>.json (gitignored) so the homepage
+ * never waits on the other site. If a refresh fails, the last good copy is
+ * served. Only these whitelisted feeds can be fetched.
  *
- * USMA: westpoint.edu returns 403 to this hosting server's IP (it blocks
- * data-center addresses), so the server can't read it directly. Instead the
- * GitHub Action .github/workflows/usma-news.yml reads the West Point News
- * page every 3 hours and commits the stories to the repo's `news-data`
- * branch; this script reads that JSON from raw.githubusercontent.com and
- * re-validates every item. Parsing logic lives in admin/lib/news.php.
- * WPAOG: the News Room's WordPress RSS feed, with clean summaries.
+ * Why WPAOG for cadet news: westpoint.edu returns HTTP 403 to this hosting
+ * server (and to GitHub's runners) — it blocks data-center networks — so it
+ * can't be read from here. westpointaog.org can.
  */
 header('Content-Type: application/json');
 header('Cache-Control: public, max-age=300');
@@ -23,14 +19,12 @@ header('Cache-Control: public, max-age=300');
 require_once __DIR__ . '/admin/lib/news.php';
 
 const NEWS_SOURCES = [
-    'usma' => [
-        'type'         => 'relay',
-        'feed'         => 'https://raw.githubusercontent.com/mijohnst/bamablackknights.org/news-data/usma-news.json',
-        'link_pattern' => USMA_NEWS_LINK_PATTERN,
-        'more'         => USMA_NEWS_PAGE,
+    'cadets' => [
+        'feed'         => 'https://www.westpointaog.org/news/news-category/cadet-news/feed/',
+        'link_pattern' => '#^https://(www\.)?westpointaog\.org/#i',
+        'more'         => 'https://www.westpointaog.org/news/news-category/cadet-news/',
     ],
     'wpaog' => [
-        'type'         => 'rss',
         'feed'         => 'https://www.westpointaog.org/feed/',
         'link_pattern' => '#^https://(www\.)?westpointaog\.org/#i',
         'more'         => 'https://www.westpointaog.org/news/news-room/',
@@ -38,7 +32,7 @@ const NEWS_SOURCES = [
 ];
 const NEWS_CACHE_TTL = 1800; // seconds
 
-$source_key = $_GET['source'] ?? 'usma';
+$source_key = $_GET['source'] ?? 'wpaog';
 if (!isset(NEWS_SOURCES[$source_key])) {
     http_response_code(400);
     echo json_encode(['success' => false, 'items' => []]);
@@ -56,9 +50,7 @@ function news_read_cache(string $file): ?array {
 function news_fetch_items(array $source): ?array {
     $body = news_http_get($source['feed']);
     if ($body === null) return null;
-    $items = $source['type'] === 'relay'
-        ? news_parse_relay($body, $source['link_pattern'])
-        : news_parse_rss($body, $source['link_pattern'], true);
+    $items = news_parse_rss($body, $source['link_pattern'], true);
     if (!$items) error_log("news-feed: {$source['feed']} gave 0 usable stories");
     return $items ?: null;
 }

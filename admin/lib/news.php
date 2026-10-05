@@ -1,15 +1,14 @@
 <?php
 /**
- * Shared news helpers for the homepage news sections.
- * Used by news-feed.php (on the web server) and by
- * tools/usma-news-relay.php (run by the GitHub Action
- * .github/workflows/usma-news.yml). No output, no side effects.
+ * Shared helpers for the homepage news sections (used by news-feed.php).
+ * No output, no side effects.
+ *
+ * History: westpoint.edu was tried first, but it returns HTTP 403 to the
+ * hosting server and to GitHub's runners (it blocks data-center networks),
+ * so both sections now read westpointaog.org feeds, which the server can reach.
  */
 
 const NEWS_MAX_ITEMS = 6;
-
-const USMA_NEWS_PAGE         = 'https://www.westpoint.edu/news/west-point-news';
-const USMA_NEWS_LINK_PATTERN = '#^https://(www\.)?westpoint\.edu/news/west-point-news/#i';
 
 function news_clean_text(string $s): string {
     $s = html_entity_decode(strip_tags($s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -46,30 +45,6 @@ function news_http_get(string $url, int $timeout = 8): ?string {
     return $body;
 }
 
-// westpoint.edu "West Point News" listing page → items.
-// westpoint.edu has no feed for just this category (its only RSS mixes in
-// sports and is wrapped in Drupal debug markup), so this reads the listing
-// page: each story is a <div class="views-row"> with a .pao-news-link, a
-// .pao-news-title and a summary <p>. The page has no dates. Community News
-// items also listed there are skipped by the link pattern.
-function news_parse_usma_page(string $html): array {
-    $html  = preg_replace('/<!--.*?-->/s', '', $html); // Drupal debug comments
-    $items = [];
-    foreach (array_slice(preg_split('/<div class="views-row">/', $html), 1) as $row) {
-        if (!preg_match('/class="[^"]*pao-news-link[^"]*"\s+href="([^"]+)"/', $row, $lm)) continue;
-        if (!preg_match('/class="[^"]*pao-news-title[^"]*"[^>]*>(.*?)<\/h4>/s', $row, $tm)) continue;
-        $link  = html_entity_decode(trim($lm[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        $title = news_clean_text($tm[1]);
-        if ($title === '' || !preg_match(USMA_NEWS_LINK_PATTERN, $link)) continue;
-        $summary = preg_match('/<\/h4>.*?<p[^>]*>(.*?)<\/p>/s', $row, $pm)
-            ? news_summary(preg_replace('/\.{3,}\s*$/', '', news_clean_text($pm[1])))
-            : '';
-        $items[] = ['title' => $title, 'link' => $link, 'date' => '', 'summary' => $summary];
-        if (count($items) >= NEWS_MAX_ITEMS) break;
-    }
-    return $items;
-}
-
 // Any RSS 2.0 feed → items. Trims anything wrapped around <rss>…</rss>.
 function news_parse_rss(string $body, string $link_pattern, bool $summaries): array {
     $start = strpos($body, '<rss');
@@ -89,27 +64,6 @@ function news_parse_rss(string $body, string $link_pattern, bool $summaries): ar
         $row = ['title' => $title, 'link' => $link, 'date' => $ts ? date('c', $ts) : ''];
         if ($summaries) $row['summary'] = news_summary((string)$item->description);
         $items[] = $row;
-        if (count($items) >= NEWS_MAX_ITEMS) break;
-    }
-    return $items;
-}
-
-// Relay JSON (written by tools/usma-news-relay.php) → items, re-validated
-// here so the web server never trusts the relay blindly.
-function news_parse_relay(string $body, string $link_pattern): array {
-    $data  = json_decode($body, true);
-    $items = [];
-    foreach ((is_array($data) ? ($data['items'] ?? []) : []) as $it) {
-        if (!is_array($it)) continue;
-        $title = news_clean_text((string)($it['title'] ?? ''));
-        $link  = trim((string)($it['link'] ?? ''));
-        if ($title === '' || !preg_match($link_pattern, $link)) continue;
-        $items[] = [
-            'title'   => mb_substr($title, 0, 300),
-            'link'    => $link,
-            'date'    => '',
-            'summary' => news_summary((string)($it['summary'] ?? '')),
-        ];
         if (count($items) >= NEWS_MAX_ITEMS) break;
     }
     return $items;

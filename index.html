@@ -599,15 +599,15 @@
   </div>
 </section>
 
-<!-- USMA NEWS — latest stories from westpoint.edu/news/west-point-news (news-feed.php?source=usma) -->
+<!-- CADET NEWS — WPAOG News Room, Cadet News category (news-feed.php?source=cadets) -->
 <section id="usma-news" style="background:var(--white);display:none">
   <div class="container">
     <p class="section-label">From the Academy</p>
-    <h2 class="section-title">West Point News</h2>
+    <h2 class="section-title">Cadet News</h2>
     <div class="divider"></div>
     <div class="usma-news-grid" id="usma-news-list"></div>
     <p style="margin-top:1.75rem;text-align:center">
-      <a href="https://www.westpoint.edu/news/west-point-news" target="_blank" rel="noopener" class="btn btn-outline">More West Point News</a>
+      <a href="https://www.westpointaog.org/news/news-category/cadet-news/" target="_blank" rel="noopener" class="btn btn-outline">More Cadet News</a>
     </p>
   </div>
 </section>
@@ -1377,18 +1377,23 @@ function footballScheduleHtml() {
     + '</div>';
 }
 
-// ── News feeds (news-feed.php): West Point News + WPAOG News ─────────────
+// ── News feeds (news-feed.php): Cadet News + WPAOG News ─────────────────
 // Each section stays hidden unless at least one story loads, so a feed
-// outage never leaves an empty box on the homepage.
-function loadNewsFeed(source, sectionId, listId, siteName) {
+// outage never leaves an empty box on the homepage. Both come from
+// westpointaog.org, so WPAOG News skips anything Cadet News already shows.
+// Resolves to the list of links it displayed.
+function loadNewsFeed(source, sectionId, listId, siteName, skipLinks) {
   var section = document.getElementById(sectionId);
   var list = document.getElementById(listId);
-  if (!section || !list) return;
-  fetchWithTimeout('news-feed.php?source=' + source, 8000)
+  if (!section || !list) return Promise.resolve([]);
+  return fetchWithTimeout('news-feed.php?source=' + source, 8000)
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (d) {
-      if (!d || !d.success || !d.items || !d.items.length) return;
-      list.innerHTML = d.items.map(function (it) {
+      var items = (d && d.success && d.items ? d.items : []).filter(function (it) {
+        return !(skipLinks || []).includes(it.link);
+      });
+      if (!items.length) return [];
+      list.innerHTML = items.map(function (it) {
         var dt = it.date ? new Date(it.date) : null;
         var when = dt && !isNaN(dt) ? dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
         return '<a class="usma-news-card" href="' + escHtml(safeHref(it.link)) + '" target="_blank" rel="noopener">'
@@ -1398,11 +1403,12 @@ function loadNewsFeed(source, sectionId, listId, siteName) {
           + '<span class="usma-news-more">Read on ' + escHtml(siteName) + ' &rarr;</span></a>';
       }).join('');
       section.style.display = '';
+      return items.map(function (it) { return it.link; });
     })
-    .catch(function () { /* leave the section hidden */ });
+    .catch(function () { return []; /* leave the section hidden */ });
 }
-loadNewsFeed('usma', 'usma-news', 'usma-news-list', 'westpoint.edu');
-loadNewsFeed('wpaog', 'wpaog-news', 'wpaog-news-list', 'westpointaog.org');
+loadNewsFeed('cadets', 'usma-news', 'usma-news-list', 'westpointaog.org')
+  .then(function (shown) { return loadNewsFeed('wpaog', 'wpaog-news', 'wpaog-news-list', 'westpointaog.org', shown); });
 
 async function loadEvents() {
   var list = document.getElementById('events-list');
