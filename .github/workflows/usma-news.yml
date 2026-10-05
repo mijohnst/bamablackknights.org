@@ -10,16 +10,11 @@
 
 name: West Point News relay
 
+# Schedule and push triggers are OFF: as of 2026-10-04 westpoint.edu also
+# answers GitHub's runners with HTTP 403 (it blocks data-center networks),
+# so every scheduled run failed. Manual runs stay available for re-testing.
 on:
-  schedule:
-    - cron: '17 */3 * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/usma-news.yml
-      - tools/usma-news-relay.php
-      - admin/lib/news.php
 
 permissions:
   contents: write
