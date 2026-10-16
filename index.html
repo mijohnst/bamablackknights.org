@@ -69,6 +69,9 @@
     .class-ladder-card h3{font-family:var(--font-display);font-size:1.15rem;color:var(--navy);margin:.3rem 0 .15rem;}
     .class-ladder-nickname{font-size:.8rem;color:#D4BF91;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;}
     .class-ladder-card p{font-size:.85rem;color:var(--gray);line-height:1.6;}
+    a.class-ladder-link{display:block;text-decoration:none;transition:transform .15s,box-shadow .15s;}
+    a.class-ladder-link:hover,a.class-ladder-link:focus-visible{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.12);}
+    a.class-ladder-link h3::after{content:' \2192';color:#D4BF91;}
 
     /* RING WEEKEND */
     #ring-weekend{background:var(--white);}
@@ -354,29 +357,6 @@
         <p>From events to outreach to behind-the-scenes support, there are many ways to get involved and make a difference.</p>
       </div>
     </div>
-
-    <div class="class-ladder-grid" style="margin-top:2.5rem;">
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Parents</div>
-        <h3>Parent Resources</h3>
-        <p>Helpful guidance, links, and updates for families at every stage of the West Point experience.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Events</div>
-        <h3>Upcoming Events</h3>
-        <p>Stay connected through parent socials, club gatherings, dedicated support events, and special milestones.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Leadership</div>
-        <h3>Meet the Team</h3>
-        <p>Get to know the officers and volunteers who serve Alabama's cadet families with care and commitment.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Get Involved</div>
-        <h3>Volunteer</h3>
-        <p>Join us in supporting families, planning events, and creating a strong club community across the state.</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -386,36 +366,26 @@
     <h2 class="section-title">Parent Resources</h2>
     <div class="divider"></div>
     <div class="class-ladder-grid">
-      <div class="class-ladder-card">
+      <a class="class-ladder-card class-ladder-link" href="nominations.html">
         <div class="class-ladder-year">Admissions</div>
-        <h3>Admissions &amp; Application</h3>
-        <p>We help families navigate the application and nomination process with timely information and useful guidance.</p>
-      </div>
-      <div class="class-ladder-card">
+        <h3>Nominations</h3>
+        <p>How the application and congressional nomination process works, with timelines and tips for Alabama applicants.</p>
+      </a>
+      <a class="class-ladder-card class-ladder-link" href="familyresources.html">
         <div class="class-ladder-year">Support</div>
-        <h3>Family Support</h3>
-        <p>Resources designed to help parents understand the experience and support their cadet through each stage of academy life.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Milestones</div>
-        <h3>Key Milestones</h3>
-        <p>Important dates, traditions, and events that matter most to West Point families and cadet support networks.</p>
-      </div>
-      <div class="class-ladder-card">
+        <h3>Family Resources</h3>
+        <p>Guidance to help parents understand academy life and support their cadet through each stage.</p>
+      </a>
+      <a class="class-ladder-card class-ladder-link" href="resources.html">
         <div class="class-ladder-year">Academy</div>
-        <h3>Academy Resources</h3>
-        <p>Helpful links and trusted information to keep families connected to official Academy updates and opportunities.</p>
-      </div>
-      <div class="class-ladder-card">
+        <h3>Academy Links</h3>
+        <p>Trusted links to official West Point information, calendars, and updates.</p>
+      </a>
+      <a class="class-ladder-card class-ladder-link" href="faq.html">
         <div class="class-ladder-year">Questions</div>
         <h3>FAQs</h3>
-        <p>Answers to common questions for new and current families who are navigating the West Point journey.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Contact</div>
-        <h3>Get Connected</h3>
-        <p>A central place to connect with club leadership, ask questions, and learn how to get involved.</p>
-      </div>
+        <p>Answers to common questions from new and current West Point families.</p>
+      </a>
     </div>
   </div>
 </section>
@@ -569,36 +539,6 @@
 -->
 
 <!-- WHAT WE'RE DOING THIS YEAR -->
-<section id="club-focus" style="background:var(--white);">
-  <div class="container">
-    <p class="section-label">Current Initiatives</p>
-    <h2 class="section-title">What We’re Doing This Year</h2>
-    <div class="divider"></div>
-    <div class="class-ladder-grid">
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Support</div>
-        <h3>Family Support</h3>
-        <p>Helping families stay informed, connected, and encouraged throughout the cadet experience.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Communication</div>
-        <h3>Timely Updates</h3>
-        <p>Sharing important information, club updates, and practical guidance for parents and cadet families.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Events</div>
-        <h3>Meaningful Gatherings</h3>
-        <p>Planning parent socials, support events, and opportunities to build a stronger Alabama community.</p>
-      </div>
-      <div class="class-ladder-card">
-        <div class="class-ladder-year">Involvement</div>
-        <h3>Volunteer Growth</h3>
-        <p>Expanding club participation so more parents can contribute, connect, and strengthen the network.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CADET NEWS — WPAOG News Room, Cadet News category (news-feed.php?source=cadets) -->
 <section id="usma-news" style="background:var(--white);display:none">
   <div class="container">
