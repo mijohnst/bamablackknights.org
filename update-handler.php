@@ -289,6 +289,30 @@ foreach ($diff_labels as $col => $label) {
     }
 }
 
+// ── Log the change for the "Recently updated profiles" panel on admin/index.php ──
+// Who submitted is inferred from the email used in "Find My Record", matched
+// against the record as it stood before this update. Table comes from
+// admin/migrate_member_update_log.sql — if it hasn't been run yet, skip silently.
+if (!empty($changes)) {
+    $by_email = (string)($verified['email'] ?? '');
+    $by = $by_email;
+    if ($by_email !== '') {
+        if ($by_email === strtolower($o('cadet_email'))) {
+            $by = 'Cadet';
+        } elseif ($by_email === strtolower($o('parent1_email'))) {
+            $by = trim($o('parent1_first_name') . ' ' . $o('parent1_last_name')) ?: 'Primary contact';
+        } elseif ($by_email === strtolower($o('parent2_email'))) {
+            $by = trim($o('parent2_first_name') . ' ' . $o('parent2_last_name')) ?: 'Secondary contact';
+        }
+    }
+    try {
+        $pdo->prepare('INSERT INTO member_update_log (member_id, submitted_by, changes) VALUES (?, ?, ?)')
+            ->execute([$existing_id, mb_substr($by, 0, 150), json_encode($changes, JSON_UNESCAPED_UNICODE)]);
+    } catch (PDOException $e) {
+        error_log('update-handler: member_update_log insert failed - ' . $e->getMessage());
+    }
+}
+
 // ── Notify secretary of the update ────────────────────────────────────────
 $secretary_email = 'secretary@bamablackknights.org';
 $subject = 'Member Info Updated: ' . sanitize_header($g('cadet_first_name')) . ' ' . sanitize_header($g('cadet_last_name'))

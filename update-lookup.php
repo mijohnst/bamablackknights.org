@@ -110,6 +110,7 @@ foreach ($_SESSION['update_verified'] as $t => $entry) {
 }
 $_SESSION['update_verified'][$verify_token] = [
     'member_id' => (int)$m['id'],
+    'email'     => strtolower($email), // which contact looked it up — shown in the Members page change log
     'expires'   => time() + 1800, // 30 minutes
 ];
 

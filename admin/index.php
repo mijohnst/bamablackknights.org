@@ -252,6 +252,21 @@ foreach ($bday_rows as $b) {
 }
 usort($upcoming_bdays, fn($a, $b) => $a['days'] - $b['days']);
 
+// Profiles updated by a parent/cadet via the public update form in the last
+// 7 days (logged by update-handler.php). Table comes from
+// migrate_member_update_log.sql — empty if that hasn't been run yet.
+$recent_updates = [];
+try {
+    $recent_updates = $pdo->query(
+        "SELECT l.member_id, l.submitted_by, l.changes, l.created_at,
+                m.cadet_last_name, m.cadet_suffix, m.cadet_first_name, m.cadet_middle_name, m.class_year
+         FROM member_update_log l JOIN members m ON m.id = l.member_id
+         WHERE l.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+         ORDER BY l.created_at DESC"
+    )->fetchAll();
+} catch (PDOException $e) {}
+$recent_update_members = count(array_unique(array_column($recent_updates, 'member_id')));
+
 // Helper: build sort link preserving current filters
 function sort_link(string $col, string $label, string $current_sort, string $current_dir, string $next_dir, array $get): string {
     $params = array_merge($get, ['sort' => $col, 'dir' => $col === $current_sort ? $next_dir : 'asc']);
@@ -290,6 +305,7 @@ $alerts = [];
 if ($fin_pending)  $alerts[] = ['color'=>'#fff3cd','border'=>'#ffc107','text'=>'#5f4c00','icon'=>'⏳','msg'=>"$fin_pending purchase".($fin_pending>1?'s':'')." need approval",'href'=>'purchases.php?status=pending'];
 if ($fin_approved) $alerts[] = ['color'=>'#e3f2fd','border'=>'#90caf9','text'=>'#0d47a1','icon'=>'💰','msg'=>"$fin_approved awaiting payment",'href'=>'pending-reimbursements.php'];
 if ($new_this_month) $alerts[] = ['color'=>'#e8f5e9','border'=>'#a5d6a7','text'=>'#1b5e20','icon'=>'👤','msg'=>"$new_this_month new member".($new_this_month>1?'s':'')." this month",'href'=>'index.php?q='];
+if ($recent_update_members) $alerts[] = ['color'=>'#e0f2f1','border'=>'#80cbc4','text'=>'#004d40','icon'=>'✏️','msg'=>"$recent_update_members profile".($recent_update_members>1?'s':'')." updated by families in the last 7 days",'href'=>'#upd-panel','onclick'=>'openUpdates()'];
 if (!empty($upcoming_bdays)) $alerts[] = ['color'=>'#f3e5f5','border'=>'#ce93d8','text'=>'#4a148c','icon'=>'🎂','msg'=>count($upcoming_bdays)." birthday".( count($upcoming_bdays)>1?'s':'')." in the next 30 days",'href'=>'#bday-panel','onclick'=>'openBirthdays()'];
 if ($needs_split_count) $alerts[] = ['color'=>'#fff3cd','border'=>'#ffc107','text'=>'#5f4c00','icon'=>'✂️','msg'=>"$needs_split_count cadet name".($needs_split_count>1?'s':'')." still need First/Middle split",'href'=>'index.php?split=1'];
 if ($dup_count) $alerts[] = ['color'=>'#fde0e0','border'=>'#e57373','text'=>'#8a1425','icon'=>'👥','msg'=>"$dup_count possible duplicate cadet".($dup_count>1?'s':'')." (same name + class year)",'href'=>'index.php?dup=1'];
@@ -401,6 +417,46 @@ function openBirthdays() {
   var panel=document.getElementById('bday-panel'), chev=document.getElementById('bday-chevron');
   panel.style.display='block';
   chev.textContent='▾ Hide';
+}
+</script>
+<?php endif; ?>
+
+<?php if (!empty($recent_updates)): ?>
+<div class="card" style="padding:0;margin-bottom:1.25rem;overflow:hidden">
+  <button onclick="toggleUpdates()" style="width:100%;background:none;border:none;padding:.85rem 1.25rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;font-family:inherit">
+    <span style="font-size:.78rem;font-weight:700;color:#5a6a7a;text-transform:uppercase;letter-spacing:.05em">
+      ✏️ Recently Updated Profiles
+      <span style="background:#00695c;color:#fff;font-size:.65rem;padding:.15rem .45rem;border-radius:99px;margin-left:.4rem;vertical-align:middle"><?= $recent_update_members ?></span>
+      <span style="font-weight:400;text-transform:none;letter-spacing:0;margin-left:.4rem">last 7 days</span>
+    </span>
+    <span id="upd-chevron" style="color:#5a6a7a;font-size:.85rem">▸ Show</span>
+  </button>
+  <div id="upd-panel" style="display:none;padding:.25rem 1.25rem 1.25rem">
+    <?php foreach ($recent_updates as $u): $u_changes = json_decode($u['changes'], true) ?: []; ?>
+    <div style="border:1px solid #c8e6e2;background:#f3faf9;border-radius:4px;padding:.6rem .85rem;margin-bottom:.5rem;font-size:.82rem">
+      <div style="display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap">
+        <div><a href="view.php?id=<?= (int)$u['member_id'] ?>" style="font-weight:700;color:#000"><?= h(cadet_last_name_suffixed($u) . ', ' . trim($u['cadet_first_name'] . ' ' . $u['cadet_middle_name'])) ?></a>
+          <span style="color:#5a6a7a">(<?= h($u['class_year']) ?>)</span>
+          <?php if ($u['submitted_by'] !== ''): ?><span style="color:#5a6a7a"> · by <?= h($u['submitted_by']) ?></span><?php endif; ?></div>
+        <div style="color:#9aa5b4;white-space:nowrap"><?= h(date('D M j, g:ia', strtotime($u['created_at']))) ?></div>
+      </div>
+      <ul style="margin:.35rem 0 0 1.1rem;padding:0;color:#333;line-height:1.55">
+        <?php foreach ($u_changes as $c): ?><li><?= h($c) ?></li><?php endforeach; ?>
+      </ul>
+    </div>
+    <?php endforeach; ?>
+  </div>
+</div>
+<script>
+function toggleUpdates() {
+  var panel=document.getElementById('upd-panel'), chev=document.getElementById('upd-chevron');
+  var open=panel.style.display==='none';
+  panel.style.display=open?'block':'none';
+  chev.textContent=open?'▾ Hide':'▸ Show';
+}
+function openUpdates() {
+  document.getElementById('upd-panel').style.display='block';
+  document.getElementById('upd-chevron').textContent='▾ Hide';
 }
 </script>
 <?php endif; ?>
