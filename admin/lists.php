@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($box) {
                     $lines[] = 'Cadet ' . $cadet_full . "\n"
                              . 'P.O. Box ' . $box . "\n"
-                             . 'USAF Academy, CO 80841-' . $box . "\n";
+                             . "West Point, NY 10997\n";
                 }
                 break;
             case 'company_roster':
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $box = trim($r['cadet_po_box'] ?? '');
                 $lines[] = "Cadet $cadet_full"
                          . ($box ? "\nP.O. Box $box" : '')
-                         . "\nUSAF Academy, CO 80841" . ($box ? "-$box" : '')
+                         . "\nWest Point, NY 10997"
                          . "\n";
                 break;
         }

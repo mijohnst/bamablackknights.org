@@ -67,7 +67,7 @@ if (empty($cadets)) {
         $body .= "    Cadet $name\n";
         if ($c['cadet_po_box']) {
             $body .= "    P.O. Box {$c['cadet_po_box']}\n";
-            $body .= "    USAF Academy, CO 80841-{$c['cadet_po_box']}\n";
+            $body .= "    West Point, NY 10997\n";
         } else {
             $body .= "    (No PO Box on file — check member record)\n";
         }
