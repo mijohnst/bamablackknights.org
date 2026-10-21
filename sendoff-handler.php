@@ -51,8 +51,16 @@ if (!filter_var(trim($input['email']), FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// Paste your deployed Apps Script Web App URL here after following setup instructions
-define('APPS_SCRIPT_URL', 'https://script.google.com/macros/s/AKfycbz4ZSWEaO7ttsOJ2Baw9ybPl_eeHbgqXDeCwZHmW7zHqdFInul1b1BEJa82le5v2Ljv/exec');
+// The club's own Apps Script Web App URL (writes registrations to the club's
+// Google Sheet). Blank = registration closed. The URL inherited from the fork
+// belonged to the USAFA club's Google account — never put it back; deploy a
+// new script from this club's account before reopening registration.
+define('APPS_SCRIPT_URL', '');
+if (APPS_SCRIPT_URL === '') {
+    http_response_code(503);
+    echo json_encode(['success' => false, 'message' => 'Online sendoff registration is closed. Please email secretary@bamablackknights.org.']);
+    exit;
+}
 
 $dob_raw = trim($input['dob'] ?? '');
 $dob     = $dob_raw ? date('m/d/Y', strtotime($dob_raw)) : '';

@@ -30,7 +30,7 @@
 //  automatically within a few seconds of a page refresh.
 // ============================================================
 
-var FOLDER_ID = '1qOFC20iSxWuXPKcRNEucHsSsjc77hXve';
+var FOLDER_ID = 'PASTE_CLUB_DRIVE_FOLDER_ID';
 
 function doGet(e) {
   // Load the set of file IDs that have already been shared publicly.
