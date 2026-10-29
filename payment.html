@@ -381,7 +381,7 @@
         <h4>Pay Dues Online</h4>
       </div>
       <div class="box-content">
-        <p>Look up your cadet below to pay online instantly by card, PayPal balance, or Venmo &mdash; no need to email a receipt, your membership updates automatically.</p>
+        <p>Look up your cadet below to pay online instantly by card, PayPal balance, or Venmo &mdash; no need to email a receipt, your membership updates automatically. We'll email a verification code to the parent address you enter.</p>
 
         <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
           <label for="duesWebsite">Leave this field empty</label>
@@ -390,6 +390,7 @@
 
         <!-- LOOKUP -->
         <div id="duesLookupSection">
+          <div id="duesLookupFields">
           <div class="form-row-3">
             <div class="form-group">
               <label for="duesLastName">Cadet Last Name *</label>
@@ -404,8 +405,9 @@
               <input type="email" id="duesEmail" required />
             </div>
           </div>
+          <button type="button" id="duesLookupBtn" class="cta-button">Email Me a Code</button>
+          </div>
           <div id="duesLookupStatus" role="status" aria-live="polite"></div>
-          <button type="button" id="duesLookupBtn" class="cta-button">Find My Cadet</button>
           <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble? Contact <a href="mailto:treasurer@bamablackknights.org" style="color:var(--blue)">treasurer@bamablackknights.org</a>.</p>
         </div>
 
@@ -498,6 +500,7 @@
     </div>
   </footer>
 
+  <script src="email-code.js"></script>
   <script>
     (function() {
       var verifyToken = '';
@@ -549,87 +552,67 @@
       document.getElementById('duesBirthday').addEventListener('keydown', duesEnterKey);
       document.getElementById('duesEmail').addEventListener('keydown', duesEnterKey);
 
-      document.getElementById('duesLookupBtn').addEventListener('click', async function() {
-        var btn = this;
-        var statusEl = document.getElementById('duesLookupStatus');
-        var last     = document.getElementById('duesLastName').value.trim();
-        var birthday = document.getElementById('duesBirthday').value;
-        var email    = document.getElementById('duesEmail').value.trim();
-
-        statusEl.style.display = 'none';
-        statusEl.className = '';
-
-        if (!last || !birthday || !email) {
-          statusEl.textContent = "Please enter the cadet's last name, birthday, and the email on file.";
-          statusEl.className = 'error';
-          statusEl.style.display = 'block';
-          return;
-        }
-
-        btn.textContent = 'Searching…';
-        btn.disabled = true;
-
-        try {
-          var resp = await fetch('dues-pay-lookup.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+      // Two steps: the lookup button emails a one-time code to the address
+      // typed, and the code is exchanged for the record (see email-code.js).
+      EmailCode.attach({
+        endpoint: 'dues-pay-lookup.php',
+        button:   document.getElementById('duesLookupBtn'),
+        fields:   document.getElementById('duesLookupFields'),
+        status:   document.getElementById('duesLookupStatus'),
+        contact:  'treasurer@bamablackknights.org',
+        collect: function() {
+          var last     = document.getElementById('duesLastName').value.trim();
+          var birthday = document.getElementById('duesBirthday').value;
+          var email    = document.getElementById('duesEmail').value.trim();
+          if (!last || !birthday || !email) {
+            return { error: "Please enter the cadet's last name, birthday, and the email on file." };
+          }
+          return {
+            email: email,
+            payload: {
               cadetLastName: last,
               cadetBirthday: birthday,
               email: email,
               website: document.getElementById('duesWebsite').value
-            })
-          });
-          var result = await resp.json();
-
-          if (result.success) {
-            verifyToken = result.verifyToken;
-            duesOptions = result.options || [];
-            duesCadetYears = result.cadetYears || [];
-            duesPaidYears = result.paidYears || [];
-            document.getElementById('duesLookupSection').style.display = 'none';
-            document.getElementById('duesPaySection').style.display = 'block';
-            document.getElementById('duesPayHeading').textContent = 'Paying dues for ' + (result.cadetName || 'your cadet');
-
-            if (!duesOptions.length) {
-              document.getElementById('duesNothingDue').style.display = 'block';
-            } else {
-              document.getElementById('duesYearsBody').style.display = 'block';
-              var list = document.getElementById('duesYearsList');
-              list.innerHTML = '';
-              duesOptions.forEach(function(opt) {
-                // Per-box price if that single year were paid on its own —
-                // matches what dues-pay-create-order.php would actually
-                // charge for checking just this box; the accurate combined
-                // total (which reflects the 4-year bundle discount) is
-                // shown separately below, computed by updateDuesTotal().
-                var solo = duesPrice(duesPaidYears.concat([opt.year]), duesCadetYears) - duesPrice(duesPaidYears, duesCadetYears);
-                var label = document.createElement('label');
-                var cb = document.createElement('input');
-                cb.type = 'checkbox';
-                cb.value = opt.year;
-                cb.className = 'dues-year-checkbox';
-                cb.addEventListener('change', updateDuesTotal);
-                label.appendChild(cb);
-                label.appendChild(document.createTextNode(' ' + opt.year + ' — $' + solo));
-                list.appendChild(label);
-              });
-              updateDuesTotal();
-              renderPaypalButtonsIfReady();
             }
-          } else {
-            statusEl.textContent = result.error || "We couldn't find a matching record.";
-            statusEl.className = 'error';
-            statusEl.style.display = 'block';
-          }
-        } catch (err) {
-          statusEl.textContent = 'Something went wrong. Please try again or email treasurer@bamablackknights.org.';
-          statusEl.className = 'error';
-          statusEl.style.display = 'block';
-        }
+          };
+        },
+        onVerified: function(result) {
+          verifyToken = result.verifyToken;
+          duesOptions = result.options || [];
+          duesCadetYears = result.cadetYears || [];
+          duesPaidYears = result.paidYears || [];
+          document.getElementById('duesLookupSection').style.display = 'none';
+          document.getElementById('duesPaySection').style.display = 'block';
+          document.getElementById('duesPayHeading').textContent = 'Paying dues for ' + (result.cadetName || 'your cadet');
 
-        btn.textContent = 'Find My Cadet';
-        btn.disabled = false;
+          if (!duesOptions.length) {
+            document.getElementById('duesNothingDue').style.display = 'block';
+          } else {
+            document.getElementById('duesYearsBody').style.display = 'block';
+            var list = document.getElementById('duesYearsList');
+            list.innerHTML = '';
+            duesOptions.forEach(function(opt) {
+              // Per-box price if that single year were paid on its own —
+              // matches what dues-pay-create-order.php would actually
+              // charge for checking just this box; the accurate combined
+              // total (which reflects the 4-year bundle discount) is
+              // shown separately below, computed by updateDuesTotal().
+              var solo = duesPrice(duesPaidYears.concat([opt.year]), duesCadetYears) - duesPrice(duesPaidYears, duesCadetYears);
+              var label = document.createElement('label');
+              var cb = document.createElement('input');
+              cb.type = 'checkbox';
+              cb.value = opt.year;
+              cb.className = 'dues-year-checkbox';
+              cb.addEventListener('change', updateDuesTotal);
+              label.appendChild(cb);
+              label.appendChild(document.createTextNode(' ' + opt.year + ' — $' + solo));
+              list.appendChild(label);
+            });
+            updateDuesTotal();
+            renderPaypalButtonsIfReady();
+          }
+        }
       });
 
       function selectedYears() {

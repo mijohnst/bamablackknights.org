@@ -6,6 +6,10 @@
  * isn't restricted to one class_year — any cadet with an unpaid year can
  * pay. Issues its own token in its own session pool (dues_verified) so it
  * doesn't interact with any other verification flow.
+ *
+ * Two steps, like update-lookup.php: a match emails a one-time code to the
+ * address typed (see admin/email-code.php), and action = "verify" with the
+ * right code returns the payable years and the token.
  */
 
 header('Content-Type: application/json');
@@ -13,6 +17,7 @@ header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
+require_once __DIR__ . '/admin/email-code.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -43,44 +48,43 @@ if (honeypot_tripped($payload)) {
 
 $pdo = get_pdo();
 
-if (rate_limited($pdo, 'dues_pay_lookup')) {
-    http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@bamablackknights.org.']);
-    exit();
-}
-
 function s(array $p, string $key): string {
     return trim($p[$key] ?? '');
 }
 
-$last     = s($payload, 'cadetLastName');
-$email    = s($payload, 'email');
-$birthday = s($payload, 'cadetBirthday');
+if (s($payload, 'action') === 'verify') {
+    [$m] = email_code_verified_member($pdo, 'dues', $payload, 'treasurer@bamablackknights.org');
+} else {
+    if (rate_limited($pdo, 'dues_pay_lookup')) {
+        http_response_code(429);
+        echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email treasurer@bamablackknights.org.']);
+        exit();
+    }
 
-if ($last === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => "Please enter the cadet's last name, birthday, and the email address on file."]);
-    exit();
-}
+    $last     = s($payload, 'cadetLastName');
+    $email    = s($payload, 'email');
+    $birthday = s($payload, 'cadetBirthday');
 
-$stmt = $pdo->prepare(
-    'SELECT * FROM members
-     WHERE archived = 0 AND cadet_birthday = :birthday
-       AND (parent1_email = :email OR parent2_email = :email)'
-);
-$stmt->execute(['birthday' => $birthday, 'email' => $email]);
-$target_norm = strip_name_suffix(normalize_name($last));
-$m = null;
-foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_norm) { $m = $row; break; }
-}
+    if ($last === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => "Please enter the cadet's last name, birthday, and the email address on file."]);
+        exit();
+    }
 
-if (!$m) {
-    echo json_encode([
-        'success' => false,
-        'error'   => "We couldn't find a matching record. Please double-check the cadet's last name, birthday, and the email on file, or contact treasurer@bamablackknights.org."
-    ]);
-    exit();
+    $stmt = $pdo->prepare(
+        'SELECT * FROM members
+         WHERE archived = 0 AND cadet_birthday = :birthday
+           AND (parent1_email = :email OR parent2_email = :email)'
+    );
+    $stmt->execute(['birthday' => $birthday, 'email' => $email]);
+    $target_norm = strip_name_suffix(normalize_name($last));
+    $m = null;
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_norm) { $m = $row; break; }
+    }
+
+    // No match gets a decoy challenge, so the response doesn't reveal it.
+    email_code_respond_issued('dues', $m ? ['member_id' => (int)$m['id']] : null, $email, 'pay membership dues online', 'treasurer@bamablackknights.org');
 }
 
 $cadet_years = cadet_dues_years($m['class_year'] ?? '');

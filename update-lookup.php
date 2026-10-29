@@ -59,33 +59,7 @@ function s(array $p, string $key): string {
 
 // ── Step 2: verify the emailed code ───────────────────────────────────────
 if (s($payload, 'action') === 'verify') {
-    // Per-challenge attempts are capped in email_code_verify(); this caps
-    // guessing across many challenges from one network.
-    if (rate_limited($pdo, 'update_code', 15, 15)) {
-        http_response_code(429);
-        echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@bamablackknights.org.']);
-        exit();
-    }
-
-    $check = email_code_verify(UPDATE_CODE_POOL, s($payload, 'challengeId'), s($payload, 'code'));
-    if (!$check['ok']) {
-        echo json_encode(['success' => false, 'error' => $check['error']]);
-        exit();
-    }
-    $binding = $check['binding'];
-
-    if (!empty($binding['multiple'])) {
-        echo json_encode(['success' => false, 'error' => 'More than one record matched those details. Please contact secretary@bamablackknights.org for help.']);
-        exit();
-    }
-
-    $stmt = $pdo->prepare('SELECT * FROM members WHERE id = ? AND archived = 0');
-    $stmt->execute([$binding['member_id']]);
-    $m = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$m) {
-        echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please contact secretary@bamablackknights.org."]);
-        exit();
-    }
+    [$m, $binding] = email_code_verified_member($pdo, UPDATE_CODE_POOL, $payload, 'secretary@bamablackknights.org');
 
     // Bind this specific record to a random per-lookup token, not one shared
     // session slot — a single slot meant a second "Find My Record" lookup in
@@ -194,17 +168,7 @@ foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
 // the response is identical either way.
 $binding = match (true) {
     count($matches) === 1 => ['member_id' => (int)$matches[0]['id'], 'email' => strtolower($email)],
-    count($matches) > 1   => ['multiple' => true, 'email' => strtolower($email)],
+    count($matches) > 1   => ['error' => 'More than one record matched those details. Please contact secretary@bamablackknights.org for help.'],
     default               => null,
 };
-$challenge_id = email_code_issue(UPDATE_CODE_POOL, $binding, $email, 'update your family information');
-
-if ($challenge_id === null) {
-    echo json_encode(['success' => false, 'error' => "We couldn't send the verification email right now. Please try again in a few minutes or contact secretary@bamablackknights.org."]);
-    exit();
-}
-
-echo json_encode([
-    'success'     => true,
-    'challengeId' => $challenge_id,
-]);
+email_code_respond_issued(UPDATE_CODE_POOL, $binding, $email, 'update your family information', 'secretary@bamablackknights.org');

@@ -14,12 +14,18 @@
  * whether or not the record exists.
  *
  * Each caller passes its own $pool name so codes from one form can't be
- * redeemed on another.
+ * redeemed on another. A binding may instead carry an 'error' message (e.g.
+ * "more than one record matched"), which is shown only once the code checks
+ * out, so it can't be used to learn who's on file.
+ *
+ * The lookup endpoints use the request-level helpers at the bottom; the
+ * page side is email-code.js.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 require_once __DIR__ . '/lib.php';
 require_once __DIR__ . '/mailer.php';
+require_once __DIR__ . '/form-guard.php';
 
 const EMAIL_CODE_TTL          = 600; // 10 minutes
 const EMAIL_CODE_MAX_ATTEMPTS = 5;
@@ -89,4 +95,53 @@ function email_code_verify(string $pool, string $challenge_id, string $code): ar
         return ['ok' => false, 'error' => 'Too many incorrect attempts. Please request a new code.'];
     }
     return ['ok' => false, 'error' => 'That code is incorrect. Please check the email and try again.'];
+}
+
+// ── Request-level helpers for the lookup endpoints ────────────────────────
+// Each echoes a JSON response and exits on anything but success.
+
+// Step 1: issue a code for $binding (null = no match) and respond with the
+// challenge id. Always exits.
+function email_code_respond_issued(string $pool, ?array $binding, string $email, string $purpose, string $contact): void {
+    $challenge_id = email_code_issue($pool, $binding, $email, $purpose);
+    if ($challenge_id === null) {
+        echo json_encode(['success' => false, 'error' => "We couldn't send the verification email right now. Please try again in a few minutes or contact $contact."]);
+        exit();
+    }
+    echo json_encode(['success' => true, 'challengeId' => $challenge_id]);
+    exit();
+}
+
+// Step 2: check the posted challengeId + code and return the binding.
+function email_code_handle_verify(PDO $pdo, string $pool, array $payload, string $contact): array {
+    // Per-challenge attempts are capped in email_code_verify(); this caps
+    // guessing across many challenges from one network.
+    if (rate_limited($pdo, $pool . '_code', 15, 15)) {
+        http_response_code(429);
+        echo json_encode(['success' => false, 'error' => "Too many attempts from your network. Please try again later or email $contact."]);
+        exit();
+    }
+    $check = email_code_verify($pool, trim((string)($payload['challengeId'] ?? '')), trim((string)($payload['code'] ?? '')));
+    if (!$check['ok']) {
+        echo json_encode(['success' => false, 'error' => $check['error']]);
+        exit();
+    }
+    if (isset($check['binding']['error'])) {
+        echo json_encode(['success' => false, 'error' => $check['binding']['error']]);
+        exit();
+    }
+    return $check['binding'];
+}
+
+// Step 2 for a binding of ['member_id' => …]: returns [member row, binding].
+function email_code_verified_member(PDO $pdo, string $pool, array $payload, string $contact): array {
+    $binding = email_code_handle_verify($pdo, $pool, $payload, $contact);
+    $stmt = $pdo->prepare('SELECT * FROM members WHERE id = ? AND archived = 0');
+    $stmt->execute([(int)($binding['member_id'] ?? 0)]);
+    $m = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$m) {
+        echo json_encode(['success' => false, 'error' => "We couldn't find a matching record. Please contact $contact."]);
+        exit();
+    }
+    return [$m, $binding];
 }

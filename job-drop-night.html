@@ -119,7 +119,8 @@
       <!-- FIND YOUR RECORD -->
       <div id="lookupSection">
         <h3>Find Your Record</h3>
-        <p>Job Drop Night is for our graduating cadets — currently, the Class of <span id="eligibleYear">2027</span>. Enter your cadet's last name, birthday, and a parent email address already on file.</p>
+        <p>Job Drop Night is for our graduating cadets — currently, the Class of <span id="eligibleYear">2027</span>. Enter your cadet's last name, birthday, and a parent email address already on file. We'll email a verification code to that address.</p>
+        <div id="lookupFields">
         <div class="form-row-3">
           <div class="form-group">
             <label for="lookupLastName">Cadet Last Name *</label>
@@ -134,8 +135,9 @@
             <input type="email" id="lookupEmail" required />
           </div>
         </div>
+        <button type="button" id="lookupBtn" class="cta-button">Email Me a Code</button>
+        </div>
         <div id="lookupStatus" role="status" aria-live="polite"></div>
-        <button type="button" id="lookupBtn" class="cta-button">Find My Record</button>
         <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact site support at <a href="mailto:mijohnst@bamablackknights.org" style="color:var(--blue)">mijohnst@bamablackknights.org</a>.</p>
       </div>
 
@@ -175,6 +177,7 @@
     </div>
   </footer>
 
+  <script src="email-code.js"></script>
   <script>
     var verifyToken = '';
 
@@ -194,79 +197,59 @@
     document.getElementById('lookupBirthday').addEventListener('keydown', lookupEnterKey);
     document.getElementById('lookupEmail').addEventListener('keydown', lookupEnterKey);
 
-    document.getElementById('lookupBtn').addEventListener('click', async function() {
-      var btn = this;
-      var statusEl = document.getElementById('lookupStatus');
-      var last     = document.getElementById('lookupLastName').value.trim();
-      var birthday = document.getElementById('lookupBirthday').value;
-      var email    = document.getElementById('lookupEmail').value.trim();
-
-      statusEl.style.display = 'none';
-      statusEl.className = '';
-
-      if (!last || !birthday || !email) {
-        statusEl.textContent = "Please enter the cadet's last name, birthday, and the email on file.";
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
-        return;
-      }
-
-      btn.textContent = 'Searching…';
-      btn.disabled = true;
-
-      try {
-        var resp = await fetch('job-drop-lookup.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+    // Two steps: the lookup button emails a one-time code to the address
+    // typed, and the code is exchanged for the record (see email-code.js).
+    EmailCode.attach({
+      endpoint: 'job-drop-lookup.php',
+      button:   document.getElementById('lookupBtn'),
+      fields:   document.getElementById('lookupFields'),
+      status:   document.getElementById('lookupStatus'),
+      contact:  'secretary@bamablackknights.org',
+      collect: function() {
+        var last     = document.getElementById('lookupLastName').value.trim();
+        var birthday = document.getElementById('lookupBirthday').value;
+        var email    = document.getElementById('lookupEmail').value.trim();
+        if (!last || !birthday || !email) {
+          return { error: "Please enter the cadet's last name, birthday, and the email on file." };
+        }
+        return {
+          email: email,
+          payload: {
             cadetLastName: last,
             cadetBirthday: birthday,
             email: email,
             website: document.getElementById('website').value
-          })
-        });
-        var result = await resp.json();
-
-        if (result.success) {
-          verifyToken = result.verifyToken;
-          var cadetName = result.cadetName || 'your cadet';
-          document.getElementById('lookupSection').style.display = 'none';
-
-          if (result.existing && result.existing.status === 'approved') {
-            document.getElementById('approvedCadetNameDisplay').textContent = cadetName;
-            document.getElementById('alreadyApprovedBody').style.display = 'block';
-          } else {
-            document.getElementById('cadetNameDisplay').textContent = cadetName;
-            if (result.existing && result.existing.editable) {
-              document.getElementById('submitHeading').firstChild.textContent = 'Editing submission for ';
-              document.getElementById('editingNotice').style.display = 'block';
-              document.getElementById('photoHint').textContent = 'Choose a new photo (JPG, PNG, GIF, or WebP, under 10MB) — replaces the one you sent before.';
-              document.getElementById('jobTitle').value = result.existing.jobTitle || '';
-              if (result.existing.youtubeId) {
-                document.getElementById('youtubeUrl').value = 'https://youtube.com/watch?v=' + result.existing.youtubeId;
-              }
-              document.getElementById('submitBtn').textContent = 'Update My Submission';
-              document.getElementById('submitBtn').setAttribute('data-idle-label', 'Update My Submission');
-            }
-            document.getElementById('submitBody').style.display = 'block';
           }
+        };
+      },
+      onVerified: function(result) {
+        verifyToken = result.verifyToken;
+        var cadetName = result.cadetName || 'your cadet';
+        document.getElementById('lookupSection').style.display = 'none';
 
-          var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          var revealed = document.getElementById('alreadyApprovedBody').style.display === 'block'
-            ? document.getElementById('alreadyApprovedBody') : document.getElementById('submitBody');
-          window.scrollTo({ top: revealed.offsetTop - 100, behavior: reduceMotion ? 'auto' : 'smooth' });
+        if (result.existing && result.existing.status === 'approved') {
+          document.getElementById('approvedCadetNameDisplay').textContent = cadetName;
+          document.getElementById('alreadyApprovedBody').style.display = 'block';
         } else {
-          statusEl.textContent = result.error || "We couldn't find a matching record.";
-          statusEl.className = 'error';
-          statusEl.style.display = 'block';
+          document.getElementById('cadetNameDisplay').textContent = cadetName;
+          if (result.existing && result.existing.editable) {
+            document.getElementById('submitHeading').firstChild.textContent = 'Editing submission for ';
+            document.getElementById('editingNotice').style.display = 'block';
+            document.getElementById('photoHint').textContent = 'Choose a new photo (JPG, PNG, GIF, or WebP, under 10MB) — replaces the one you sent before.';
+            document.getElementById('jobTitle').value = result.existing.jobTitle || '';
+            if (result.existing.youtubeId) {
+              document.getElementById('youtubeUrl').value = 'https://youtube.com/watch?v=' + result.existing.youtubeId;
+            }
+            document.getElementById('submitBtn').textContent = 'Update My Submission';
+            document.getElementById('submitBtn').setAttribute('data-idle-label', 'Update My Submission');
+          }
+          document.getElementById('submitBody').style.display = 'block';
         }
-      } catch (err) {
-        statusEl.textContent = 'Error looking up your record. Please try again or contact secretary@bamablackknights.org';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
-      } finally {
-        btn.textContent = 'Find My Record';
-        btn.disabled = false;
+
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var revealed = document.getElementById('alreadyApprovedBody').style.display === 'block'
+          ? document.getElementById('alreadyApprovedBody') : document.getElementById('submitBody');
+        window.scrollTo({ top: revealed.offsetTop - 100, behavior: reduceMotion ? 'auto' : 'smooth' });
       }
     });
 

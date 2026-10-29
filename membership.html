@@ -130,11 +130,12 @@
 
     <div class="form-section" id="membershipLookupSection">
       <h3>Find or Start Your Membership</h3>
-      <p>Enter the cadet’s last name and birthday, plus an email already on file. If no record matches, we’ll start a new application.</p>
+      <p>Enter the cadet’s last name and birthday, plus an email already on file. If no record matches, we’ll start a new application. Either way, we’ll email a verification code to the address you enter.</p>
       <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
         <label for="lookupWebsite">Leave this field empty</label>
         <input type="text" id="lookupWebsite" autocomplete="off" tabindex="-1" />
       </div>
+      <div id="membershipLookupFields">
       <div class="form-row-3">
         <div class="form-group">
           <label for="lookupCadetLastName">Cadet Last Name *</label>
@@ -158,8 +159,9 @@
           <option value="secondary">Secondary contact</option>
         </select>
       </div>
+      <button type="button" id="membershipLookupButton" class="cta-button">Email Me a Code</button>
+      </div>
       <div id="membershipLookupStatus" role="status" aria-live="polite"></div>
-      <button type="button" id="membershipLookupButton" class="cta-button">Continue</button>
       <p class="hint" style="margin-top:.75rem">Use the exact email address saved for the cadet or a family contact.</p>
     </div>
 
@@ -488,6 +490,7 @@
     </div>
   </footer>
 
+  <script src="email-code.js"></script>
   <script>
     var membershipMode = '';
     var duesVerifyToken = '';
@@ -592,13 +595,6 @@
       updateDuesTotal(containerId, totalId, cadetYears, paidYears);
     }
 
-    function setLookupMessage(message, isError) {
-      var status = document.getElementById('membershipLookupStatus');
-      status.textContent = message;
-      status.className = isError ? 'error' : 'success';
-      status.style.display = 'block';
-    }
-
     function populateMembershipForm(member) {
       var fields = [
         'cadetFirstName','cadetMiddleName','cadetLastName','cadetSuffix','nickname','cadetEmail','cadetGender',
@@ -689,42 +685,35 @@
       loadNewMemberDuesOptions(this.value);
     });
 
-    document.getElementById('membershipLookupButton').addEventListener('click', async function() {
-      var button = this;
-      var lastName = document.getElementById('lookupCadetLastName').value.trim();
-      var birthday = document.getElementById('lookupCadetBirthday').value;
-      var email = document.getElementById('lookupEmail').value.trim();
-      var emailOwner = document.getElementById('lookupEmailOwner').value;
-      var status = document.getElementById('membershipLookupStatus');
-      status.style.display = 'none';
-      status.className = '';
-      if (!lastName || !birthday || !validateEmail(email) || !emailOwner) {
-        setLookupMessage('Enter the cadet’s last name and birthday, a valid email, and who owns that email address.', true);
-        return;
-      }
-      button.disabled = true;
-      button.textContent = 'Verifying…';
-      try {
-        var response = await fetch('membership-lookup.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+    // Two steps: the lookup button emails a one-time code to the address
+    // typed, and the code is exchanged for the existing record or a new
+    // application (see email-code.js).
+    EmailCode.attach({
+      endpoint: 'membership-lookup.php',
+      button:   document.getElementById('membershipLookupButton'),
+      fields:   document.getElementById('membershipLookupFields'),
+      status:   document.getElementById('membershipLookupStatus'),
+      contact:  'secretary@bamablackknights.org',
+      collect: function() {
+        var lastName = document.getElementById('lookupCadetLastName').value.trim();
+        var birthday = document.getElementById('lookupCadetBirthday').value;
+        var email = document.getElementById('lookupEmail').value.trim();
+        var emailOwner = document.getElementById('lookupEmailOwner').value;
+        if (!lastName || !birthday || !validateEmail(email) || !emailOwner) {
+          return { error: 'Enter the cadet’s last name and birthday, a valid email, and who owns that email address.' };
+        }
+        return {
+          email: email,
+          payload: {
             cadetLastName: lastName,
             cadetBirthday: birthday,
             email: email,
             emailOwner: emailOwner,
             website: document.getElementById('lookupWebsite').value
-          })
-        });
-        var result = await response.json();
-        if (!result.success) throw new Error(result.error || 'We could not verify those details.');
-        applyVerification(result);
-      } catch (error) {
-        setLookupMessage(error.message || 'Could not verify those details. Please try again or contact the club.', true);
-      } finally {
-        button.disabled = false;
-        button.textContent = 'Continue';
-      }
+          }
+        };
+      },
+      onVerified: applyVerification
     });
 
     function loadPayPalSdk() {

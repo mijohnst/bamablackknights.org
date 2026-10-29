@@ -166,20 +166,6 @@
           <button type="button" id="lookupBtn" class="cta-button">Email Me a Code</button>
           </div>
 
-          <div id="codeStep" hidden>
-            <p style="color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem">If that information matches a record on file, we've sent a 6-digit code to <strong id="codeSentTo"></strong>. It expires in 10 minutes. Don't see it? Check your spam or junk folder.</p>
-            <div class="form-group" style="max-width:14rem">
-              <label for="verifyCode">Verification Code *</label>
-              <input type="text" id="verifyCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" />
-            </div>
-            <button type="button" id="verifyBtn" class="cta-button">Verify &amp; Continue</button>
-            <p style="font-size:.85rem;margin-top:.85rem">
-              <a href="#" id="resendCode" style="color:var(--blue)">Send a new code</a>
-              &nbsp;·&nbsp;
-              <a href="#" id="changeLookup" style="color:var(--blue)">Use different information</a>
-            </p>
-          </div>
-
           <div id="lookupStatus"></div>
           <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact the club at <a href="mailto:secretary@bamablackknights.org" style="color:var(--blue)">secretary@bamablackknights.org</a>.</p>
         </div>
@@ -467,6 +453,7 @@
     </div>
   </footer>
 
+  <script src="email-code.js"></script>
   <script>
 
     // Form validation helper functions
@@ -557,120 +544,37 @@
     document.getElementById('lookupEmail').addEventListener('keydown', lookupEnterKey);
 
     // Two steps: "Email Me a Code" sends a one-time code to the email typed
-    // here, then the code is exchanged for the record and the update token.
-    var challengeId = '';
-
-    function showLookupStatus(text, kind) {
-      var statusEl = document.getElementById('lookupStatus');
-      statusEl.textContent = text;
-      statusEl.className = kind || '';
-      statusEl.style.display = text ? 'block' : 'none';
-    }
-
-    async function postLookup(body) {
-      var resp = await fetch('update-lookup.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      return resp.json();
-    }
-
-    async function requestCode(btn, busyLabel) {
-      var last     = document.getElementById('lookupLastName').value.trim();
-      var graduationYear = document.getElementById('lookupGraduationYear').value;
-      var email    = document.getElementById('lookupEmail').value.trim();
-
-      showLookupStatus('');
-
-      if (!graduationYear || !last || !email) {
-        showLookupStatus('Please enter the cadet graduation year, last name, and an email address on file.', 'error');
-        return;
-      }
-
-      var label = btn.textContent;
-      btn.textContent = busyLabel;
-      btn.disabled = true;
-
-      try {
-        var result = await postLookup({
-          cadetLastName: last,
-          graduationYear: graduationYear,
+    // here, then the code is exchanged for the record and the update token
+    // (see email-code.js).
+    EmailCode.attach({
+      endpoint: 'update-lookup.php',
+      button:   document.getElementById('lookupBtn'),
+      fields:   document.getElementById('lookupFields'),
+      status:   document.getElementById('lookupStatus'),
+      contact:  'secretary@bamablackknights.org',
+      collect: function() {
+        var last     = document.getElementById('lookupLastName').value.trim();
+        var graduationYear = document.getElementById('lookupGraduationYear').value;
+        var email    = document.getElementById('lookupEmail').value.trim();
+        if (!graduationYear || !last || !email) {
+          return { error: 'Please enter the cadet graduation year, last name, and an email address on file.' };
+        }
+        return {
           email: email,
-          website: document.getElementById('website').value
-        });
-
-        if (result.success) {
-          challengeId = result.challengeId;
-          document.getElementById('codeSentTo').textContent = email;
-          document.getElementById('verifyCode').value = '';
-          document.getElementById('lookupFields').hidden = true;
-          document.getElementById('codeStep').hidden = false;
-          document.getElementById('verifyCode').focus();
-          if (btn.id === 'resendCode') showLookupStatus('A new code is on its way. Only the newest code will work.', 'success');
-        } else {
-          showLookupStatus(result.error || "We couldn't send a code. Please try again.", 'error');
-        }
-      } catch (err) {
-        showLookupStatus('Error sending your code. Please try again or contact secretary@bamablackknights.org', 'error');
-      } finally {
-        btn.textContent = label;
-        btn.disabled = false;
-      }
-    }
-
-    document.getElementById('lookupBtn').addEventListener('click', function() {
-      requestCode(this, 'Sending…');
-    });
-
-    document.getElementById('resendCode').addEventListener('click', function(e) {
-      e.preventDefault();
-      if (!this.disabled) requestCode(this, 'Sending…');
-    });
-
-    document.getElementById('changeLookup').addEventListener('click', function(e) {
-      e.preventDefault();
-      challengeId = '';
-      showLookupStatus('');
-      document.getElementById('codeStep').hidden = true;
-      document.getElementById('lookupFields').hidden = false;
-    });
-
-    document.getElementById('verifyCode').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('verifyBtn').click(); }
-    });
-
-    document.getElementById('verifyBtn').addEventListener('click', async function() {
-      var btn  = this;
-      var code = document.getElementById('verifyCode').value.replace(/\D/g, '');
-
-      showLookupStatus('');
-
-      if (code.length !== 6) {
-        showLookupStatus('Please enter the 6-digit code from the email.', 'error');
-        return;
-      }
-
-      btn.textContent = 'Verifying…';
-      btn.disabled = true;
-
-      try {
-        var result = await postLookup({ action: 'verify', challengeId: challengeId, code: code });
-
-        if (result.success) {
-          populateForm(result.member);
-          document.getElementById('verifyToken').value = result.verifyToken;
-          document.getElementById('lookupSection').style.display = 'none';
-          document.getElementById('formBody').style.display = 'block';
-          window.scrollTo({ top: document.getElementById('formBody').offsetTop - 100, behavior: 'smooth' });
-        } else {
-          showLookupStatus(result.error || "That code didn't work. Please try again.", 'error');
-        }
-      } catch (err) {
-        showLookupStatus('Error verifying your code. Please try again or contact secretary@bamablackknights.org', 'error');
-      } finally {
-        btn.textContent = 'Verify & Continue';
-        btn.disabled = false;
+          payload: {
+            cadetLastName: last,
+            graduationYear: graduationYear,
+            email: email,
+            website: document.getElementById('website').value
+          }
+        };
+      },
+      onVerified: function(result) {
+        populateForm(result.member);
+        document.getElementById('verifyToken').value = result.verifyToken;
+        document.getElementById('lookupSection').style.display = 'none';
+        document.getElementById('formBody').style.display = 'block';
+        window.scrollTo({ top: document.getElementById('formBody').offsetTop - 100, behavior: 'smooth' });
       }
     });
 

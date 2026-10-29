@@ -8,6 +8,10 @@
  * visitor picks — Job Drop Night is only for the class about to graduate,
  * computed the same way current_class_years() is (no yearly manual
  * upkeep), so a family from any other class simply won't match.
+ *
+ * Two steps, like update-lookup.php: a match emails a one-time code to the
+ * address typed (see admin/email-code.php), and action = "verify" with the
+ * right code returns the record and the token.
  */
 
 header('Content-Type: application/json');
@@ -15,6 +19,7 @@ header('Access-Control-Allow-Origin: https://bamablackknights.org');
 
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
+require_once __DIR__ . '/admin/email-code.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -45,49 +50,48 @@ if (honeypot_tripped($payload)) {
 
 $pdo = get_pdo();
 
-if (rate_limited($pdo, 'job_drop_lookup')) {
-    http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@bamablackknights.org.']);
-    exit();
-}
-
 function s(array $p, string $key): string {
     return trim($p[$key] ?? '');
 }
 
-$last     = s($payload, 'cadetLastName');
-$email    = s($payload, 'email');
-$birthday = s($payload, 'cadetBirthday');
+if (s($payload, 'action') === 'verify') {
+    [$m] = email_code_verified_member($pdo, 'jobdrop', $payload, 'secretary@bamablackknights.org');
+} else {
+    if (rate_limited($pdo, 'job_drop_lookup')) {
+        http_response_code(429);
+        echo json_encode(['success' => false, 'error' => 'Too many attempts from your network. Please try again later or email secretary@bamablackknights.org.']);
+        exit();
+    }
 
-if ($last === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => "Please enter the cadet's last name, birthday, and the email address on file."]);
-    exit();
-}
+    $last     = s($payload, 'cadetLastName');
+    $email    = s($payload, 'email');
+    $birthday = s($payload, 'cadetBirthday');
 
-// The class Job Drop Night is currently open for — automatic by default,
-// but an officer can override it (see job_drop_eligible_year()). Only this
-// class_year will ever match this lookup.
-$eligible_year = job_drop_eligible_year($pdo);
+    if ($last === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => "Please enter the cadet's last name, birthday, and the email address on file."]);
+        exit();
+    }
 
-$stmt = $pdo->prepare(
-    'SELECT * FROM members
-     WHERE archived = 0 AND class_year = :class_year AND cadet_birthday = :birthday
-       AND (parent1_email = :email OR parent2_email = :email)'
-);
-$stmt->execute(['class_year' => $eligible_year, 'birthday' => $birthday, 'email' => $email]);
-$target_norm = strip_name_suffix(normalize_name($last));
-$m = null;
-foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_norm) { $m = $row; break; }
-}
+    // The class Job Drop Night is currently open for — automatic by default,
+    // but an officer can override it (see job_drop_eligible_year()). Only this
+    // class_year will ever match this lookup.
+    $eligible_year = job_drop_eligible_year($pdo);
 
-if (!$m) {
-    echo json_encode([
-        'success' => false,
-        'error'   => "We couldn't find a matching record. Job Drop Night is only open to the graduating Class of $eligible_year — please double-check the cadet's last name, birthday, and the email on file, or contact secretary@bamablackknights.org."
-    ]);
-    exit();
+    $stmt = $pdo->prepare(
+        'SELECT * FROM members
+         WHERE archived = 0 AND class_year = :class_year AND cadet_birthday = :birthday
+           AND (parent1_email = :email OR parent2_email = :email)'
+    );
+    $stmt->execute(['class_year' => $eligible_year, 'birthday' => $birthday, 'email' => $email]);
+    $target_norm = strip_name_suffix(normalize_name($last));
+    $m = null;
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        if (strip_name_suffix(normalize_name($row['cadet_last_name'])) === $target_norm) { $m = $row; break; }
+    }
+
+    // No match gets a decoy challenge, so the response doesn't reveal it.
+    email_code_respond_issued('jobdrop', $m ? ['member_id' => (int)$m['id']] : null, $email, 'submit your Job Drop Night photo', 'secretary@bamablackknights.org');
 }
 
 // Tell the front end whether this family already has a submission on file,

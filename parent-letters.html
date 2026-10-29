@@ -157,7 +157,8 @@
       <!-- FIND YOUR RECORD -->
       <div id="lookupSection">
         <h3>Find Your Record</h3>
-        <p>Enter your cadet's last name, birthday, and a parent email address already on file.</p>
+        <p>Enter your cadet's last name, birthday, and a parent email address already on file. We'll email a verification code to that address.</p>
+        <div id="lookupFields">
         <div class="form-row-3">
           <div class="form-group">
             <label for="lookupLastName">Cadet Last Name *</label>
@@ -172,8 +173,9 @@
             <input type="email" id="lookupEmail" required />
           </div>
         </div>
+        <button type="button" id="lookupBtn" class="cta-button">Email Me a Code</button>
+        </div>
         <div id="lookupStatus"></div>
-        <button type="button" id="lookupBtn" class="cta-button">Find My Record</button>
         <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact site support at <a href="mailto:mijohnst@bamablackknights.org" style="color:var(--blue)">mijohnst@bamablackknights.org</a>.</p>
       </div>
 
@@ -208,6 +210,7 @@
     </div>
   </footer>
 
+  <script src="email-code.js"></script>
   <script>
     // Show the write-a-letter form or the closed notice depending on the
     // officer-controlled toggle (admin/parent-letters.php). Both start
@@ -239,60 +242,40 @@
     document.getElementById('lookupBirthday').addEventListener('keydown', lookupEnterKey);
     document.getElementById('lookupEmail').addEventListener('keydown', lookupEnterKey);
 
-    document.getElementById('lookupBtn').addEventListener('click', async function() {
-      var btn = this;
-      var statusEl = document.getElementById('lookupStatus');
-      var last     = document.getElementById('lookupLastName').value.trim();
-      var birthday = document.getElementById('lookupBirthday').value;
-      var email    = document.getElementById('lookupEmail').value.trim();
-
-      statusEl.style.display = 'none';
-      statusEl.className = '';
-
-      if (!last || !birthday || !email) {
-        statusEl.textContent = 'Please enter the cadet last name, birthday, and the email on file.';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
-        return;
-      }
-
-      btn.textContent = 'Searching…';
-      btn.disabled = true;
-
-      try {
-        var resp = await fetch('parent-letters-lookup.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+    // Two steps: the lookup button emails a one-time code to the address
+    // typed, and the code is exchanged for the record (see email-code.js).
+    EmailCode.attach({
+      endpoint: 'parent-letters-lookup.php',
+      button:   document.getElementById('lookupBtn'),
+      fields:   document.getElementById('lookupFields'),
+      status:   document.getElementById('lookupStatus'),
+      contact:  'secretary@bamablackknights.org',
+      collect: function() {
+        var last     = document.getElementById('lookupLastName').value.trim();
+        var birthday = document.getElementById('lookupBirthday').value;
+        var email    = document.getElementById('lookupEmail').value.trim();
+        if (!last || !birthday || !email) {
+          return { error: "Please enter the cadet's last name, birthday, and the email on file." };
+        }
+        return {
+          email: email,
+          payload: {
             cadetLastName: last,
             cadetBirthday: birthday,
             email: email,
             website: document.getElementById('website').value
-          })
-        });
-        var result = await resp.json();
-
-        if (result.success) {
-          verifyToken = result.verifyToken;
-          cadetFirst  = result.cadetFirstName || 'your cadet';
-          document.getElementById('lookupSection').style.display = 'none';
-          document.getElementById('letterBody').style.display = 'block';
-          startNewLetter();
-          lettersCache = result.letters;
-          renderLetters(result.letters);
-          window.scrollTo({ top: document.getElementById('letterBody').offsetTop - 100, behavior: 'smooth' });
-        } else {
-          statusEl.textContent = result.error || "We couldn't find a matching record.";
-          statusEl.className = 'error';
-          statusEl.style.display = 'block';
-        }
-      } catch (err) {
-        statusEl.textContent = 'Error looking up your record. Please try again or contact secretary@bamablackknights.org';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
-      } finally {
-        btn.textContent = 'Find My Record';
-        btn.disabled = false;
+          }
+        };
+      },
+      onVerified: function(result) {
+        verifyToken = result.verifyToken;
+        cadetFirst  = result.cadetFirstName || 'your cadet';
+        document.getElementById('lookupSection').style.display = 'none';
+        document.getElementById('letterBody').style.display = 'block';
+        startNewLetter();
+        lettersCache = result.letters;
+        renderLetters(result.letters);
+        window.scrollTo({ top: document.getElementById('letterBody').offsetTop - 100, behavior: 'smooth' });
       }
     });
 

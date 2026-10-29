@@ -4,11 +4,17 @@
  * Existing records require cadet last name, date of birth, and any email on file.
  * A verified existing record gets the update handler's one-time token; a new
  * applicant gets a token bound to the supplied identity and email field choice.
+ *
+ * Two steps, like update-lookup.php: every lookup emails a one-time code to
+ * the address typed (new applicants too, which confirms their email is
+ * real), and the outcome is only revealed once action = "verify" gets the
+ * right code — so the form can't be used to learn whether a family is on file.
  */
 header('Content-Type: application/json');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 require_once __DIR__ . '/admin/auth.php';
 require_once __DIR__ . '/admin/form-guard.php';
+require_once __DIR__ . '/admin/email-code.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -29,58 +35,83 @@ if (honeypot_tripped($payload)) {
 }
 
 $pdo = get_pdo();
-if (rate_limited($pdo, 'membership_lookup')) {
-    http_response_code(429);
-    echo json_encode(['success' => false, 'error' => 'Too many attempts. Please wait and try again, or contact the club.']);
-    exit();
-}
 
 function membership_lookup_value(array $payload, string $key): string {
     return trim((string)($payload[$key] ?? ''));
 }
 
-$last = membership_lookup_value($payload, 'cadetLastName');
-$birthday = membership_lookup_value($payload, 'cadetBirthday');
-$email = strtolower(membership_lookup_value($payload, 'email'));
-$email_owner = membership_lookup_value($payload, 'emailOwner');
-if (
-    $last === ''
-    || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)
-    || !filter_var($email, FILTER_VALIDATE_EMAIL)
-    || !in_array($email_owner, ['cadet', 'primary', 'secondary'], true)
-) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Enter the cadet’s last name and birthday, a valid email, and who owns that email address.']);
-    exit();
-}
+if (membership_lookup_value($payload, 'action') === 'verify') {
+    $binding = email_code_handle_verify($pdo, 'membership', $payload, 'secretary@bamablackknights.org');
+} else {
+    if (rate_limited($pdo, 'membership_lookup')) {
+        http_response_code(429);
+        echo json_encode(['success' => false, 'error' => 'Too many attempts. Please wait and try again, or contact the club.']);
+        exit();
+    }
 
-$stmt = $pdo->prepare(
-    'SELECT * FROM members
-     WHERE archived = 0 AND cadet_birthday = :birthday'
-);
-$stmt->execute(['birthday' => $birthday]);
-$target_last = strip_name_suffix(normalize_name($last));
-$name_matches = [];
-$email_matches = [];
-foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-    if (strip_name_suffix(normalize_name($row['cadet_last_name'])) !== $target_last) continue;
-    $name_matches[] = $row;
-    $record_emails = array_map('strtolower', array_filter([
-        $row['cadet_email'] ?? '',
-        $row['parent1_email'] ?? '',
-        $row['parent2_email'] ?? '',
-    ]));
-    if (in_array($email, $record_emails, true)) $email_matches[] = $row;
+    $last = membership_lookup_value($payload, 'cadetLastName');
+    $birthday = membership_lookup_value($payload, 'cadetBirthday');
+    $email = strtolower(membership_lookup_value($payload, 'email'));
+    $email_owner = membership_lookup_value($payload, 'emailOwner');
+    if (
+        $last === ''
+        || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthday)
+        || !filter_var($email, FILTER_VALIDATE_EMAIL)
+        || !in_array($email_owner, ['cadet', 'primary', 'secondary'], true)
+    ) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Enter the cadet’s last name and birthday, a valid email, and who owns that email address.']);
+        exit();
+    }
+
+    $stmt = $pdo->prepare(
+        'SELECT * FROM members
+         WHERE archived = 0 AND cadet_birthday = :birthday'
+    );
+    $stmt->execute(['birthday' => $birthday]);
+    $target_last = strip_name_suffix(normalize_name($last));
+    $name_matches = [];
+    $email_matches = [];
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        if (strip_name_suffix(normalize_name($row['cadet_last_name'])) !== $target_last) continue;
+        $name_matches[] = $row;
+        $record_emails = array_map('strtolower', array_filter([
+            $row['cadet_email'] ?? '',
+            $row['parent1_email'] ?? '',
+            $row['parent2_email'] ?? '',
+        ]));
+        if (in_array($email, $record_emails, true)) $email_matches[] = $row;
+    }
+
+    if (count($email_matches) > 1) {
+        $binding = ['error' => 'More than one record matched those details. Please contact the club for help.'];
+    } elseif (count($email_matches) === 1) {
+        $binding = ['member_id' => (int)$email_matches[0]['id']];
+    } elseif ($name_matches) {
+        $binding = ['error' => 'A record already exists for that cadet name and birthday, but this email does not match. Try an email address on file or contact the club for help.'];
+    } else {
+        $binding = [
+            'new'         => true,
+            'last'        => $last,
+            'last_name'   => $target_last,
+            'birthday'    => $birthday,
+            'email'       => $email,
+            'email_owner' => $email_owner,
+        ];
+    }
+    email_code_respond_issued('membership', $binding, $email, 'continue your membership', 'secretary@bamablackknights.org');
 }
 
 start_verification_session();
-if (count($email_matches) > 1) {
-    echo json_encode(['success' => false, 'error' => 'More than one record matched those details. Please contact the club for help.']);
-    exit();
-}
 
-if (count($email_matches) === 1) {
-    $member = $email_matches[0];
+if (isset($binding['member_id'])) {
+    $stmt = $pdo->prepare('SELECT * FROM members WHERE id = ? AND archived = 0');
+    $stmt->execute([$binding['member_id']]);
+    $member = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$member) {
+        echo json_encode(['success' => false, 'error' => "We couldn't verify those details. Please check them or contact the club."]);
+        exit();
+    }
     $token = bin2hex(random_bytes(24));
     if (!isset($_SESSION['update_verified']) || !is_array($_SESSION['update_verified'])) {
         $_SESSION['update_verified'] = [];
@@ -143,13 +174,11 @@ if (count($email_matches) === 1) {
     exit();
 }
 
-if ($name_matches) {
-    echo json_encode([
-        'success' => false,
-        'error' => 'A record already exists for that cadet name and birthday, but this email does not match. Try an email address on file or contact the club for help.',
-    ]);
-    exit();
-}
+$last = $binding['last'];
+$target_last = $binding['last_name'];
+$birthday = $binding['birthday'];
+$email = $binding['email'];
+$email_owner = $binding['email_owner'];
 
 $token = bin2hex(random_bytes(24));
 if (!isset($_SESSION['membership_verified']) || !is_array($_SESSION['membership_verified'])) {
