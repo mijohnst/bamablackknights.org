@@ -1,5 +1,5 @@
 # Prevent direct web access to internal PHP files
-<FilesMatch "^(config|auth|mailer|lib)\.php$">
+<FilesMatch "^(config|auth|mailer|lib|email-code)\.php$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>

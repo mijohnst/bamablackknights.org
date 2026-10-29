@@ -109,7 +109,7 @@ try {
     if (!$existing_id || ($verified['expires'] ?? 0) < time()) {
         echo json_encode([
             'success' => false,
-            'error'   => 'Your session expired. Please use "Find My Record" again before submitting changes.'
+            'error'   => 'Your session expired. Please reload the page and verify your email again before submitting changes.'
         ]);
         exit();
     }

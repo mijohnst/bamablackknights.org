@@ -139,7 +139,8 @@
         <!-- FIND YOUR RECORD -->
         <div id="lookupSection">
           <div class="form-divider-label" id="fs-lookup">Find Your Record</div>
-          <p style="color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem">Enter your cadet's graduation year, last name, and an email address already on file for a parent, guardian, or cadet.</p>
+          <div id="lookupFields">
+          <p style="color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem">Enter your cadet's graduation year, last name, and an email address already on file for a parent, guardian, or cadet. We'll email a verification code to that address.</p>
           <div class="form-row-3">
             <div class="form-group">
               <label for="lookupGraduationYear">Graduation Year *</label>
@@ -162,8 +163,24 @@
               <input type="email" id="lookupEmail" required />
             </div>
           </div>
+          <button type="button" id="lookupBtn" class="cta-button">Email Me a Code</button>
+          </div>
+
+          <div id="codeStep" hidden>
+            <p style="color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem">If that information matches a record on file, we've sent a 6-digit code to <strong id="codeSentTo"></strong>. It expires in 10 minutes. Don't see it? Check your spam or junk folder.</p>
+            <div class="form-group" style="max-width:14rem">
+              <label for="verifyCode">Verification Code *</label>
+              <input type="text" id="verifyCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" />
+            </div>
+            <button type="button" id="verifyBtn" class="cta-button">Verify &amp; Continue</button>
+            <p style="font-size:.85rem;margin-top:.85rem">
+              <a href="#" id="resendCode" style="color:var(--blue)">Send a new code</a>
+              &nbsp;·&nbsp;
+              <a href="#" id="changeLookup" style="color:var(--blue)">Use different information</a>
+            </p>
+          </div>
+
           <div id="lookupStatus"></div>
-          <button type="button" id="lookupBtn" class="cta-button">Find My Record</button>
           <p style="font-size:.8rem;color:var(--gray);margin-top:.85rem">Having trouble finding your record? Contact the club at <a href="mailto:secretary@bamablackknights.org" style="color:var(--blue)">secretary@bamablackknights.org</a>.</p>
         </div>
 
@@ -539,38 +556,106 @@
     document.getElementById('lookupGraduationYear').addEventListener('keydown', lookupEnterKey);
     document.getElementById('lookupEmail').addEventListener('keydown', lookupEnterKey);
 
-    document.getElementById('lookupBtn').addEventListener('click', async function() {
-      var btn = this;
+    // Two steps: "Email Me a Code" sends a one-time code to the email typed
+    // here, then the code is exchanged for the record and the update token.
+    var challengeId = '';
+
+    function showLookupStatus(text, kind) {
       var statusEl = document.getElementById('lookupStatus');
+      statusEl.textContent = text;
+      statusEl.className = kind || '';
+      statusEl.style.display = text ? 'block' : 'none';
+    }
+
+    async function postLookup(body) {
+      var resp = await fetch('update-lookup.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      return resp.json();
+    }
+
+    async function requestCode(btn, busyLabel) {
       var last     = document.getElementById('lookupLastName').value.trim();
       var graduationYear = document.getElementById('lookupGraduationYear').value;
       var email    = document.getElementById('lookupEmail').value.trim();
 
-      statusEl.style.display = 'none';
-      statusEl.className = '';
+      showLookupStatus('');
 
       if (!graduationYear || !last || !email) {
-        statusEl.textContent = 'Please enter the cadet graduation year, last name, and an email address on file.';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
+        showLookupStatus('Please enter the cadet graduation year, last name, and an email address on file.', 'error');
         return;
       }
 
-      btn.textContent = 'Searching…';
+      var label = btn.textContent;
+      btn.textContent = busyLabel;
       btn.disabled = true;
 
       try {
-        var resp = await fetch('update-lookup.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            cadetLastName: last,
-            graduationYear: graduationYear,
-            email: email,
-            website: document.getElementById('website').value
-          })
+        var result = await postLookup({
+          cadetLastName: last,
+          graduationYear: graduationYear,
+          email: email,
+          website: document.getElementById('website').value
         });
-        var result = await resp.json();
+
+        if (result.success) {
+          challengeId = result.challengeId;
+          document.getElementById('codeSentTo').textContent = email;
+          document.getElementById('verifyCode').value = '';
+          document.getElementById('lookupFields').hidden = true;
+          document.getElementById('codeStep').hidden = false;
+          document.getElementById('verifyCode').focus();
+          if (btn.id === 'resendCode') showLookupStatus('A new code is on its way. Only the newest code will work.', 'success');
+        } else {
+          showLookupStatus(result.error || "We couldn't send a code. Please try again.", 'error');
+        }
+      } catch (err) {
+        showLookupStatus('Error sending your code. Please try again or contact secretary@bamablackknights.org', 'error');
+      } finally {
+        btn.textContent = label;
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('lookupBtn').addEventListener('click', function() {
+      requestCode(this, 'Sending…');
+    });
+
+    document.getElementById('resendCode').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!this.disabled) requestCode(this, 'Sending…');
+    });
+
+    document.getElementById('changeLookup').addEventListener('click', function(e) {
+      e.preventDefault();
+      challengeId = '';
+      showLookupStatus('');
+      document.getElementById('codeStep').hidden = true;
+      document.getElementById('lookupFields').hidden = false;
+    });
+
+    document.getElementById('verifyCode').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('verifyBtn').click(); }
+    });
+
+    document.getElementById('verifyBtn').addEventListener('click', async function() {
+      var btn  = this;
+      var code = document.getElementById('verifyCode').value.replace(/\D/g, '');
+
+      showLookupStatus('');
+
+      if (code.length !== 6) {
+        showLookupStatus('Please enter the 6-digit code from the email.', 'error');
+        return;
+      }
+
+      btn.textContent = 'Verifying…';
+      btn.disabled = true;
+
+      try {
+        var result = await postLookup({ action: 'verify', challengeId: challengeId, code: code });
 
         if (result.success) {
           populateForm(result.member);
@@ -579,16 +664,12 @@
           document.getElementById('formBody').style.display = 'block';
           window.scrollTo({ top: document.getElementById('formBody').offsetTop - 100, behavior: 'smooth' });
         } else {
-          statusEl.textContent = result.error || "We couldn't find a matching record.";
-          statusEl.className = 'error';
-          statusEl.style.display = 'block';
+          showLookupStatus(result.error || "That code didn't work. Please try again.", 'error');
         }
       } catch (err) {
-        statusEl.textContent = 'Error looking up your record. Please try again or contact secretary@bamablackknights.org';
-        statusEl.className = 'error';
-        statusEl.style.display = 'block';
+        showLookupStatus('Error verifying your code. Please try again or contact secretary@bamablackknights.org', 'error');
       } finally {
-        btn.textContent = 'Find My Record';
+        btn.textContent = 'Verify & Continue';
         btn.disabled = false;
       }
     });
