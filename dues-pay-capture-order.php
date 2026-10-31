@@ -88,7 +88,8 @@ if ($track['status'] === 'applied') {
 }
 
 function notify_treasurer_capture_issue(string $subject, string $detail): void {
-    send_notification('treasurer@bamablackknights.org', $subject, nl2br(htmlspecialchars($detail)));
+    // Plain text: send_notification() doesn't send HTML.
+    send_notification('treasurer@bamablackknights.org', $subject, $detail);
 }
 
 // Sandbox mode always reports a successful capture (it's fake test money),
@@ -102,19 +103,40 @@ $capture_id = null;
 $captured_amount = null;
 
 $result = paypal_capture_order($order_id, 'capture-' . $order_id);
-if ($result['success']) {
-    $capture_id = $result['capture_id'];
-    $captured_amount = $result['captured_amount'];
-} elseif (!empty($result['already_captured'])) {
-    $recover = paypal_get_order($order_id);
-    if (!$recover['success']) {
-        error_log('dues-pay-capture-order: recovery failed for order ' . $order_id . ': ' . $recover['error']);
+if (!empty($result['already_captured'])) {
+    // Recovery lookup — returns the same shape, so it flows into the
+    // success/pending handling below.
+    $result = paypal_get_order($order_id);
+    if (!$result['success'] && empty($result['pending'])) {
+        error_log('dues-pay-capture-order: recovery failed for order ' . $order_id . ': ' . $result['error']);
         http_response_code(502);
         echo json_encode(['success' => false, 'error' => 'We could not confirm your payment status. Please contact treasurer@bamablackknights.org with your PayPal receipt.']);
         exit();
     }
-    $capture_id = $recover['capture_id'];
-    $captured_amount = $recover['captured_amount'];
+}
+
+if (!empty($result['pending'])) {
+    // PayPal took the payment but is holding it — don't apply the years or
+    // log income yet, and don't tell the parent it failed (they'd pay again).
+    $pdo->prepare("UPDATE paypal_dues_orders SET paypal_capture_id=?, status='needs_manual_review', captured_at=NOW() WHERE id=?")
+        ->execute([$result['capture_id'], $track['id']]);
+    notify_treasurer_capture_issue(
+        "{$capture_note_prefix}PayPal dues payment is pending — needs review",
+        "Order $order_id / capture {$result['capture_id']} for member #$member_id (\${$track['amount']}, years {$track['years']}) is PENDING at PayPal (e.g. an eCheck or a risk review). Nothing was applied. Once PayPal shows it completed, mark the year(s) paid and log the income; if it's declined, let the family know."
+    );
+    echo json_encode([
+        'success' => true,
+        'applied' => false,
+        'needsReview' => true,
+        'message' => 'PayPal is holding this payment for review, which can take a few days. The Treasurer has been notified and will mark your dues paid once it clears; please do not pay again.',
+        'years' => explode(',', $track['years']),
+    ]);
+    exit();
+}
+
+if ($result['success']) {
+    $capture_id = $result['capture_id'];
+    $captured_amount = $result['captured_amount'];
 } else {
     error_log('dues-pay-capture-order: capture failed for order ' . $order_id . ': ' . $result['error']);
     echo json_encode(['success' => false, 'error' => 'Your payment could not be completed. Please try again, or use another payment method.']);
@@ -152,11 +174,14 @@ $current_paid = parse_dues_years($row['membership_paid_years'] ?? '');
 $order_years  = explode(',', $track['years']);
 $still_needed = array_values(array_diff($order_years, $current_paid));
 
-if (!$still_needed) {
+// Any overlap, not just a full one: applying only the remaining years would
+// record only their price as income while PayPal collected the full amount.
+if (count($still_needed) !== count($order_years)) {
+    $already_paid = implode(', ', array_diff($order_years, $still_needed));
     $pdo->prepare("UPDATE paypal_dues_orders SET status='needs_manual_review' WHERE id=?")->execute([$track['id']]);
     notify_treasurer_capture_issue(
         "{$capture_note_prefix}PayPal dues payment needs manual review",
-        "Order $order_id / capture $capture_id for member #$member_id (\${$track['amount']}) captured successfully, but years {$track['years']} were already marked paid by the time we went to apply it. Please confirm this isn't a double payment and reconcile in the Income Ledger."
+        "Order $order_id / capture $capture_id for member #$member_id (\${$track['amount']}, years {$track['years']}) captured successfully, but year(s) $already_paid were already marked paid by the time we went to apply it. Nothing was applied automatically. Please confirm this isn't a double payment, mark any remaining years paid, and reconcile in the Income Ledger."
     );
     echo json_encode([
         'success' => true,

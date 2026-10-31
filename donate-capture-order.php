@@ -72,7 +72,8 @@ if ($track['status'] === 'captured') {
 }
 
 function notify_treasurer_donation_issue(string $subject, string $detail): void {
-    send_notification('treasurer@bamablackknights.org', $subject, nl2br(htmlspecialchars($detail)));
+    // Plain text: send_notification() doesn't send HTML.
+    send_notification('treasurer@bamablackknights.org', $subject, $detail);
 }
 
 // Sandbox mode always reports a successful capture (it's fake test money),
@@ -86,19 +87,33 @@ $capture_id = null;
 $captured_amount = null;
 
 $result = paypal_capture_order($order_id, 'capture-' . $order_id);
-if ($result['success']) {
-    $capture_id = $result['capture_id'];
-    $captured_amount = $result['captured_amount'];
-} elseif (!empty($result['already_captured'])) {
-    $recover = paypal_get_order($order_id);
-    if (!$recover['success']) {
-        error_log('donate-capture-order: recovery failed for order ' . $order_id . ': ' . $recover['error']);
+if (!empty($result['already_captured'])) {
+    // Recovery lookup — returns the same shape, so it flows into the
+    // success/pending handling below.
+    $result = paypal_get_order($order_id);
+    if (!$result['success'] && empty($result['pending'])) {
+        error_log('donate-capture-order: recovery failed for order ' . $order_id . ': ' . $result['error']);
         http_response_code(502);
         echo json_encode(['success' => false, 'error' => 'We could not confirm your donation status. Please contact treasurer@bamablackknights.org with your PayPal receipt.']);
         exit();
     }
-    $capture_id = $recover['capture_id'];
-    $captured_amount = $recover['captured_amount'];
+}
+
+if (!empty($result['pending'])) {
+    // PayPal took the donation but is holding it — don't log income or send
+    // a receipt yet, and don't tell the donor it failed (they'd give again).
+    // The row stays 'created'; the Treasurer finishes it by hand.
+    notify_treasurer_donation_issue(
+        "{$capture_note_prefix}PayPal donation is pending — needs review",
+        "Order $order_id / capture {$result['capture_id']} from {$track['donor_email']} (\${$track['amount']}) is PENDING at PayPal (e.g. an eCheck or a risk review). Nothing was logged and no receipt was sent. Once PayPal shows it completed, add it to the Income Ledger and send the donor a receipt."
+    );
+    echo json_encode(['success' => true, 'amount' => number_format((float)$track['amount'], 2)]);
+    exit();
+}
+
+if ($result['success']) {
+    $capture_id = $result['capture_id'];
+    $captured_amount = $result['captured_amount'];
 } else {
     error_log('donate-capture-order: capture failed for order ' . $order_id . ': ' . $result['error']);
     echo json_encode(['success' => false, 'error' => 'Your donation could not be completed. Please try again.']);
@@ -116,8 +131,16 @@ if (abs((float)$captured_amount - (float)$track['amount']) > 0.001) {
     exit();
 }
 
-$pdo->prepare("UPDATE paypal_donations SET paypal_capture_id=?, status='captured', captured_at=NOW() WHERE id=?")
-    ->execute([$capture_id, $track['id']]);
+// Atomic claim: two simultaneous requests for the same order can both get
+// past the 'captured' check above (PayPal's idempotent capture answers both
+// as COMPLETED). Only the one whose UPDATE actually flips the row goes on
+// to log income and send emails.
+$claim = $pdo->prepare("UPDATE paypal_donations SET paypal_capture_id=?, status='captured', captured_at=NOW() WHERE id=? AND status <> 'captured'");
+$claim->execute([$capture_id, $track['id']]);
+if ($claim->rowCount() === 0) {
+    echo json_encode(['success' => true, 'amount' => number_format((float)$track['amount'], 2)]);
+    exit();
+}
 
 $donor_name  = (string)($track['donor_name'] ?? '');
 $donor_email = (string)$track['donor_email'];

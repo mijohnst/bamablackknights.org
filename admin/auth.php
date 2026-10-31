@@ -57,9 +57,11 @@ function require_login(): void {
 // it. During impersonation this re-validates the impersonated target
 // (whose id/role $_SESSION currently holds), not the real admin — which is
 // the intended check either way.
-function revalidate_session_periodically(): void {
+// With $redirect = false (file-serving endpoints, where a redirect to the
+// login page makes no sense), a deactivated account just gets false back.
+function revalidate_session_periodically(bool $redirect = true): bool {
     $now = time();
-    if ($now - (int)($_SESSION['role_checked_at'] ?? 0) < 300) return;
+    if ($now - (int)($_SESSION['role_checked_at'] ?? 0) < 300) return true;
 
     $stmt = get_pdo()->prepare('SELECT role, officer_title, active FROM users WHERE id = ?');
     $stmt->execute([$_SESSION['user_id'] ?? 0]);
@@ -68,12 +70,23 @@ function revalidate_session_periodically(): void {
     if (!$user || !$user['active']) {
         session_unset();
         session_destroy();
+        if (!$redirect) return false;
         header('Location: login.php?deactivated=1');
         exit;
     }
     $_SESSION['role']          = $user['role'];
     $_SESSION['officer_title'] = $user['officer_title'] ?? '';
     $_SESSION['role_checked_at'] = $now;
+    return true;
+}
+
+// For the file-serving endpoints (avatar-serve.php etc.): true if this
+// request has a logged-in session whose account is still active, after the
+// same periodic re-check require_login() does — so a deactivated or demoted
+// account loses file access too, not just page access. Never redirects.
+function has_valid_login(): bool {
+    start_session();
+    return !empty($_SESSION['logged_in']) && revalidate_session_periodically(false);
 }
 
 function is_admin(): bool {
@@ -199,7 +212,12 @@ function can_manage_finances(): bool {
 function can_edit_purchase(array $purchase): bool {
     if (is_admin() || is_treasurer()) return true;
     if (is_officer()) return ($purchase['status'] ?? '') === 'pending';
-    if (is_member() || is_secretary()) return (int)($purchase['submitted_by'] ?? -1) === (int)($_SESSION['user_id'] ?? 0);
+    // Own purchases only, and only while Pending — once approved, an edit
+    // could change the amount or payout address without re-approval.
+    if (is_member() || is_secretary()) {
+        return ($purchase['status'] ?? '') === 'pending'
+            && (int)($purchase['submitted_by'] ?? -1) === (int)($_SESSION['user_id'] ?? 0);
+    }
     return false;
 }
 

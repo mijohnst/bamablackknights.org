@@ -195,6 +195,9 @@ function paypal_create_order(float $amount, string $referenceId, string $request
 // mirror of paypal_send_payout()'s DUPLICATE_BATCH_ID handling above.
 // 'already_captured' distinguishes that specific, expected-on-retry
 // rejection from an ordinary failure the caller should just report as-is.
+// 'pending' means PayPal took the payment but is holding it (eCheck, risk
+// review): not money the club has yet, but not a failure to report to the
+// payer either — the caller should flag it for the Treasurer.
 function paypal_capture_order(string $orderId, string $requestId): array {
     $auth = paypal_get_access_token();
     if (!$auth['token']) return ['success' => false, 'error' => $auth['error']];
@@ -222,6 +225,17 @@ function paypal_capture_order(string $orderId, string $requestId): array {
             'captured_amount' => (float)($capture['amount']['value'] ?? 0),
         ];
     }
+    if ($code >= 200 && $code < 300 && $capture && ($capture['status'] ?? '') === 'PENDING') {
+        error_log('paypal_capture_order pending: ' . $resp);
+        return [
+            'success'         => false,
+            'pending'         => true,
+            'status'          => 'PENDING',
+            'capture_id'      => $capture['id'] ?? null,
+            'captured_amount' => (float)($capture['amount']['value'] ?? 0),
+            'error'           => 'Capture is pending at PayPal',
+        ];
+    }
     error_log('paypal_capture_order failed: HTTP ' . $code . ' ' . $resp);
     $is_duplicate = $code === 422 && (($data['details'][0]['issue'] ?? '') === 'ORDER_ALREADY_CAPTURED');
     return ['success' => false, 'already_captured' => $is_duplicate, 'error' => $data['message'] ?? ('PayPal returned HTTP ' . $code)];
@@ -232,7 +246,10 @@ function paypal_capture_order(string $orderId, string $requestId): array {
 // tracking row doesn't show it as applied yet (a crash between PayPal
 // confirming the capture and our own bookkeeping finishing) — recovers
 // the real capture id/amount so the flow can still finish instead of
-// stranding an already-paid order in limbo.
+// stranding an already-paid order in limbo. Same result shape as
+// paypal_capture_order(): success only for a COMPLETED capture, 'pending'
+// for one PayPal is holding, and a failure for anything else (DECLINED,
+// REFUNDED…) — never treat those as money received.
 function paypal_get_order(string $orderId): array {
     $auth = paypal_get_access_token();
     if (!$auth['token']) return ['success' => false, 'error' => $auth['error']];
@@ -251,12 +268,16 @@ function paypal_get_order(string $orderId): array {
     $data = json_decode((string)$resp, true);
     $capture = $data['purchase_units'][0]['payments']['captures'][0] ?? null;
     if ($code >= 200 && $code < 300 && $capture) {
-        return [
-            'success'         => true,
-            'status'          => $capture['status'] ?? 'UNKNOWN',
+        $status = $capture['status'] ?? 'UNKNOWN';
+        $found  = [
+            'status'          => $status,
             'capture_id'      => $capture['id'] ?? null,
             'captured_amount' => (float)($capture['amount']['value'] ?? 0),
         ];
+        if ($status === 'COMPLETED') return ['success' => true] + $found;
+        if ($status === 'PENDING')   return ['success' => false, 'pending' => true, 'error' => 'Capture is pending at PayPal'] + $found;
+        error_log('paypal_get_order: capture ' . ($found['capture_id'] ?? '?') . " has status $status");
+        return ['success' => false, 'error' => "PayPal capture status is $status"] + $found;
     }
     error_log('paypal_get_order failed: HTTP ' . $code . ' ' . $resp);
     return ['success' => false, 'error' => $data['message'] ?? ('PayPal returned HTTP ' . $code)];

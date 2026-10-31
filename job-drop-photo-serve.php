@@ -7,7 +7,7 @@ start_session();
 $pdo = get_pdo();
 
 $can_preview = false;
-if (!empty($_SESSION['logged_in'])) {
+if (has_valid_login()) {
     $title_check = $pdo->prepare('SELECT officer_title FROM users WHERE id = ?');
     $title_check->execute([$_SESSION['user_id'] ?? 0]);
     $my_title = (string)($title_check->fetchColumn() ?: '');

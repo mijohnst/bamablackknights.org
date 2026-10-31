@@ -53,6 +53,12 @@ if ($action === 'approve') {
         flash('error', 'Only pending purchases can be approved.');
         header('Location: purchases.php'); exit;
     }
+    // Nobody approves their own purchase — not even an Admin. Another
+    // officer always can, so this never leaves a purchase stuck.
+    if ((int)($p['submitted_by'] ?? 0) === (int)($_SESSION['user_id'] ?? -1)) {
+        flash('error', 'You can’t approve a purchase you submitted. Another officer will need to approve it.');
+        header('Location: purchases.php'); exit;
+    }
     // President <-> VP cross-approval: President and VP share the generic
     // 'officer' role, so nothing else distinguishes them. If the submitter
     // is tagged as one of the two, only their counterpart (or an Admin/Tech

@@ -86,9 +86,16 @@ if ($action === 'save') {
         // simply not matched, not an error that leaks whether it exists.
         $upd = $pdo->prepare('UPDATE parent_letters SET letter_body = ? WHERE id = ? AND member_id = ?');
         $upd->execute([$body, $letter_id, $member_id]);
+        // rowCount() is 0 both for "no such letter" and for saving text that
+        // didn't change (MySQL counts changed rows, not matched ones), so
+        // only treat it as missing if the row really isn't there.
         if ($upd->rowCount() === 0) {
-            echo json_encode(['success' => false, 'error' => 'That letter could not be found.']);
-            exit();
+            $exists = $pdo->prepare('SELECT 1 FROM parent_letters WHERE id = ? AND member_id = ?');
+            $exists->execute([$letter_id, $member_id]);
+            if (!$exists->fetchColumn()) {
+                echo json_encode(['success' => false, 'error' => 'That letter could not be found.']);
+                exit();
+            }
         }
     } else {
         $ins = $pdo->prepare('INSERT INTO parent_letters (member_id, letter_body) VALUES (?, ?)');

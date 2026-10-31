@@ -4,7 +4,7 @@
 // never public.
 require_once __DIR__ . '/admin/auth.php';
 start_session();
-if (empty($_SESSION['logged_in'])) { http_response_code(404); exit; }
+if (!has_valid_login()) { http_response_code(404); exit; }
 $pdo = get_pdo();
 
 $id = (int)($_GET['id'] ?? 0);

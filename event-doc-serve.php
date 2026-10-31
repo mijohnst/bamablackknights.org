@@ -8,7 +8,7 @@ start_session();
 // bypass the visible=1 check and view hidden/unpublished albums just by
 // knowing a filename. Hidden-album preview should be limited to whoever can
 // actually manage albums (event-albums.php's own guard), same as admin.
-$is_admin_session = !empty($_SESSION['logged_in']) && can_manage_members();
+$is_admin_session = has_valid_login() && can_manage_members();
 $pdo = get_pdo();
 
 $filename = basename($_GET['f'] ?? '');

@@ -5,7 +5,7 @@
 // review queue itself, never public.
 require_once __DIR__ . '/admin/auth.php';
 start_session();
-if (empty($_SESSION['logged_in']) || !can_manage_members()) {
+if (!has_valid_login() || !can_manage_members()) {
     http_response_code(404); exit;
 }
 $pdo = get_pdo();
