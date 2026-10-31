@@ -171,4 +171,4 @@ $binding = match (true) {
     count($matches) > 1   => ['error' => 'More than one record matched those details. Please contact secretary@bamablackknights.org for help.'],
     default               => null,
 };
-email_code_respond_issued(UPDATE_CODE_POOL, $binding, $email, 'update your family information', 'secretary@bamablackknights.org');
+email_code_respond_issued($pdo, UPDATE_CODE_POOL, $binding, $email, 'update your family information', 'secretary@bamablackknights.org');

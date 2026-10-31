@@ -99,7 +99,7 @@ if (s($payload, 'action') === 'verify') {
     }
 
     // No match gets a decoy challenge, so the response doesn't reveal it.
-    email_code_respond_issued('letters', $m ? ['member_id' => (int)$m['id']] : null, $email, 'write your Parent Letter', 'secretary@bamablackknights.org');
+    email_code_respond_issued($pdo, 'letters', $m ? ['member_id' => (int)$m['id']] : null, $email, 'write your Parent Letter', 'secretary@bamablackknights.org');
 }
 
 start_verification_session();

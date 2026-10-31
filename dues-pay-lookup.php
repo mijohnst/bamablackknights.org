@@ -84,7 +84,7 @@ if (s($payload, 'action') === 'verify') {
     }
 
     // No match gets a decoy challenge, so the response doesn't reveal it.
-    email_code_respond_issued('dues', $m ? ['member_id' => (int)$m['id']] : null, $email, 'pay membership dues online', 'treasurer@bamablackknights.org');
+    email_code_respond_issued($pdo, 'dues', $m ? ['member_id' => (int)$m['id']] : null, $email, 'pay membership dues online', 'treasurer@bamablackknights.org');
 }
 
 $cadet_years = cadet_dues_years($m['class_year'] ?? '');

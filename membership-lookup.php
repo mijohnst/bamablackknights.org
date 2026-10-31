@@ -99,7 +99,7 @@ if (membership_lookup_value($payload, 'action') === 'verify') {
             'email_owner' => $email_owner,
         ];
     }
-    email_code_respond_issued('membership', $binding, $email, 'continue your membership', 'secretary@bamablackknights.org');
+    email_code_respond_issued($pdo, 'membership', $binding, $email, 'continue your membership', 'secretary@bamablackknights.org');
 }
 
 start_verification_session();

@@ -2,7 +2,7 @@
  * Emailed verification code step for the public lookup forms.
  * ─────────────────────────────────────────────────────────────────────────────
  * Pairs with admin/email-code.php. The lookup button POSTs the form's fields
- * to its endpoint, which emails a 6-digit code to the address typed and
+ * to its endpoint, which emails a 3-character code to the address typed and
  * returns a challengeId. This script then swaps the lookup fields for a code
  * box; a correct code POSTs { action: 'verify', challengeId, code } to the
  * same endpoint, whose response goes to onVerified exactly as the old
@@ -51,11 +51,13 @@
     step.hidden = true;
     var intro = el('p', { style: 'color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem' });
     var sentTo = el('strong');
-    intro.append("If that information matches a record on file, we've sent a 6-digit code to ", sentTo,
+    intro.append("If that information matches a record on file, we've sent a 3-character code (letters and numbers) to ", sentTo,
       ". It expires in 10 minutes. Don't see it? Check your spam or junk folder.");
     var group = el('div', { 'class': 'form-group', style: 'max-width:14rem' });
     var inputId = 'emailCode-' + Math.random().toString(36).slice(2);
-    var input = el('input', { type: 'text', id: inputId, inputmode: 'numeric', autocomplete: 'one-time-code', maxlength: '6', pattern: '[0-9]*' });
+    var input = el('input', { type: 'text', id: inputId, autocomplete: 'one-time-code', maxlength: '3',
+      autocapitalize: 'characters', autocorrect: 'off', spellcheck: 'false',
+      style: 'text-transform:uppercase;letter-spacing:.3em;font-size:1.25rem' });
     group.append(el('label', { 'for': inputId }, 'Verification Code *'), input);
     var verifyBtn = el('button', { type: 'button', 'class': 'cta-button' }, 'Verify & Continue');
     var links = el('p', { style: 'font-size:.85rem;margin-top:.85rem' });
@@ -114,10 +116,10 @@
     });
 
     verifyBtn.addEventListener('click', async function () {
-      var code = input.value.replace(/\D/g, '');
+      var code = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
       showStatus('');
-      if (code.length !== 6) {
-        showStatus('Please enter the 6-digit code from the email.', 'error');
+      if (code.length !== 3) {
+        showStatus('Please enter the 3-character code from the email.', 'error');
         return;
       }
       verifyBtn.textContent = 'Verifying…';

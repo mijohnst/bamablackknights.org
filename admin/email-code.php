@@ -27,17 +27,62 @@ require_once __DIR__ . '/lib.php';
 require_once __DIR__ . '/mailer.php';
 require_once __DIR__ . '/form-guard.php';
 
+// Codes are 3 characters from this alphabet: letters and digits, minus the
+// look-alikes 0/O and 1/I/L, so 31^3 ≈ 30,000 possible codes. Matching is
+// case-insensitive. Short codes are guessable only because they're short,
+// so attempts per code are low and each record can only be sent so many
+// codes a day (see email_code_recipient_capped()).
+const EMAIL_CODE_ALPHABET     = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const EMAIL_CODE_LENGTH       = 3;
 const EMAIL_CODE_TTL          = 600; // 10 minutes
-const EMAIL_CODE_MAX_ATTEMPTS = 5;
+const EMAIL_CODE_MAX_ATTEMPTS = 3;
+const EMAIL_CODE_DAILY_CAP    = 10;  // codes per record (or address) per 24 hours
 
 function email_code_hash(string $challenge_id, string $code): string {
     return hash('sha256', $challenge_id . '|' . $code);
 }
 
-// Creates a challenge and, when $binding is non-null, emails a 6-digit code
-// to $email. Returns the challenge id, or null if the email couldn't be sent.
-// A null $binding sends nothing and stores a decoy that never verifies.
-function email_code_issue(string $pool, ?array $binding, string $email, string $purpose): ?string {
+function email_code_generate(): string {
+    $code = '';
+    for ($i = 0; $i < EMAIL_CODE_LENGTH; $i++) {
+        $code .= EMAIL_CODE_ALPHABET[random_int(0, strlen(EMAIL_CODE_ALPHABET) - 1)];
+    }
+    return $code;
+}
+
+// Uppercases and drops anything that isn't a letter or digit (spaces, dashes).
+function email_code_normalize(string $code): string {
+    return preg_replace('/[^A-Z0-9]/', '', strtoupper($code));
+}
+
+// True once $target (a member id or email) has been sent EMAIL_CODE_DAILY_CAP
+// codes in 24 hours; otherwise records this send and returns false. Unlike
+// rate_limited(), keyed by recipient rather than IP, so spreading guesses
+// across networks doesn't buy more codes — and shared across every form, so
+// neither does spreading them across forms. Reuses the form_throttle table;
+// fails open like rate_limited() if it can't be reached.
+function email_code_recipient_capped(PDO $pdo, string $target): bool {
+    $key = hash('sha256', 'email_code|' . strtolower($target));
+    try {
+        $stmt = $pdo->prepare(
+            "SELECT COUNT(*) FROM form_throttle WHERE form_name = 'email_code' AND ip_hash = ? AND created_at > NOW() - INTERVAL 1 DAY"
+        );
+        $stmt->execute([$key]);
+        if ((int)$stmt->fetchColumn() >= EMAIL_CODE_DAILY_CAP) return true;
+        $pdo->prepare("INSERT INTO form_throttle (form_name, ip_hash) VALUES ('email_code', ?)")->execute([$key]);
+        return false;
+    } catch (PDOException $e) {
+        error_log('email-code: recipient cap check failed — ' . $e->getMessage());
+        return false;
+    }
+}
+
+// Creates a challenge and, when $binding is non-null, emails a code to
+// $email. Returns the challenge id, or null if the email couldn't be sent.
+// A null $binding sends nothing and stores a decoy that never verifies; a
+// record over its daily cap gets the same treatment, so the cap isn't
+// visible from outside either.
+function email_code_issue(PDO $pdo, string $pool, ?array $binding, string $email, string $purpose): ?string {
     start_verification_session();
     if (!isset($_SESSION['email_codes'][$pool]) || !is_array($_SESSION['email_codes'][$pool])) {
         $_SESSION['email_codes'][$pool] = [];
@@ -48,12 +93,20 @@ function email_code_issue(string $pool, ?array $binding, string $email, string $
     }
 
     $challenge_id = bin2hex(random_bytes(24));
-    $code         = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    $code         = email_code_generate();
+
+    if ($binding !== null) {
+        $target = isset($binding['member_id']) ? 'member:' . $binding['member_id'] : 'email:' . $email;
+        if (email_code_recipient_capped($pdo, $target)) {
+            error_log("email-code: daily code cap reached ($pool" . (isset($binding['member_id']) ? ", member {$binding['member_id']}" : '') . ') — no code sent');
+            $binding = null;
+        }
+    }
 
     if ($binding !== null) {
         $body = "Your verification code is:\n\n"
               . "    $code\n\n"
-              . "Enter it on the bamablackknights.org page where you requested it to $purpose. "
+              . "(Letters and numbers; capitals don't matter.) Enter it on the bamablackknights.org page where you requested it to $purpose. "
               . "The code expires in 10 minutes.\n\n"
               . "If you didn't request this, you can ignore this email; nothing has been changed. "
               . "Questions? Contact secretary@bamablackknights.org.\n\n"
@@ -82,7 +135,7 @@ function email_code_verify(string $pool, string $challenge_id, string $code): ar
         return ['ok' => false, 'error' => 'That code has expired. Please request a new one.'];
     }
 
-    $code = preg_replace('/\D/', '', $code);
+    $code = email_code_normalize($code);
     $_SESSION['email_codes'][$pool][$challenge_id]['attempts'] = ++$c['attempts'];
 
     if ($c['binding'] !== null && hash_equals($c['hash'], email_code_hash($challenge_id, $code))) {
@@ -102,8 +155,8 @@ function email_code_verify(string $pool, string $challenge_id, string $code): ar
 
 // Step 1: issue a code for $binding (null = no match) and respond with the
 // challenge id. Always exits.
-function email_code_respond_issued(string $pool, ?array $binding, string $email, string $purpose, string $contact): void {
-    $challenge_id = email_code_issue($pool, $binding, $email, $purpose);
+function email_code_respond_issued(PDO $pdo, string $pool, ?array $binding, string $email, string $purpose, string $contact): void {
+    $challenge_id = email_code_issue($pdo, $pool, $binding, $email, $purpose);
     if ($challenge_id === null) {
         echo json_encode(['success' => false, 'error' => "We couldn't send the verification email right now. Please try again in a few minutes or contact $contact."]);
         exit();

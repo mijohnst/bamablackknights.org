@@ -91,7 +91,7 @@ if (s($payload, 'action') === 'verify') {
     }
 
     // No match gets a decoy challenge, so the response doesn't reveal it.
-    email_code_respond_issued('jobdrop', $m ? ['member_id' => (int)$m['id']] : null, $email, 'submit your Job Drop Night photo', 'secretary@bamablackknights.org');
+    email_code_respond_issued($pdo, 'jobdrop', $m ? ['member_id' => (int)$m['id']] : null, $email, 'submit your Job Drop Night photo', 'secretary@bamablackknights.org');
 }
 
 // Tell the front end whether this family already has a submission on file,
