@@ -31,7 +31,7 @@ require_once __DIR__ . '/form-guard.php';
 // look-alikes 0/O and 1/I/L, so 31^3 ≈ 30,000 possible codes. Matching is
 // case-insensitive. Short codes are guessable only because they're short,
 // so attempts per code are low and each record can only be sent so many
-// codes a day (see email_code_recipient_capped()).
+// codes a day (see email_code_record_request()).
 const EMAIL_CODE_ALPHABET     = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const EMAIL_CODE_LENGTH       = 3;
 const EMAIL_CODE_TTL          = 600; // 10 minutes
@@ -55,33 +55,47 @@ function email_code_normalize(string $code): string {
     return preg_replace('/[^A-Z0-9]/', '', strtoupper($code));
 }
 
-// True once $target (a member id or email) has been sent EMAIL_CODE_DAILY_CAP
-// codes in 24 hours; otherwise records this send and returns false. Unlike
-// rate_limited(), keyed by recipient rather than IP, so spreading guesses
-// across networks doesn't buy more codes — and shared across every form, so
-// neither does spreading them across forms. Reuses the form_throttle table;
-// fails open like rate_limited() if it can't be reached.
-function email_code_recipient_capped(PDO $pdo, string $target): bool {
+// Records a code request for $target (a member id or email) and returns
+// ['count' => requests in the last 24 hours including this one, 'key' => throttle key],
+// or null if the table can't be reached (fail open, like rate_limited()).
+// Keyed by recipient rather than IP, so spreading guesses across networks
+// doesn't buy more codes — and shared across every form, so neither does
+// spreading them across forms. Inserting before counting (rather than
+// count-then-insert) means concurrent requests can't all slip under the cap.
+function email_code_record_request(PDO $pdo, string $target): ?array {
     $key = hash('sha256', 'email_code|' . strtolower($target));
     try {
+        $pdo->prepare("INSERT INTO form_throttle (form_name, ip_hash) VALUES ('email_code', ?)")->execute([$key]);
         $stmt = $pdo->prepare(
             "SELECT COUNT(*) FROM form_throttle WHERE form_name = 'email_code' AND ip_hash = ? AND created_at > NOW() - INTERVAL 1 DAY"
         );
         $stmt->execute([$key]);
-        if ((int)$stmt->fetchColumn() >= EMAIL_CODE_DAILY_CAP) return true;
-        $pdo->prepare("INSERT INTO form_throttle (form_name, ip_hash) VALUES ('email_code', ?)")->execute([$key]);
-        return false;
+        return ['count' => (int)$stmt->fetchColumn(), 'key' => $key];
     } catch (PDOException $e) {
         error_log('email-code: recipient cap check failed — ' . $e->getMessage());
-        return false;
+        return null;
+    }
+}
+
+// Un-counts a request whose code email never went out, so a mail outage
+// doesn't use up a family's daily codes.
+function email_code_unrecord_request(PDO $pdo, ?array $request): void {
+    if (!$request) return;
+    try {
+        $pdo->prepare("DELETE FROM form_throttle WHERE form_name = 'email_code' AND ip_hash = ? ORDER BY created_at DESC LIMIT 1")
+            ->execute([$request['key']]);
+    } catch (PDOException $e) {
+        error_log('email-code: could not un-count failed send — ' . $e->getMessage());
     }
 }
 
 // Creates a challenge and, when $binding is non-null, emails a code to
 // $email. Returns the challenge id, or null if the email couldn't be sent.
-// A null $binding sends nothing and stores a decoy that never verifies; a
-// record over its daily cap gets the same treatment, so the cap isn't
-// visible from outside either.
+// A null $binding sends nothing and stores a decoy that never verifies.
+// A record over its daily cap gets a decoy too, so the cap isn't visible to
+// whoever is requesting — but the first time it's hit, the inbox owner is
+// emailed a notice instead of a code, so a real family that's been locked
+// out (or targeted) learns why and who to contact.
 function email_code_issue(PDO $pdo, string $pool, ?array $binding, string $email, string $purpose): ?string {
     start_verification_session();
     if (!isset($_SESSION['email_codes'][$pool]) || !is_array($_SESSION['email_codes'][$pool])) {
@@ -95,10 +109,21 @@ function email_code_issue(PDO $pdo, string $pool, ?array $binding, string $email
     $challenge_id = bin2hex(random_bytes(24));
     $code         = email_code_generate();
 
+    $request = null;
     if ($binding !== null) {
-        $target = isset($binding['member_id']) ? 'member:' . $binding['member_id'] : 'email:' . $email;
-        if (email_code_recipient_capped($pdo, $target)) {
+        $target  = isset($binding['member_id']) ? 'member:' . $binding['member_id'] : 'email:' . $email;
+        $request = email_code_record_request($pdo, $target);
+        if ($request && $request['count'] > EMAIL_CODE_DAILY_CAP) {
             error_log("email-code: daily code cap reached ($pool" . (isset($binding['member_id']) ? ", member {$binding['member_id']}" : '') . ') — no code sent');
+            if ($request['count'] === EMAIL_CODE_DAILY_CAP + 1) {
+                send_notification($email, 'Verification code limit reached',
+                    "We've received more requests for verification codes for your family's record today than we allow, "
+                  . "so no more codes will be sent until tomorrow.\n\n"
+                  . "If you've been trying to sign in, please try again tomorrow or contact secretary@bamablackknights.org and we'll help. "
+                  . "If these requests weren't from you, please let us know at the same address.\n\n"
+                  . "West Point Parents Club of Alabama\n"
+                  . "bamablackknights.org");
+            }
             $binding = null;
         }
     }
@@ -112,7 +137,10 @@ function email_code_issue(PDO $pdo, string $pool, ?array $binding, string $email
               . "Questions? Contact secretary@bamablackknights.org.\n\n"
               . "West Point Parents Club of Alabama\n"
               . "bamablackknights.org";
-        if (!send_notification($email, "Your verification code: $code", $body)) return null;
+        if (!send_notification($email, "Your verification code: $code", $body)) {
+            email_code_unrecord_request($pdo, $request);
+            return null;
+        }
     }
 
     $_SESSION['email_codes'][$pool][$challenge_id] = [
@@ -161,7 +189,8 @@ function email_code_respond_issued(PDO $pdo, string $pool, ?array $binding, stri
         echo json_encode(['success' => false, 'error' => "We couldn't send the verification email right now. Please try again in a few minutes or contact $contact."]);
         exit();
     }
-    echo json_encode(['success' => true, 'challengeId' => $challenge_id]);
+    // codeLength keeps email-code.js in step with EMAIL_CODE_LENGTH.
+    echo json_encode(['success' => true, 'challengeId' => $challenge_id, 'codeLength' => EMAIL_CODE_LENGTH]);
     exit();
 }
 

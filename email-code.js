@@ -29,6 +29,7 @@
 
   function attach(opts) {
     var challengeId = '';
+    var codeLength = 3; // replaced by the server's codeLength once a code is sent
     var buttonLabel = opts.button.textContent;
 
     function showStatus(text, kind) {
@@ -51,13 +52,24 @@
     step.hidden = true;
     var intro = el('p', { style: 'color:var(--gray);font-size:0.95rem;margin-bottom:1.25rem' });
     var sentTo = el('strong');
-    intro.append("If that information matches a record on file, we've sent a 3-character code (letters and numbers) to ", sentTo,
+    var lengthText = el('span');
+    intro.append("If that information matches a record on file, we've sent a ", lengthText, '-character code (letters and numbers) to ', sentTo,
       ". It expires in 10 minutes. Don't see it? Check your spam or junk folder.");
     var group = el('div', { 'class': 'form-group', style: 'max-width:14rem' });
     var inputId = 'emailCode-' + Math.random().toString(36).slice(2);
-    var input = el('input', { type: 'text', id: inputId, autocomplete: 'one-time-code', maxlength: '3',
+    // No maxlength: it would cut a pasted code (the email indents it with
+    // spaces) before the spaces could be stripped. The input handler below
+    // cleans and trims to length instead.
+    var input = el('input', { type: 'text', id: inputId, autocomplete: 'one-time-code',
       autocapitalize: 'characters', autocorrect: 'off', spellcheck: 'false',
       style: 'text-transform:uppercase;letter-spacing:.3em;font-size:1.25rem' });
+    function cleanCode(value) {
+      return value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, codeLength);
+    }
+    input.addEventListener('input', function () {
+      var cleaned = cleanCode(input.value);
+      if (cleaned !== input.value) input.value = cleaned;
+    });
     group.append(el('label', { 'for': inputId }, 'Verification Code *'), input);
     var verifyBtn = el('button', { type: 'button', 'class': 'cta-button' }, 'Verify & Continue');
     var links = el('p', { style: 'font-size:.85rem;margin-top:.85rem' });
@@ -82,6 +94,8 @@
         var result = await post(c.payload);
         if (result.success) {
           challengeId = result.challengeId;
+          codeLength = result.codeLength || codeLength;
+          lengthText.textContent = codeLength;
           sentTo.textContent = c.email;
           input.value = '';
           opts.fields.hidden = true;
@@ -116,10 +130,10 @@
     });
 
     verifyBtn.addEventListener('click', async function () {
-      var code = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      var code = cleanCode(input.value);
       showStatus('');
-      if (code.length !== 3) {
-        showStatus('Please enter the 3-character code from the email.', 'error');
+      if (code.length !== codeLength) {
+        showStatus('Please enter the ' + codeLength + '-character code from the email.', 'error');
         return;
       }
       verifyBtn.textContent = 'Verifying…';
