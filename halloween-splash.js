@@ -1,8 +1,8 @@
 // Halloween splash for the homepage — a small animated night scene behind a
 // greeting card that closes itself after about 5 seconds. Shows on every
 // homepage visit during October (visitor's local date) and removes itself
-// completely on close. From November 1 it never shows; leave the <script>
-// tag in index.html and it comes back next October.
+// completely on close. From November 1 it never shows; add a <script src="halloween-splash.js" defer>
+// tag back to index.html to bring it back next October.
 //
 // Preview anytime (ignores the date):
 //   https://bamablackknights.org/?halloween-preview
