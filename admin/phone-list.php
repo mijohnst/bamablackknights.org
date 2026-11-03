@@ -59,6 +59,16 @@ foreach ($rows as $r) {
 }
 $all_cells = array_keys($all_cells);
 
+// "Text group" buttons open the phone's Messages app with these numbers
+// filled in. Group texts top out around 20–30 people depending on phone and
+// carrier, so bigger lists are split. +1 numbers so the phone doesn't guess.
+const SMS_GROUP_SIZE = 20;
+$sms_batches = array_chunk(array_values(array_filter(array_map(function ($c) {
+    $d = preg_replace('/\D/', '', $c);
+    if (strlen($d) === 10) return '+1' . $d;
+    return (strlen($d) === 11 && $d[0] === '1') ? '+' . $d : null;
+}, $all_cells))), SMS_GROUP_SIZE);
+
 $year_label = $year === 'current' ? 'Current classes' : ($year === '' ? 'All classes' : 'Class of ' . $year);
 $who_label  = implode(', ', array_map(fn($w) => $who_labels[$w], $show));
 
@@ -100,6 +110,7 @@ admin_header('Phone List');
 .phone-class{background:#f5f5f0;font-family:'Cinzel',serif;font-weight:700;color:#000;font-size:.85rem;letter-spacing:.04em}
 .phone-none{color:#b0b6bd}
 .copy-card{margin-bottom:1rem}
+.sms-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
 .copy-card textarea{font-size:.9rem;line-height:1.5;resize:vertical;background:#fafaf7}
 .print-date{display:none}
 @media print{
@@ -178,8 +189,25 @@ admin_header('Phone List');
     <button type="button" class="btn btn-primary" id="copy-btn" onclick="copyNumbers()">Copy</button>
   </div>
   <textarea id="copy-numbers" readonly rows="3" onfocus="this.select()" onclick="this.setSelectionRange(0, this.value.length)"><?= h(implode(', ', $all_cells)) ?></textarea>
+  <?php if ($sms_batches): ?>
+  <div class="sms-row">
+    <?php foreach ($sms_batches as $i => $batch): ?>
+      <a class="btn btn-secondary sms-btn" href="#" data-numbers="<?= h(implode(',', $batch)) ?>">💬 Text <?= count($sms_batches) > 1 ? 'group ' . ($i + 1) . ' (' . ($i * SMS_GROUP_SIZE + 1) . '–' . ($i * SMS_GROUP_SIZE + count($batch)) . ')' : 'these numbers' ?></a>
+    <?php endforeach; ?>
+  </div>
+  <div style="font-size:.8rem;color:#5a6a7a;margin-top:.4rem">Opens Messages on your phone with the numbers filled in — you type the message and send it from your own phone. It's a <strong>group text</strong>: everyone in it sees each other's numbers and replies go to the whole group.<?= count($sms_batches) > 1 ? ' Larger lists are split into groups of ' . SMS_GROUP_SIZE . '.' : '' ?></div>
+  <?php endif; ?>
 </div>
 <script>
+// iPhones/iPads/Macs need sms:/open?addresses=a,b for more than one
+// recipient; Android takes sms:a,b.
+(function () {
+  var apple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  document.querySelectorAll('.sms-btn').forEach(function (a) {
+    var nums = a.getAttribute('data-numbers');
+    a.href = apple ? 'sms:/open?addresses=' + nums : 'sms:' + nums;
+  });
+})();
 function copyNumbers() {
   var box = document.getElementById('copy-numbers'), btn = document.getElementById('copy-btn');
   var done = function () { btn.textContent = 'Copied ✓'; setTimeout(function () { btn.textContent = 'Copy'; }, 2000); };
