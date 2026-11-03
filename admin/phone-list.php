@@ -52,6 +52,13 @@ $people = function (array $r) use ($show): array {
     return $out;
 };
 
+// Every number in the list, once each, for the copy box (group texts).
+$all_cells = [];
+foreach ($rows as $r) {
+    foreach ($people($r) as [, $cell]) if ($cell !== '') $all_cells[$cell] = true;
+}
+$all_cells = array_keys($all_cells);
+
 $year_label = $year === 'current' ? 'Current classes' : ($year === '' ? 'All classes' : 'Class of ' . $year);
 $who_label  = implode(', ', array_map(fn($w) => $who_labels[$w], $show));
 
@@ -92,6 +99,8 @@ admin_header('Phone List');
 .who-checks input{width:auto;margin:0;padding:0;accent-color:#000}
 .phone-class{background:#f5f5f0;font-family:'Cinzel',serif;font-weight:700;color:#000;font-size:.85rem;letter-spacing:.04em}
 .phone-none{color:#b0b6bd}
+.copy-card{margin-bottom:1rem}
+.copy-card textarea{font-size:.9rem;line-height:1.5;resize:vertical;background:#fafaf7}
 .print-date{display:none}
 @media print{
   @page{margin:.5in}
@@ -161,6 +170,27 @@ admin_header('Phone List');
     </div>
   </div>
 </form>
+
+<?php if ($all_cells): ?>
+<div class="card no-print copy-card">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.5rem">
+    <div><strong>All numbers</strong> <span style="color:#5a6a7a;font-size:.85rem">— <?= count($all_cells) ?> number<?= count($all_cells) === 1 ? '' : 's' ?>. Tap the box to select them all, or use Copy, then paste into a group text.</span></div>
+    <button type="button" class="btn btn-primary" id="copy-btn" onclick="copyNumbers()">Copy</button>
+  </div>
+  <textarea id="copy-numbers" readonly rows="3" onfocus="this.select()" onclick="this.setSelectionRange(0, this.value.length)"><?= h(implode(', ', $all_cells)) ?></textarea>
+</div>
+<script>
+function copyNumbers() {
+  var box = document.getElementById('copy-numbers'), btn = document.getElementById('copy-btn');
+  var done = function () { btn.textContent = 'Copied ✓'; setTimeout(function () { btn.textContent = 'Copy'; }, 2000); };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(box.value).then(done, function () { box.focus(); box.setSelectionRange(0, box.value.length); document.execCommand('copy'); done(); });
+  } else {
+    box.focus(); box.setSelectionRange(0, box.value.length); document.execCommand('copy'); done();
+  }
+}
+</script>
+<?php endif; ?>
 
 <div class="card" style="padding:0;overflow:auto">
 <table>
