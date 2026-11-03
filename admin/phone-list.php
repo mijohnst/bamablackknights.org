@@ -59,15 +59,13 @@ foreach ($rows as $r) {
 }
 $all_cells = array_keys($all_cells);
 
-// "Text group" buttons open the phone's Messages app with these numbers
-// filled in. Group texts top out around 20–30 people depending on phone and
-// carrier, so bigger lists are split. +1 numbers so the phone doesn't guess.
-const SMS_GROUP_SIZE = 20;
-$sms_batches = array_chunk(array_values(array_filter(array_map(function ($c) {
+// The "Text these numbers" button opens the phone's Messages app with every
+// number filled in. +1 numbers so the phone doesn't guess.
+$sms_numbers = array_values(array_filter(array_map(function ($c) {
     $d = preg_replace('/\D/', '', $c);
     if (strlen($d) === 10) return '+1' . $d;
     return (strlen($d) === 11 && $d[0] === '1') ? '+' . $d : null;
-}, $all_cells))), SMS_GROUP_SIZE);
+}, $all_cells)));
 
 $year_label = $year === 'current' ? 'Current classes' : ($year === '' ? 'All classes' : 'Class of ' . $year);
 $who_label  = implode(', ', array_map(fn($w) => $who_labels[$w], $show));
@@ -189,13 +187,11 @@ admin_header('Phone List');
     <button type="button" class="btn btn-primary" id="copy-btn" onclick="copyNumbers()">Copy</button>
   </div>
   <textarea id="copy-numbers" readonly rows="3" onfocus="this.select()" onclick="this.setSelectionRange(0, this.value.length)"><?= h(implode(', ', $all_cells)) ?></textarea>
-  <?php if ($sms_batches): ?>
+  <?php if ($sms_numbers): ?>
   <div class="sms-row">
-    <?php foreach ($sms_batches as $i => $batch): ?>
-      <a class="btn btn-secondary sms-btn" href="#" data-numbers="<?= h(implode(',', $batch)) ?>">💬 Text <?= count($sms_batches) > 1 ? 'group ' . ($i + 1) . ' (' . ($i * SMS_GROUP_SIZE + 1) . '–' . ($i * SMS_GROUP_SIZE + count($batch)) . ')' : 'these numbers' ?></a>
-    <?php endforeach; ?>
+    <a class="btn btn-secondary sms-btn" href="#" data-numbers="<?= h(implode(',', $sms_numbers)) ?>">💬 Text these <?= count($sms_numbers) ?> number<?= count($sms_numbers) === 1 ? '' : 's' ?></a>
   </div>
-  <div style="font-size:.8rem;color:#5a6a7a;margin-top:.4rem">Opens Messages on your phone with the numbers filled in — you type the message and send it from your own phone. It's a <strong>group text</strong>: everyone in it sees each other's numbers and replies go to the whole group.<?= count($sms_batches) > 1 ? ' Larger lists are split into groups of ' . SMS_GROUP_SIZE . '.' : '' ?></div>
+  <div style="font-size:.8rem;color:#5a6a7a;margin-top:.4rem">Opens Messages on your phone with the numbers filled in — you type the message and send it from your own phone. It's a <strong>group text</strong>: everyone in it sees each other's numbers and replies go to the whole group. Some phones and carriers cap group size; if a big group won't send, narrow the filters (e.g. one class) and send in parts.</div>
   <?php endif; ?>
 </div>
 <script>
