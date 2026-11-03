@@ -85,8 +85,11 @@ admin_header('Phone List');
 ?>
 <style>
 .filter-bar .form-group{max-width:190px}
-.who-checks{display:flex;gap:.75rem;flex-wrap:wrap;padding-top:.35rem}
-.who-checks label{display:flex;align-items:center;gap:.3rem;font-weight:400;text-transform:none;letter-spacing:0;font-size:.85rem;cursor:pointer}
+/* Styled like the selects beside it so the row lines up */
+.filter-bar .who-group{flex:0 0 auto;max-width:none}
+.who-checks{display:flex;align-items:center;gap:1rem;height:calc(.9rem * 1.15 + 1.1rem + 2px);min-height:38px;padding:0 .85rem;border:1px solid #d0d5dd;border-radius:4px;background:#fff}
+.who-checks label{display:flex;align-items:center;gap:.35rem;margin:0;white-space:nowrap;font-weight:400;text-transform:none;letter-spacing:0;font-size:.9rem;color:#1a2332;cursor:pointer}
+.who-checks input{width:auto;margin:0;padding:0;accent-color:#000}
 .phone-class{background:#f5f5f0;font-family:'Cinzel',serif;font-weight:700;color:#000;font-size:.85rem;letter-spacing:.04em}
 .phone-none{color:#b0b6bd}
 .print-date{display:none}
@@ -142,7 +145,7 @@ admin_header('Phone List');
       <?php endforeach; ?>
     </select>
   </div>
-  <div class="form-group" style="max-width:none">
+  <div class="form-group who-group">
     <label>Include</label>
     <div class="who-checks">
       <?php foreach ($who_labels as $w => $label): ?>
