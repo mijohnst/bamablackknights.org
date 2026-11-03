@@ -217,6 +217,7 @@ if (can_manage_members()) {
         $sponsors_tile_added = true;
     }
     $sections['Member Management'][] = ['icon'=>'🎂','label'=>'Cadet Birthdays','sub'=>'By month, class, dues','href'=>'birthdays.php','color'=>'#f57c00'];
+    $sections['Member Management'][] = ['icon'=>'📞','label'=>'Phone List','sub'=>'Cadet & parent cells, printable','href'=>'phone-list.php','color'=>'#1b5e20'];
     $sections['Member Management'][] = ['icon'=>'📋','label'=>'Lists','sub'=>'Email & contact lists','href'=>'lists.php','color'=>'#1565c0'];
     $sections['Member Management'][] = ['icon'=>'✉️','label'=>'Email Members','sub'=>'Compose blast','href'=>'email.php','color'=>'#6a1b9a'];
     // Secretary tools
