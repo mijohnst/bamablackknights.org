@@ -4,7 +4,7 @@
  * Emails a personalized happy-birthday note to the cadet (if we have their
  * email) and to their parent(s), for any cadet whose birthday is today.
  * Run via cron every day:
- *   0 8 * * * php /home/alabkmgg/public_html/admin/birthday-wishes.php
+ *   0 8 * * * php /home/CPANEL_USER/public_html/admin/birthday-wishes.php
  */
 
 // Block direct browser access

@@ -8,7 +8,9 @@
  * the enabled flag in the database decide what actually sends.
  *
  * Run via cron every day:
- *   0 8 * * * php /home/alabkmgg/public_html/admin/automated-emails-cron.php
+ *   0 8 * * * /usr/local/bin/php /home/CPANEL_USER/public_html/admin/automated-emails-cron.php
+ * (CPANEL_USER = this site's cPanel username — the home directory shown
+ * on the right of the cPanel home page. Cron runs in the server's timezone.)
  *
  * If you already have a cron entry for admin/birthday-wishes.php, you can
  * repoint it to this script instead (recommended, one cron for everything)

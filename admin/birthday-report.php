@@ -2,7 +2,7 @@
 /**
  * Monthly Birthday Report
  * Run via cron on the 1st of each month:
- *   0 8 1 * * php /home/alabkmgg/public_html/admin/birthday-report.php
+ *   0 8 1 * * php /home/CPANEL_USER/public_html/admin/birthday-report.php
  */
 
 // Block direct browser access
