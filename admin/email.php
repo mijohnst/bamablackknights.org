@@ -342,6 +342,19 @@ $preview_count = count(extract_emails($recipients));
 // Sending Queue panel — empty (and hidden) until migrate_email_queue.sql runs
 try { $queue_jobs = email_queue_recent($pdo); } catch (PDOException $e) { $queue_jobs = []; }
 
+// Live numbers for the recipient warning / queue counter. null = queue
+// tables not migrated yet (sends go out directly, so only the size warning
+// applies).
+try {
+    $q_waiting   = (int)$pdo->query("SELECT COUNT(*) FROM email_queue_recipients r JOIN email_queue_jobs j ON j.id = r.job_id
+                                     WHERE r.status='pending' AND j.status IN ('queued','sending')")->fetchColumn();
+    $q_jobs      = (int)$pdo->query("SELECT COUNT(DISTINCT r.job_id) FROM email_queue_recipients r JOIN email_queue_jobs j ON j.id = r.job_id
+                                     WHERE r.status='pending' AND j.status IN ('queued','sending')")->fetchColumn();
+    $q_hour_left = max(0, EMAIL_QUEUE_HOURLY - email_queue_sent_last_hour($pdo));
+} catch (PDOException $e) {
+    $q_waiting = $q_jobs = $q_hour_left = null;
+}
+
 admin_header('Compose Email');
 ?>
 <!-- Quill rich text editor (CDN) -->
@@ -353,6 +366,8 @@ admin_header('Compose Email');
 .loader-card h2{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#000000;margin-bottom:1rem}
 .from-badge{display:inline-flex;align-items:center;gap:.5rem;background:#f0f4ff;border:1px solid #c7d4f5;border-radius:4px;padding:.45rem .85rem;font-size:.9rem;color:#000000;font-weight:600}
 .recipient-count{font-size:.78rem;margin-top:.3rem}
+.send-warning{margin-top:.5rem;padding:.6rem .8rem;border-left:4px solid #f57c00;background:#fff4e5;color:#5d3a00;font-size:.82rem;border-radius:0 4px 4px 0}
+.queue-counter{margin-top:.45rem;font-size:.78rem;color:#5a6a7a}
 .char-count{font-size:.78rem;color:#5a6a7a;text-align:right;margin-top:.25rem}
 .cd{position:relative}
 .cd-btn{width:100%;text-align:left;background:#fff;border:1px solid #d0d5dd;border-radius:4px;padding:.55rem .75rem;cursor:pointer;font-size:.9rem;color:#1a2332;display:flex;justify-content:space-between;align-items:center;font-family:inherit;white-space:nowrap;overflow:hidden;gap:.4rem}
@@ -549,6 +564,18 @@ admin_header('Compose Email');
       <div class="recipient-count" id="recipient-count" style="color:<?= $preview_count>0?'#2e7d32':'#5a6a7a' ?>">
         <?= $preview_count > 0 ? '✓ ' . $preview_count . ' valid address' . ($preview_count!==1?'es':'') . ' loaded' : 'No addresses loaded yet' ?>
       </div>
+      <div id="send-warning" class="send-warning" style="display:none"></div>
+      <?php if ($q_hour_left !== null): ?>
+      <div class="queue-counter">
+        📬 <strong><?= $q_hour_left ?></strong> of <?= EMAIL_QUEUE_HOURLY ?> sends left this hour
+        <?php if ($q_waiting > 0): ?>
+          · <strong><?= $q_jobs ?></strong> email<?= $q_jobs !== 1 ? 's' : '' ?> still going out
+          (<strong><?= $q_waiting ?></strong> recipient<?= $q_waiting !== 1 ? 's' : '' ?> waiting) — see Sending Queue below
+        <?php else: ?>
+          · nothing waiting in the queue
+        <?php endif; ?>
+      </div>
+      <?php endif; ?>
     </div>
 
     <div class="form-group">
@@ -689,7 +716,39 @@ function updateCount() {
   var el = document.getElementById('recipient-count');
   el.style.color = n > 0 ? '#2e7d32' : '#5a6a7a';
   el.textContent = n > 0 ? '✓ ' + n + ' valid address' + (n!==1?'es':'') + ' loaded' : 'No addresses loaded yet';
+  updateSendWarning(n);
 }
+
+// ── Hourly-limit warning ──────────────────────────────────────────────────
+// The host allows ~200 recipients/hour; the queue sends HOURLY per hour.
+// Estimate what goes out now vs. later, counting sends already waiting.
+var HOURLY    = <?= EMAIL_QUEUE_HOURLY ?>;
+var Q_WAITING = <?= json_encode($q_waiting) ?>;   // null = queue not set up
+var Q_LEFT    = <?= json_encode($q_hour_left) ?>;
+var sendWarningText = '';
+function updateSendWarning(n) {
+  var box = document.getElementById('send-warning');
+  var msg = '';
+  if (Q_WAITING === null) {
+    if (n > HOURLY) msg = '⚠ ' + n + ' recipients is more than the ' + HOURLY + ' per hour the server allows. ' +
+      'Some of these emails may be silently dropped — consider splitting this into smaller sends an hour apart.';
+  } else if (n > 0) {
+    var now   = Math.max(0, Math.min(n, Q_LEFT - Q_WAITING));
+    var later = n - now;
+    if (later > 0) {
+      var hours = Math.max(1, Math.ceil((Q_WAITING + n - Q_LEFT) / HOURLY));
+      msg = '⚠ ' + (n > HOURLY ? n + ' recipients is more than the ' + HOURLY + ' per hour the server allows. '
+                               : 'Other emails are still going out (' + Q_WAITING + ' recipients waiting). ') +
+        (now > 0 ? now + ' will go out right away; the other ' + later : 'All ' + n + ' will wait in the queue and') +
+        ' will be sent automatically over about ' + hours + ' hour' + (hours > 1 ? 's' : '') + '. ' +
+        'Time-sensitive? Send it to fewer people, or wait until the queue clears.';
+    }
+  }
+  sendWarningText = msg;
+  box.textContent = msg;
+  box.style.display = msg ? 'block' : 'none';
+}
+updateSendWarning(extract_count(document.getElementById('recipients').value));
 // ── Message rich text editor ──────────────────────────────────────────────
 var quill = new Quill('#email-editor', {
   theme: 'snow',
@@ -713,13 +772,14 @@ function updateChar() {
 }
 quill.on('text-change', updateChar);
 updateChar();
-document.getElementById('compose-form').addEventListener('submit', function() {
+document.getElementById('compose-form').addEventListener('submit', function(e) {
+  if (sendWarningText && !confirm(sendWarningText + '\n\nSend anyway?')) { e.preventDefault(); return; }
   bodyInput.value = quill.root.innerHTML; // safety net
 });
 
 // ── Emoji picker ───────────────────────────────────────────────────────────
 var EMOJIS = ['😀','😊','😍','🎉','🎊','👍','👏','🙌','🤝','💪','❤️','⭐','✅','📅','📌','📣',
-              '✈️','🎓','🦅','🇺🇸','🏈','☀️','🎄','🎃','🥳','🙏','💰','📸','📝','🔔','⚡','🚀'];
+              '⚔️','🎓','🫡','🇺🇸','🏈','☀️','🎄','🎃','🥳','🙏','💰','📸','📝','🔔','⚡','🚀'];
 var emojiBtn   = document.getElementById('emoji-btn');
 var emojiPanel = document.getElementById('emoji-panel');
 EMOJIS.forEach(function(e) {
