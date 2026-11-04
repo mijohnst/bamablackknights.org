@@ -308,7 +308,7 @@ admin_header('Compose Email');
 .recipient-count{font-size:.78rem;margin-top:.3rem}
 .char-count{font-size:.78rem;color:#5a6a7a;text-align:right;margin-top:.25rem}
 .cd{position:relative}
-.cd-btn{width:100%;text-align:left;background:#fff;border:1px solid #d0d5dd;border-radius:4px;padding:.55rem .75rem;cursor:pointer;font-size:.9rem;color:#1a2332;display:flex;justify-content:space-between;align-items:center;font-family:inherit}
+.cd-btn{width:100%;text-align:left;background:#fff;border:1px solid #d0d5dd;border-radius:4px;padding:.55rem .75rem;cursor:pointer;font-size:.9rem;color:#1a2332;display:flex;justify-content:space-between;align-items:center;font-family:inherit;white-space:nowrap;overflow:hidden;gap:.4rem}
 .cd-btn::after{content:'▾';font-size:.8rem;color:#5a6a7a;flex-shrink:0}
 .cd-btn:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
 .cd-panel{display:none;position:absolute;top:calc(100% + 3px);left:0;right:0;background:#fff;border:1px solid #d0d5dd;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.12);z-index:200;padding:.4rem 0;min-width:160px}
@@ -540,11 +540,15 @@ var yrCbs = yrCd.querySelectorAll('input[type=checkbox]');
 function updateYrLabel() {
   var checked     = Array.from(yrCbs).filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
   var currentVals = Array.from(yrCbs).filter(function(c){ return c.dataset.current; }).map(function(c){ return c.value; });
-  var isCurrent   = checked.length === currentVals.length && currentVals.every(function(v){ return checked.indexOf(v) !== -1; });
-  yrBtn.childNodes[0].textContent = checked.length === 0           ? 'No Years'      :
-                                    checked.length === yrCbs.length ? 'All Years'     :
-                                    isCurrent                       ? 'Current Years' :
-                                    checked.join(', ');
+  var classVals   = currentVals.filter(function(v){ return v !== 'USMAPS'; });
+  var same = function(a, b){ return a.length === b.length && b.every(function(v){ return a.indexOf(v) !== -1; }); };
+  // Short labels only — a long comma list wraps and stretches the filter bar
+  yrBtn.childNodes[0].textContent = checked.length === 0           ? 'No Years'         :
+                                    checked.length === yrCbs.length ? 'All Years'        :
+                                    same(checked, classVals)        ? 'Current Classes'  :
+                                    same(checked, currentVals)      ? 'Current + USMAPS' :
+                                    checked.length <= 2             ? checked.join(', ') :
+                                    checked.length + ' years';
 }
 yrBtn.addEventListener('click', function(e){ e.stopPropagation(); yrCd.classList.toggle('open'); });
 document.addEventListener('click', function(){ yrCd.classList.remove('open'); });
