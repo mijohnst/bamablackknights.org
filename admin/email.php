@@ -57,6 +57,10 @@ function load_recipients(PDO $pdo, array $years, string $region, string $paid, s
               if ($r['parent1_email_updates'] && $r['parent1_email']) $lines[] = $r['parent1_email'];
               if ($r['parent2_email_updates'] && $r['parent2_email']) $lines[] = $r['parent2_email'];
                 break;
+            case 'parent_all': // every parent on file, opted in or not
+                if ($r['parent1_email']) $lines[] = $r['parent1_email'];
+                if ($r['parent2_email']) $lines[] = $r['parent2_email'];
+                break;
             case 'parent1':
               if ($r['parent1_email_updates'] && $r['parent1_email']) $lines[] = $r['parent1_email'];
                 break;
@@ -389,6 +393,7 @@ admin_header('Compose Email');
         <select name="f_type">
           <option value="everyone"    <?= $f_type==='everyone'   ?'selected':''?>>Opted-in Parents + Cadets</option>
           <option value="parent_both" <?= $f_type==='parent_both'?'selected':''?>>Opted-in Parent Contacts</option>
+          <option value="parent_all"  <?= $f_type==='parent_all' ?'selected':''?>>All Parents (incl. not opted in)</option>
           <option value="parent1"     <?= $f_type==='parent1'    ?'selected':''?>>Primary Contact (Opted In)</option>
           <option value="parent2"     <?= $f_type==='parent2'    ?'selected':''?>>Secondary Contact (Opted In)</option>
           <option value="cadet"       <?= $f_type==='cadet'      ?'selected':''?>>Cadet Emails</option>
