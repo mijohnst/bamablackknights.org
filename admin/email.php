@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/mailer.php';
+require_once __DIR__ . '/email-queue.php';
 require_member_admin(); // admin, tech, officer, secretary
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -191,6 +192,7 @@ $body        = trim($_POST['body']        ?? '');
 $from_email  = $_POST['from_email'] ?? 'president@bamablackknights.org';
 if (!array_key_exists($from_email, $from_options)) $from_email = 'president@bamablackknights.org';
 $sent        = false;
+$queued      = null; // queue counts for this send (sent/failed/pending)
 $errors      = [];
 $valid_count = 0;
 
@@ -220,6 +222,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['load'])) {
     $recipients = load_recipients($pdo, (array)$f_years, $f_region, $f_paid, $f_type, $f_missing, $f_event);
 }
 
+// ── Cancel a queued send ──────────────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['cancel_job'])) {
+    csrf_verify();
+    try {
+        email_queue_cancel($pdo, (int)$_POST['cancel_job']);
+        flash('success', 'Send cancelled — nobody else on that list will get it.');
+    } catch (PDOException $e) {
+        flash('error', 'Could not cancel that send.');
+    }
+    header('Location: email.php'); exit;
+}
+
 // ── Handle send ───────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['send'])) {
     csrf_verify();
@@ -244,49 +258,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['send'])) {
             $full_body     = fix_email_paragraph_spacing($full_body);
             $clean_subject = str_replace(["\r","\n"], '', $subject);
 
-            // Batch BCC into chunks of 90 to stay under the host mail server's
-            // per-message recipient cap — each batch is its own separate send
-            // to info@bamablackknights.org, reusing the same body/attachments.
-            // The host also caps total recipients per hour (every BCC counts).
-            $batches      = array_chunk($valid, 90);
-            $sent_count   = 0;
-            $failed_count = 0;
-
-            foreach ($batches as $batch) {
-                $mail = new PHPMailer(true);
-                try {
-                    configure_smtp_relay($mail);
-                    $mail->setFrom($from_email, CLUB_NAME);
-                    $mail->addReplyTo($from_email, CLUB_NAME);
-                    $mail->addAddress(CLUB_FROM_EMAIL);
-                    foreach ($batch as $bcc) $mail->addBCC($bcc);
-                    foreach ($attachments as $att) {
-                        $mail->addStringAttachment($att['content'], $att['name'], PHPMailer::ENCODING_BASE64, $att['mime']);
-                    }
-                    $mail->isHTML(true);
-                    $mail->Subject = $clean_subject;
-                    $mail->Body    = $full_body;
-
-                    $mail->send();
-                    $sent_count += count($batch);
-                } catch (PHPMailerException $e) {
-                    $failed_count += count($batch);
-                    error_log('Compose Email: PHPMailer error for a batch of ' . count($batch) . ' recipient(s) from ' . $from_email
-                        . ' — ' . $mail->ErrorInfo);
-                }
+            // Normal path: queue the send and push out whatever this hour's
+            // budget allows; the cron sends the rest (see email-queue.php).
+            $queued = null;
+            $job_id = null;
+            try {
+                $job_id = email_queue_create($pdo, $from_email, $clean_subject, $full_body, $valid, $attachments,
+                    isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null);
+                email_queue_process($pdo);
+                $qs = $pdo->prepare("SELECT SUM(status='sent') AS sent, SUM(status='failed') AS failed, SUM(status='pending') AS pending
+                                     FROM email_queue_recipients WHERE job_id=?");
+                $qs->execute([$job_id]);
+                $queued = $qs->fetch(PDO::FETCH_ASSOC);
+            } catch (Throwable $e) {
+                // Queue tables not migrated yet (or attachments couldn't be
+                // stored) — fall back to sending everything right now.
+                error_log('Compose Email: queue unavailable, sending directly — ' . $e->getMessage());
+                // Once the job is saved, never send directly too — that would
+                // double-send. The cron picks up whatever is still pending.
+                if ($job_id !== null) $queued = ['sent' => 0, 'failed' => 0, 'pending' => count($valid)];
             }
 
-            if ($sent_count > 0) {
+            if ($queued !== null) {
                 $sent        = true;
-                $valid_count = $sent_count;
+                $valid_count = count($valid);
                 $recipients  = '';
                 $subject     = '';
                 $body        = '';
-                if ($failed_count > 0) {
-                    $errors[] = "Sent to $sent_count recipient(s), but $failed_count could not be sent — please try again for those, or contact your hosting provider if it keeps happening.";
-                }
             } else {
-                $errors[] = 'Server failed to send. Please try again or contact your hosting provider.';
+                // Fallback: send immediately, ignoring the host's hourly cap.
+                // Batch BCC into chunks of 90 to stay under the per-message
+                // recipient cap — each batch is its own send to
+                // info@bamablackknights.org, reusing the same body/attachments.
+                $batches      = array_chunk($valid, 90);
+                $sent_count   = 0;
+                $failed_count = 0;
+
+                foreach ($batches as $batch) {
+                    $mail = new PHPMailer(true);
+                    try {
+                        configure_smtp_relay($mail);
+                        $mail->setFrom($from_email, CLUB_NAME);
+                        $mail->addReplyTo($from_email, CLUB_NAME);
+                        $mail->addAddress(CLUB_FROM_EMAIL);
+                        foreach ($batch as $bcc) $mail->addBCC($bcc);
+                        foreach ($attachments as $att) {
+                            $mail->addStringAttachment($att['content'], $att['name'], PHPMailer::ENCODING_BASE64, $att['mime']);
+                        }
+                        $mail->isHTML(true);
+                        $mail->Subject = $clean_subject;
+                        $mail->Body    = $full_body;
+
+                        $mail->send();
+                        $sent_count += count($batch);
+                    } catch (PHPMailerException $e) {
+                        $failed_count += count($batch);
+                        error_log('Compose Email: PHPMailer error for a batch of ' . count($batch) . ' recipient(s) from ' . $from_email
+                            . ' — ' . $mail->ErrorInfo);
+                    }
+                }
+
+                if ($sent_count > 0) {
+                    $sent        = true;
+                    $valid_count = $sent_count;
+                    $recipients  = '';
+                    $subject     = '';
+                    $body        = '';
+                    if ($failed_count > 0) {
+                        $errors[] = "Sent to $sent_count recipient(s), but $failed_count could not be sent — please try again for those, or contact your hosting provider if it keeps happening.";
+                    }
+                } else {
+                    $errors[] = 'Server failed to send. Please try again or contact your hosting provider.';
+                }
             }
         }
     }
@@ -295,6 +338,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['send'])) {
 }
 
 $preview_count = count(extract_emails($recipients));
+
+// Sending Queue panel — empty (and hidden) until migrate_email_queue.sql runs
+try { $queue_jobs = email_queue_recent($pdo); } catch (PDOException $e) { $queue_jobs = []; }
 
 admin_header('Compose Email');
 ?>
@@ -338,7 +384,20 @@ admin_header('Compose Email');
   <a href="lists.php" class="btn btn-secondary">← Lists</a>
 </div>
 
-<?php if ($sent): ?>
+<?= show_flash() ?>
+<?php if ($sent && $queued !== null):
+  $q_sent = (int)$queued['sent']; $q_failed = (int)$queued['failed']; $q_pending = (int)$queued['pending']; ?>
+  <div class="alert <?= $q_failed ? 'alert-error' : 'alert-success' ?>" style="max-width:900px">
+    <?php if ($q_pending === 0 && $q_failed === 0): ?>
+      ✓ Email sent to <strong><?= $q_sent ?></strong> recipient(s) via BCC.
+    <?php else: ?>
+      ✓ Email queued for <strong><?= $valid_count ?></strong> recipient(s).
+      <?= $q_sent ?> sent now<?= $q_failed ? ", <strong>$q_failed failed</strong>" : '' ?><?php if ($q_pending): ?>;
+      the other <strong><?= $q_pending ?></strong> go out automatically at about <?= EMAIL_QUEUE_HOURLY ?> per hour
+      (roughly <?= max(1, (int)ceil($q_pending / EMAIL_QUEUE_HOURLY)) ?> hour<?= ceil($q_pending / EMAIL_QUEUE_HOURLY) > 1 ? 's' : '' ?>). Track it under Sending Queue below.<?php endif; ?>
+    <?php endif; ?>
+  </div>
+<?php elseif ($sent): ?>
   <div class="alert alert-success" style="max-width:900px">
     ✓ Email sent to <strong><?= $valid_count ?></strong> recipient(s) via BCC.
   </div>
@@ -521,6 +580,50 @@ admin_header('Compose Email');
     </div>
   </form>
 </div>
+
+<?php if ($queue_jobs): ?>
+<!-- Sending Queue -->
+<div class="compose-card">
+  <h2 style="font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 .35rem">Sending Queue</h2>
+  <p style="font-size:.8rem;color:#5a6a7a;margin:0 0 .85rem">The host allows about 200 emails an hour, so large sends go out at about <?= EMAIL_QUEUE_HOURLY ?> recipients per hour. Last 14 days.</p>
+  <table>
+    <thead><tr><th>Subject</th><th>From</th><th>Queued</th><th>Progress</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    <?php foreach ($queue_jobs as $qj):
+      $total = (int)$qj['total']; $done = (int)$qj['sent']; $fail = (int)$qj['failed']; $pend = (int)$qj['pending'];
+      $active = in_array($qj['status'], ['queued','sending'], true) && $pend > 0;
+      $last   = strtotime($qj['last_sent'] ?: $qj['created_at']);
+      $stuck  = $active && $last < time() - 75 * 60; ?>
+      <tr>
+        <td><?= h($qj['subject']) ?></td>
+        <td style="font-size:.8rem"><?= h(strtok($qj['from_email'], '@')) ?></td>
+        <td style="white-space:nowrap;font-size:.8rem"><?= h(date('M j, g:i a', strtotime($qj['created_at']))) ?></td>
+        <td style="white-space:nowrap">
+          <?= $done ?> / <?= $total ?> sent<?= $fail ? ' · <span style="color:#A6192E;font-weight:700">' . $fail . ' failed</span>' : '' ?>
+          <div style="height:5px;background:#efece3;border-radius:3px;margin-top:.25rem;min-width:110px">
+            <div style="height:5px;border-radius:3px;background:<?= $fail ? '#A6192E' : '#1b5e20' ?>;width:<?= $total ? round(100 * ($done + $fail) / $total) : 0 ?>%"></div>
+          </div>
+        </td>
+        <td style="font-size:.8rem;white-space:nowrap">
+          <?php if ($stuck): ?><span style="color:#A6192E;font-weight:700">Stalled — check the queue cron</span>
+          <?php elseif ($active): ?>Sending · ~<?= max(1, (int)ceil($pend / EMAIL_QUEUE_HOURLY)) ?>h left
+          <?php elseif ($qj['status'] === 'cancelled'): ?>Cancelled
+          <?php else: ?>Done<?php endif; ?>
+        </td>
+        <td>
+          <?php if ($active): ?>
+          <form method="POST" style="margin:0" onsubmit="return confirm('Stop this send? The <?= $pend ?> people not reached yet will not get it.')">
+            <?= csrf_field() ?>
+            <button type="submit" name="cancel_job" value="<?= (int)$qj['id'] ?>" class="btn btn-secondary btn-sm">Cancel</button>
+          </form>
+          <?php endif; ?>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+<?php endif; ?>
 
 <script>
 // ── Signature preview ─────────────────────────────────────────────────────
