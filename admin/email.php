@@ -195,7 +195,8 @@ $errors      = [];
 $valid_count = 0;
 
 // Filter state
-$f_years   = $_POST['f_years']   ?? [];
+// Fresh page load: pre-check the current class years (not USMAPS/Graduate)
+$f_years   = $_SERVER['REQUEST_METHOD'] === 'POST' ? ($_POST['f_years'] ?? []) : current_class_years();
 $f_region  = $_POST['f_region']  ?? '';
 $f_paid    = $_POST['f_paid']    ?? '';
 $f_type    = $_POST['f_type']    ?? 'parent_both';
