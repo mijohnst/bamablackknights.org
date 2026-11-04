@@ -244,9 +244,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['send'])) {
             $full_body     = fix_email_paragraph_spacing($full_body);
             $clean_subject = str_replace(["\r","\n"], '', $subject);
 
-            // Batch BCC into chunks well under Google's SMTP relay per-message
-            // recipient limits — each batch is its own separate send to
-            // info@bamablackknights.org, reusing the same body/attachments.
+            // Batch BCC into chunks of 90 to stay under the host mail server's
+            // per-message recipient cap — each batch is its own separate send
+            // to info@bamablackknights.org, reusing the same body/attachments.
+            // The host also caps total recipients per hour (every BCC counts).
             $batches      = array_chunk($valid, 90);
             $sent_count   = 0;
             $failed_count = 0;
