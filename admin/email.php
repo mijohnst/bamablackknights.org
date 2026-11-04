@@ -23,7 +23,7 @@ function extract_emails(string $raw): array {
 }
 
 // ── Query DB to build recipient list ──────────────────────────────────────
-function load_recipients(PDO $pdo, array $years, string $region, string $paid, string $list_type, string $missing = ''): string {
+function load_recipients(PDO $pdo, array $years, string $region, string $paid, string $list_type, string $missing = '', string $event = ''): string {
     $where  = ['archived = 0'];
     $params = [];
 
@@ -37,6 +37,14 @@ function load_recipients(PDO $pdo, array $years, string $region, string $paid, s
     if ($paid   === '0') $where[] = 'membership_paid = 0';
     $missing_sql = missing_data_sql($missing);
     if ($missing_sql) $where[] = $missing_sql;
+    // Event RSVPs are made by portal logins; a login belongs to a family by
+    // its member_id link or by matching a parent email (as find_linked_member).
+    if (preg_match('/^(yes|no):(\d+)$/', $event, $em)) {
+        $where[] = ($em[1] === 'no' ? 'NOT ' : '') . 'EXISTS (SELECT 1 FROM event_rsvps r JOIN users u ON u.id = r.user_id
+            WHERE r.event_id = :event_id AND (u.member_id = members.id
+              OR LOWER(u.email) IN (LOWER(members.parent1_email), LOWER(members.parent2_email))))';
+        $params[':event_id'] = (int)$em[2];
+    }
 
     $sql  = 'SELECT parent1_email, parent2_email, cadet_email, parent1_is_board_member, parent2_is_board_member,
             parent1_email_updates, parent2_email_updates
@@ -192,10 +200,23 @@ $f_region  = $_POST['f_region']  ?? '';
 $f_paid    = $_POST['f_paid']    ?? '';
 $f_type    = $_POST['f_type']    ?? 'parent_both';
 $f_missing = $_POST['f_missing'] ?? '';
+$f_event   = $_POST['f_event']   ?? '';
+
+// Upcoming events for the RSVP filter
+try {
+    $rsvp_events = $pdo->query(
+        "SELECT e.id, e.title, e.event_date,
+            (SELECT COUNT(*) FROM event_rsvps WHERE event_id = e.id) AS rsvp_count
+         FROM events e WHERE e.group_label IN ('upcoming','planning')
+         ORDER BY e.event_date IS NULL, e.event_date ASC"
+    )->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $rsvp_events = [];
+}
 
 // ── Handle load recipients ────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['load'])) {
-    $recipients = load_recipients($pdo, (array)$f_years, $f_region, $f_paid, $f_type, $f_missing);
+    $recipients = load_recipients($pdo, (array)$f_years, $f_region, $f_paid, $f_type, $f_missing, $f_event);
 }
 
 // ── Handle send ───────────────────────────────────────────────────────────
@@ -336,7 +357,7 @@ admin_header('Compose Email');
     <input type="hidden" name="recipients" value="<?= h($recipients) ?>">
     <input type="hidden" name="from_email" value="<?= h($from_email) ?>">
 
-    <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr auto;align-items:flex-end;gap:.75rem">
+    <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr auto;align-items:flex-end;gap:.75rem">
 
       <div class="form-group" style="margin:0">
         <label>Class Year</label>
@@ -411,6 +432,20 @@ admin_header('Compose Email');
       </div>
 
       <div class="form-group" style="margin:0">
+        <label>Event RSVP</label>
+        <select name="f_event">
+          <option value="">Any</option>
+          <?php foreach ($rsvp_events as $ev):
+            $ev_label = $ev['title'] . ($ev['event_date'] ? ' (' . date('M j', strtotime($ev['event_date'])) . ')' : ''); ?>
+          <optgroup label="<?= h($ev_label) ?>">
+            <option value="yes:<?= (int)$ev['id'] ?>" <?= $f_event==='yes:'.$ev['id']?'selected':''?>>Signed up (<?= (int)$ev['rsvp_count'] ?>) — <?= h($ev['title']) ?></option>
+            <option value="no:<?= (int)$ev['id'] ?>"  <?= $f_event==='no:'.$ev['id'] ?'selected':''?>>Not signed up — <?= h($ev['title']) ?></option>
+          </optgroup>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin:0">
         <label>&nbsp;</label>
         <div style="display:flex;gap:.5rem">
           <button type="submit" name="load" value="1" class="btn btn-primary">Load →</button>
@@ -431,6 +466,7 @@ admin_header('Compose Email');
     <input type="hidden" name="f_paid"    value="<?= h($f_paid) ?>">
     <input type="hidden" name="f_type"    value="<?= h($f_type) ?>">
     <input type="hidden" name="f_missing" value="<?= h($f_missing) ?>">
+    <input type="hidden" name="f_event"   value="<?= h($f_event) ?>">
 
     <div class="form-group" style="max-width:360px">
       <label>From</label>
@@ -529,6 +565,7 @@ function resetFilter() {
   document.querySelector('select[name=f_paid]').value   = '';
   document.querySelector('select[name=f_type]').value   = 'parent_both';
   document.querySelector('select[name=f_missing]').value = '';
+  document.querySelector('select[name=f_event]').value   = '';
   document.getElementById('recipients').value = '';
   updateCount();
   document.querySelector('input[name=subject]').value = '';
