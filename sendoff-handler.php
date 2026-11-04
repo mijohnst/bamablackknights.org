@@ -52,8 +52,8 @@ if (!filter_var(trim($input['email']), FILTER_VALIDATE_EMAIL)) {
 }
 
 // The club's own Apps Script Web App URL (writes registrations to the club's
-// Google Sheet). Blank = registration closed. The URL inherited from the fork
-// belonged to the USAFA club's Google account — never put it back; deploy a
+// Google Sheet). Blank = registration closed. The URL that was here before
+// belonged to another organization's Google account — never put it back; deploy a
 // new script from this club's account before reopening registration.
 define('APPS_SCRIPT_URL', '');
 if (APPS_SCRIPT_URL === '') {

@@ -1,10 +1,9 @@
 <?php
 /**
  * Pay Dues Online — Lookup
- * Same 3-factor identity check as job-drop-lookup.php (cadet last name +
- * birthday + a parent email already on file), but unlike Job Drop this
- * isn't restricted to one class_year — any cadet with an unpaid year can
- * pay. Issues its own token in its own session pool (dues_verified) so it
+ * Same 3-factor identity check as update-lookup.php (cadet last name +
+ * birthday + a parent email already on file). Any cadet with an unpaid
+ * year can pay, whatever their class. Issues its own token in its own session pool (dues_verified) so it
  * doesn't interact with any other verification flow.
  *
  * Two steps, like update-lookup.php: a match emails a one-time code to the

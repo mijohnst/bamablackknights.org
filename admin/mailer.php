@@ -4,7 +4,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * bamablackknights.org's mail is hosted on the cPanel/Namecheap side (MX =
  * *.jellyfish.systems), not Google Workspace. The Google SMTP relay this
- * code inherited from the USAFA site only accepts mail for a Workspace
+ * code originally used only accepts mail for a Workspace
  * domain from an allowlisted IP, so every send through it failed.
  *
  * Now all mail goes out through the hosting server itself (PHP mail()).

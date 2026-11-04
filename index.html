@@ -32,20 +32,6 @@
     .container{max-width:1100px;margin:0 auto;}
     .divider{width:48px;height:3px;background:linear-gradient(90deg,var(--blue),transparent);margin-bottom:2rem;}
 
-    /* JOB DROP NIGHT */
-    #job-drop{background:var(--light);}
-    .jd-caption{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:2.5rem 1.5rem 1.25rem;text-align:left;background:linear-gradient(to top, rgba(0,20,50,.88) 0%, rgba(0,20,50,.6) 55%, transparent 100%);}
-    .jd-caption-title{color:#fff;font-family:var(--font-display);font-weight:700;font-size:1.7rem;line-height:1.15;margin-bottom:.25rem;text-shadow:0 2px 8px rgba(0,0,0,.5);}
-    .jd-caption-name{color:rgba(255,255,255,.9);font-size:1rem;font-weight:500;margin:0;}
-    .jd-watch-btn{display:inline-flex;align-items:center;gap:.4rem;margin-top:.6rem;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);color:#fff;font-size:.85rem;font-weight:600;padding:.4rem .85rem;border-radius:30px;cursor:pointer;transition:background .2s;}
-    .jd-watch-btn:hover{background:rgba(255,255,255,.3);}
-    .jd-lightbox{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.93);align-items:center;justify-content:center;padding:1.5rem;}
-    .jd-lightbox.open{display:flex;}
-    .jd-lb-inner{position:relative;width:100%;max-width:900px;aspect-ratio:16/9;background:#000;}
-    .jd-lb-inner iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
-    .jd-lb-close{position:fixed;top:1.25rem;right:1.5rem;background:none;border:none;color:white;font-size:2rem;cursor:pointer;line-height:1;padding:.2rem .5rem;opacity:.75;transition:opacity .2s;}
-    .jd-lb-close:hover{opacity:1;}
-
     /* ABOUT */
     #about{background:var(--white);}
     .about-grid{display:grid;grid-template-columns:280px 1fr;gap:3rem;align-items:start;}
@@ -294,29 +280,6 @@
     <a href="#events" class="btn btn-gold">Events &amp; Key Dates</a>
   </div>
 </section>
-
-<!-- JOB DROP NIGHT -->
-<section id="job-drop" style="display:none">
-  <div class="container">
-    <p class="section-label">Career Fields</p>
-    <h2 class="section-title">Job Drop Night</h2>
-    <div class="divider"></div>
-    <div class="slideshow-wrap" style="max-width:640px">
-      <div class="slideshow-viewport" id="jd-viewport" style="aspect-ratio:4/3;max-height:460px">
-        <div class="slideshow-track" id="jd-track"></div>
-        <button class="slideshow-btn prev" id="jd-prev" aria-label="Previous cadet">&#8249;</button>
-        <button class="slideshow-btn next" id="jd-next" aria-label="Next cadet">&#8250;</button>
-      </div>
-      <div class="slideshow-dots" id="jd-dots"></div>
-    </div>
-  </div>
-</section>
-
-<!-- JOB DROP NIGHT VIDEO LIGHTBOX -->
-<div class="jd-lightbox" id="jd-lightbox" role="dialog" aria-modal="true" aria-label="Job Drop reveal video">
-  <button class="jd-lb-close" id="jd-lb-close" aria-label="Close video">&times;</button>
-  <div class="jd-lb-inner" id="jd-lb-inner"></div>
-</div>
 
 <!-- ABOUT -->
 <section id="about">
@@ -915,124 +878,6 @@ function escHtml(s) {
 function safeHref(url) {
   return /^https?:\/\/|^\/|^#/i.test(url || '') ? url : '#';
 }
-
-// ── Job Drop Night — same slide-track technique as the Member Photos
-// slideshow below (pre-built slides + CSS transform), rather than swapping
-// a single <img> src — that approach could flash/pop if a new image hadn't
-// finished loading by the time the crossfade revealed it. ─────────────────
-(function() {
-  var track   = document.getElementById('jd-track');
-  var dotsEl  = document.getElementById('jd-dots');
-  var prevBtn = document.getElementById('jd-prev');
-  var nextBtn = document.getElementById('jd-next');
-  var viewport= document.getElementById('jd-viewport');
-  if (!track) return;
-  var current = 0;
-  var items   = [];
-  var autoTimer = null;
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var lightbox  = document.getElementById('jd-lightbox');
-  var lbInner   = document.getElementById('jd-lb-inner');
-  var lbClose   = document.getElementById('jd-lb-close');
-
-  function openVideo(youtubeId) {
-    lbInner.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(youtubeId) +
-      '?autoplay=1" title="Job Drop reveal video" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-    lightbox.classList.add('open');
-  }
-  function closeVideo() {
-    lightbox.classList.remove('open');
-    lbInner.innerHTML = ''; // stop playback
-  }
-  lbClose.addEventListener('click', closeVideo);
-  lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeVideo(); });
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeVideo(); });
-
-  function buildSlide(item) {
-    var slide = document.createElement('div');
-    slide.className = 'slide';
-    var src = 'job-drop-photo-serve.php?f=' + encodeURIComponent(item.filename);
-    var bg = document.createElement('img');
-    bg.className = 'slide-bg'; bg.src = src; bg.alt = ''; bg.setAttribute('aria-hidden', 'true'); bg.loading = 'lazy';
-    var fg = document.createElement('img');
-    fg.className = 'slide-fg'; fg.src = src; fg.alt = item.cadet_name + ' — ' + item.job_title; fg.loading = 'lazy';
-    var caption = document.createElement('div');
-    caption.className = 'jd-caption';
-    var title = document.createElement('p');
-    title.className = 'jd-caption-title'; title.textContent = item.job_title;
-    var name = document.createElement('p');
-    name.className = 'jd-caption-name'; name.textContent = item.cadet_name;
-    caption.appendChild(title); caption.appendChild(name);
-    if (item.youtube_id) {
-      var watchBtn = document.createElement('button');
-      watchBtn.type = 'button';
-      watchBtn.className = 'jd-watch-btn';
-      watchBtn.innerHTML = '&#9654; Watch the reveal';
-      watchBtn.addEventListener('click', function() { openVideo(item.youtube_id); });
-      caption.appendChild(watchBtn);
-    }
-    slide.appendChild(bg); slide.appendChild(fg); slide.appendChild(caption);
-    return slide;
-  }
-
-  function goTo(index) {
-    if (!items.length) return;
-    var dots = dotsEl.querySelectorAll('.slideshow-dot');
-    if (dots[current]) dots[current].classList.remove('active');
-    current = (index + items.length) % items.length;
-    track.style.transform = 'translateX(-' + (current * 100) + '%)';
-    if (dots[current]) dots[current].classList.add('active');
-  }
-
-  function startAuto() {
-    if (reduceMotion || items.length < 2) return;
-    clearInterval(autoTimer);
-    autoTimer = setInterval(function() { goTo(current + 1); }, 10000);
-  }
-  function resetAuto() { startAuto(); }
-
-  async function loadJobDrops() {
-    try {
-      var resp = await fetchWithTimeout('job-drop-feed.php', 6000);
-      var data = await resp.json();
-      if (!(data && data.success && data.drops && data.drops.length)) return;
-      items = data.drops;
-      if (reduceMotion) track.style.transition = 'none';
-      items.forEach(function(item, i) {
-        track.appendChild(buildSlide(item));
-        var dot = document.createElement('button');
-        dot.className = 'slideshow-dot';
-        dot.setAttribute('aria-label', 'Cadet ' + (i + 1));
-        dot.addEventListener('click', function() { goTo(i); resetAuto(); });
-        dotsEl.appendChild(dot);
-      });
-      if (items.length < 2) { prevBtn.style.display = 'none'; nextBtn.style.display = 'none'; dotsEl.style.display = 'none'; }
-      document.getElementById('job-drop').style.display = 'block';
-      goTo(0);
-      startAuto();
-      viewport.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
-      viewport.addEventListener('mouseleave', startAuto);
-      var touchStartX = 0;
-      viewport.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, {passive:true});
-      viewport.addEventListener('touchend', function(e) {
-        var dx = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(dx) > 40) { goTo(dx < 0 ? current + 1 : current - 1); resetAuto(); }
-      }, {passive:true});
-    } catch (err) {
-      // Silent failure — section just stays hidden if the feed can't be reached.
-    }
-  }
-
-  prevBtn.addEventListener('click', function() { goTo(current - 1); resetAuto(); });
-  nextBtn.addEventListener('click', function() { goTo(current + 1); resetAuto(); });
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadJobDrops);
-  } else {
-    loadJobDrops();
-  }
-})();
 
 // ── Spotlight layout — two centered columns when both halves have data,
 // one centered column (no divider) when only one does ────────────────────

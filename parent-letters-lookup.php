@@ -1,7 +1,7 @@
 <?php
 /**
  * Parent Letters — Lookup
- * Same identity check as update-lookup.php and job-drop-lookup.php (cadet
+ * Same identity check as update-lookup.php (cadet
  * last name + birthday + a parent email already on file), but issues its
  * own token in a separate session pool so it doesn't interact with the
  * Update Your Information flow. Unlike that token, this one isn't consumed

@@ -229,8 +229,6 @@ if (can_manage_members()) {
     $sections['Secretary Tools'][] = ['icon'=>'💌','label'=>'Parent Letters','sub'=>$pl_count>0?"$pl_count saved — print A\u{2013}Z":'None saved yet','href'=>'parent-letters.php','color'=>'#5c007a'];
     try { $pending_noms = (int)get_pdo()->query("SELECT COUNT(*) FROM election_candidates WHERE status='pending'")->fetchColumn(); } catch(Exception $e) { $pending_noms = 0; }
     $sections['Secretary Tools'][] = ['icon'=>'🗳️','label'=>'Elections','sub'=>$pending_noms>0?"$pending_noms nomination".($pending_noms>1?'s':'')." to review":'Set up officer voting','href'=>'elections.php','color'=>'#5c007a','badge'=>$pending_noms>0?$pending_noms:0];
-    try { $pending_jd = (int)get_pdo()->query("SELECT COUNT(*) FROM job_drop_submissions WHERE status='pending'")->fetchColumn(); } catch(Exception $e) { $pending_jd = 0; }
-    $sections['Secretary Tools'][] = ['icon'=>'🎖️','label'=>'Job Drop Night','sub'=>$pending_jd>0?"$pending_jd to review":'No submissions yet','href'=>'job-drop-submissions.php','color'=>'#5c007a','badge'=>$pending_jd>0?$pending_jd:0];
     // Member support features
     try { $vo_needed = (int)get_pdo()->query(
         "SELECT COUNT(*) FROM volunteer_opportunities o WHERE o.active=1

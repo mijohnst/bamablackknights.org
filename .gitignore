@@ -21,10 +21,6 @@ event-docs/*
 !event-docs/.htaccess
 event-photos/*
 !event-photos/.htaccess
-job-drop-photos/*
-!job-drop-photos/.htaccess
-job-drop-submissions/*
-!job-drop-submissions/.htaccess
 photo-submissions/*
 !photo-submissions/.htaccess
 admin/minutes-files/*

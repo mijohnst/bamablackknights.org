@@ -271,28 +271,6 @@ function save_dues_years(PDO $pdo, int $member_id, array $years, bool $touch_yea
     }
 }
 
-// Job Drop Night's eligible class year — normally the class about to
-// graduate (outgoing_class_year()+1), same reasoning as
-// current_class_years(). But real Job Drop timing doesn't necessarily line
-// up with the July 1 rollover (same gap admin/graduate-class.php already
-// handles for commencement vs. the club's fiscal year), so an officer can
-// override it manually via job_drop_settings.override_class_year — falls
-// back to the automatic value if unset, blank, or the table/column isn't
-// migrated yet. Required directly by job-drop-feed.php (no admin/auth.php
-// dependency) as well as by the authenticated Job Drop Night pages.
-function job_drop_eligible_year(PDO $pdo): string {
-    $auto = (string)((int)outgoing_class_year() + 1);
-    try {
-        $override = $pdo->query('SELECT override_class_year FROM job_drop_settings WHERE id=1')->fetchColumn();
-        if ($override !== false && $override !== null && trim((string)$override) !== '') {
-            return trim((string)$override);
-        }
-    } catch (Exception $e) {
-        // Table/column not migrated yet — fall back to automatic.
-    }
-    return $auto;
-}
-
 // Neutralizes CSV/TSV formula injection: if a cell's first character is
 // one Excel/Sheets treats as a formula trigger (=, +, -, @, or a tab/CR
 // that could smuggle one in after whitespace-trimming), prefix it with a
