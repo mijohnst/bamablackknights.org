@@ -92,8 +92,10 @@ function email_queue_process(PDO $pdo): int {
     try {
         $budget = EMAIL_QUEUE_HOURLY - email_queue_sent_last_hour($pdo);
         while ($budget > 0) {
+            // Columns named explicitly so the keys stay lowercase even if
+            // phpMyAdmin capitalized a column name during the migration.
             $job = $pdo->query(
-                "SELECT j.* FROM email_queue_jobs j
+                "SELECT j.id, j.from_email, j.subject, j.body, j.attachments_json FROM email_queue_jobs j
                  WHERE j.status IN ('queued','sending')
                    AND EXISTS (SELECT 1 FROM email_queue_recipients r WHERE r.job_id = j.id AND r.status = 'pending')
                  ORDER BY j.id LIMIT 1"
