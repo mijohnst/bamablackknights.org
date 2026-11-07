@@ -182,11 +182,32 @@ if (isset($_GET['edit'])) {
 $users = $pdo->query('SELECT * FROM users ORDER BY role, name')->fetchAll();
 
 $linkable_members = $pdo->query(
-    "SELECT id, cadet_last_name, cadet_suffix, cadet_first_name, cadet_middle_name, class_year FROM members WHERE archived = 0 ORDER BY cadet_last_name, cadet_first_name"
+    "SELECT id, cadet_last_name, cadet_suffix, cadet_first_name, cadet_middle_name, class_year, parent1_email, parent2_email FROM members WHERE archived = 0 ORDER BY cadet_last_name, cadet_first_name"
 )->fetchAll(PDO::FETCH_ASSOC);
 $member_names = [];
+$member_parent_emails = [];
 foreach ($linkable_members as $lm) {
     $member_names[$lm['id']] = trim(cadet_last_name_suffixed($lm) . ', ' . trim($lm['cadet_first_name'] . ' ' . $lm['cadet_middle_name'])) . ' (' . $lm['class_year'] . ')';
+    $member_parent_emails[$lm['id']] = array_filter([
+        strtolower(trim((string)$lm['parent1_email'])), strtolower(trim((string)$lm['parent2_email'])),
+    ]);
+}
+
+// Login codes (2FA) are emailed to users.email, so an active account with
+// no usable address can't log in at all, and one whose address no longer
+// matches its linked family record may be going to a stale inbox. Compared
+// in PHP rather than with a JOIN so a collation mismatch between the two
+// tables can't break the page.
+$email_issues = [];
+foreach ($users as $u) {
+    if (!$u['active']) continue;
+    $addr = strtolower(trim((string)$u['email']));
+    if (!filter_var($addr, FILTER_VALIDATE_EMAIL)) {
+        $email_issues[(int)$u['id']] = ['bad', 'No valid email — can’t receive login codes, so can’t log in'];
+    } elseif (!empty($u['member_id']) && !empty($member_parent_emails[$u['member_id']])
+              && !in_array($addr, $member_parent_emails[$u['member_id']], true)) {
+        $email_issues[(int)$u['id']] = ['check', 'Email doesn’t match Parent 1 or Parent 2 on the linked family record — confirm it’s current'];
+    }
 }
 
 $role_labels = ['admin'=>'Admin','tech'=>'Tech Support','officer'=>'Officer','secretary'=>'Secretary','treasurer'=>'Treasurer','member'=>'Member'];
@@ -293,6 +314,18 @@ echo show_flash();
       <a href="users.php" class="btn btn-secondary">Cancel</a>
     </div>
   </form>
+</div>
+<?php endif; ?>
+
+<?php if ($email_issues): ?>
+<div class="alert alert-error" style="max-width:820px">
+  <strong>Login code email check (<?= count($email_issues) ?>)</strong> — portal logins now email a code to the account’s address below.
+  <ul style="margin:.5rem 0 0 1.2rem">
+  <?php foreach ($users as $u): if (!isset($email_issues[(int)$u['id']])) continue; [$kind, $msg] = $email_issues[(int)$u['id']]; ?>
+    <li><a href="users.php?edit=<?= (int)$u['id'] ?>"><?= h($u['name']) ?></a>
+      (<?= h(trim((string)$u['email']) !== '' ? $u['email'] : 'blank') ?>): <?= $kind === 'bad' ? '<strong>' . h($msg) . '</strong>' : h($msg) ?></li>
+  <?php endforeach; ?>
+  </ul>
 </div>
 <?php endif; ?>
 

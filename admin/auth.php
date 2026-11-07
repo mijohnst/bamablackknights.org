@@ -29,11 +29,14 @@ function start_session(): void {
         // whether a session survives closing the browser.
         ini_set('session.gc_maxlifetime', '14400');
         session_name('wppc_admin');
-        $is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
-        session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => $is_https]);
+        session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => request_is_https()]);
         session_start();
     }
+}
+
+function request_is_https(): bool {
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
 }
 
 function require_login(): void {
@@ -304,6 +307,59 @@ function register_login_failure(PDO $pdo, int $user_id, int $failed_attempts): v
 
 function register_login_success(PDO $pdo, int $user_id): void {
     $pdo->prepare('UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE id = ?')->execute([$user_id]);
+}
+
+// ── Login verification codes (2FA) ────────────────────────────────────────
+// After the password checks out, login.php emails a code to users.email and
+// only logs the person in once it's entered (sender in email-code.php).
+
+// On unless config.php defines LOGIN_2FA_ENABLED as false — an emergency
+// switch for a mail outage, kept in config.php (on the server only) rather
+// than in Site Settings so a stolen password can't be used to turn it off.
+function login_2fa_enabled(): bool {
+    require_once __DIR__ . '/config.php';
+    return !defined('LOGIN_2FA_ENABLED') || LOGIN_2FA_ENABLED;
+}
+
+const LOGIN_TRUST_DAYS = 30;
+
+// "Trust this device" cookie: expiry + an HMAC keyed on the account's
+// password hash. Nothing is stored server-side (no migration); the cookie
+// can't be forged without the hash, and every trusted device for an account
+// is dropped the moment its password changes. It only skips the code step:
+// the password is still required every time.
+function login_trust_cookie_name(int $user_id): string {
+    return 'wppc_trust_' . $user_id;
+}
+
+function login_trust_signature(array $user, int $expires): string {
+    return hash_hmac('sha256', 'login-trust|' . (int)$user['id'] . '|' . $expires, (string)$user['password_hash']);
+}
+
+function login_trust_device(array $user): void {
+    $expires = time() + LOGIN_TRUST_DAYS * 86400;
+    setcookie(login_trust_cookie_name((int)$user['id']), $expires . '.' . login_trust_signature($user, $expires), [
+        'expires' => $expires, 'path' => '/', 'httponly' => true, 'secure' => request_is_https(), 'samesite' => 'Lax',
+    ]);
+}
+
+function login_device_trusted(array $user): bool {
+    $raw = (string)($_COOKIE[login_trust_cookie_name((int)$user['id'])] ?? '');
+    if (!preg_match('/^(\d{1,12})\.([a-f0-9]{64})$/', $raw, $m)) return false;
+    if ((int)$m[1] < time()) return false;
+    return hash_equals(login_trust_signature($user, (int)$m[1]), $m[2]);
+}
+
+// Turns a verified user row into a logged-in session.
+function complete_login(array $user): void {
+    session_regenerate_id(true);
+    unset($_SESSION['pending_login'], $_SESSION['login_flash']);
+    $_SESSION['logged_in']     = true;
+    $_SESSION['role']          = $user['role'];
+    $_SESSION['officer_title'] = $user['officer_title'] ?? '';
+    $_SESSION['user_id']       = $user['id'];
+    $_SESSION['user_name']     = $user['name'];
+    $_SESSION['user_email']    = $user['email'];
 }
 
 // Check if the users table exists and has at least one user

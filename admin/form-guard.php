@@ -14,8 +14,9 @@ function honeypot_tripped($data, string $field = 'website'): bool {
 
 // True if this IP has hit $form_name more than $max times in the last $window_minutes.
 // Fails open (returns false = not limited) if the throttle table can't be reached,
-// so a DB hiccup never blocks a legitimate submission.
-function rate_limited(PDO $pdo, string $form_name, int $max = 5, int $window_minutes = 15): bool {
+// so a DB hiccup never blocks a legitimate submission — unless $fail_closed,
+// for checks where letting everything through is worse (login code guessing).
+function rate_limited(PDO $pdo, string $form_name, int $max = 5, int $window_minutes = 15, bool $fail_closed = false): bool {
     $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     $ip_hash = hash('sha256', $ip);
     try {
@@ -29,6 +30,6 @@ function rate_limited(PDO $pdo, string $form_name, int $max = 5, int $window_min
         return false;
     } catch (PDOException $e) {
         error_log('form-guard: rate_limited check failed — ' . $e->getMessage());
-        return false;
+        return $fail_closed;
     }
 }

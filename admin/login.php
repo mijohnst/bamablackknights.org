@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/form-guard.php';
+require_once __DIR__ . '/email-code.php';
 start_session();
 
 // Only a fixed allowlist of destinations can be requested via ?next= — never
@@ -32,6 +34,75 @@ if ($bootstrap && $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['bootst
     }
 }
 
+// ── Step 2: emailed login code ────────────────────────────────────────────
+// Every code-screen action is a plain form POST that redirects back here
+// (post/redirect/get), so each render gets a fresh CSRF token and a page
+// refresh never resubmits a stale one. Messages ride in login_flash.
+function login_flash(string $type, string $msg): void {
+    $_SESSION['login_flash'] = ['type' => $type, 'msg' => $msg];
+}
+
+// The pending account, re-read so a deactivation or password change made
+// after the password step still stops the login.
+function pending_login_user(PDO $pdo, array $pending): ?array {
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ? AND active = 1');
+    $stmt->execute([(int)$pending['user_id']]);
+    $u = $stmt->fetch();
+    if (!$u || !hash_equals((string)$pending['pw_fingerprint'], hash('sha256', (string)$u['password_hash']))) return null;
+    return $u;
+}
+
+$pending = $_SESSION['pending_login'] ?? null;
+if ($pending && (int)$pending['started'] + LOGIN_PENDING_TTL < time()) {
+    unset($_SESSION['pending_login']);
+    $pending = null;
+    login_flash('error', 'Your login timed out. Please enter your password again.');
+}
+
+$code_action = $_POST['code_action'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $code_action !== '') {
+    csrf_verify();
+    $user = $pending ? pending_login_user($pdo, $pending) : null;
+    if ($pending && !$user) {
+        unset($_SESSION['pending_login']);
+        login_flash('error', 'Please log in again.');
+    } elseif ($pending && $code_action === 'cancel') {
+        unset($_SESSION['pending_login']);
+    } elseif ($pending && $code_action === 'resend') {
+        $wait = (int)($pending['sent_at'] ?? 0) + LOGIN_CODE_RESEND_WAIT - time();
+        if ($wait > 0) {
+            login_flash('error', "Please wait $wait second" . ($wait != 1 ? 's' : '') . ' before requesting another code.');
+        } else {
+            $send_error = login_code_send($pdo, $user);
+            login_flash($send_error === '' ? 'success' : 'error', $send_error === '' ? 'A new code is on its way.' : $send_error);
+        }
+    } elseif ($pending && $code_action === 'verify') {
+        // Per-code attempts are capped below; this caps guessing across
+        // many codes from one network.
+        if (rate_limited($pdo, 'admin_login_code', 15, 15, true)) {
+            login_flash('error', 'Too many attempts from your network. Please try again in a few minutes.');
+        } elseif (empty($pending['hash']) || (int)$pending['expires'] < time()) {
+            login_flash('error', 'That code has expired. Use "Send a new code" below.');
+        } else {
+            $_SESSION['pending_login']['attempts'] = ++$pending['attempts'];
+            $code = email_code_normalize((string)($_POST['code'] ?? ''));
+            if (hash_equals((string)$pending['hash'], email_code_hash((string)$pending['salt'], $code))) {
+                if (!empty($_POST['trust'])) login_trust_device($user);
+                $dest = $pending['next'];
+                complete_login($user);
+                header('Location: ' . $dest); exit;
+            }
+            if ($pending['attempts'] >= LOGIN_CODE_MAX_ATTEMPTS) {
+                unset($_SESSION['pending_login']['hash']);
+                login_flash('error', 'Too many incorrect codes. Use "Send a new code" below.');
+            } else {
+                login_flash('error', 'That code is incorrect. Please check the email and try again.');
+            }
+        }
+    }
+    header('Location: login.php'); exit;
+}
+
 // ── Normal login ───────────────────────────────────────────────────────────
 if (!$bootstrap && $_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST['bootstrap'])) {
     csrf_verify();
@@ -47,17 +118,34 @@ if (!$bootstrap && $_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST['bootst
             if ((int)$user['failed_attempts'] > 0 || $user['locked_until']) {
                 register_login_success($pdo, (int)$user['id']);
             }
-            session_regenerate_id(true);
-            $_SESSION['logged_in']  = true;
-            $_SESSION['role']          = $user['role'];
-            $_SESSION['officer_title'] = $user['officer_title'] ?? '';
-            $_SESSION['user_id']    = $user['id'];
-            $_SESSION['user_name']  = $user['name'];
-            $_SESSION['user_email'] = $user['email'];
-            header('Location: ' . $next); exit;
+            if (!login_2fa_enabled() || login_device_trusted($user)) {
+                complete_login($user);
+                header('Location: ' . $next); exit;
+            }
+            if (!filter_var(trim((string)$user['email']), FILTER_VALIDATE_EMAIL)) {
+                // No usable address: a code screen would be a dead end.
+                $error = "Your account doesn't have a valid email address on file, so we can't send you a login code. "
+                       . 'Please contact ' . LOGIN_SUPPORT_EMAIL . '.';
+            } else {
+                // Password is right — hold the login until the emailed code
+                // is entered. Nothing in this state counts as logged in
+                // (require_login() only checks logged_in).
+                session_regenerate_id(true);
+                $_SESSION['pending_login'] = [
+                    'user_id'        => (int)$user['id'],
+                    'pw_fingerprint' => hash('sha256', (string)$user['password_hash']),
+                    'next'           => $next,
+                    'started'        => time(),
+                    'email_masked'   => mask_email(trim((string)$user['email'])),
+                ];
+                $send_error = login_code_send($pdo, $user);
+                if ($send_error !== '') login_flash('error', $send_error);
+                header('Location: login.php'); exit;
+            }
+        } else {
+            if ($status) register_login_failure($pdo, (int)$status['id'], (int)$status['failed_attempts']);
+            $error = 'Invalid username or password.';
         }
-        if ($status) register_login_failure($pdo, (int)$status['id'], (int)$status['failed_attempts']);
-        $error = 'Invalid username or password.';
     }
 }
 ?>
@@ -83,6 +171,17 @@ input:focus{outline:none;border-color:#000000;box-shadow:0 0 0 2px rgba(0,0,0,.1
 button{width:100%;padding:.75rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit}
 button:hover{background:#002268}
 .alert{padding:.65rem .9rem;border-radius:4px;margin-bottom:1rem;font-size:.875rem;background:#ffebee;color:#c62828;border-left:4px solid #f44336}
+.alert.ok{background:#e8f5e9;color:#1b5e20;border-left-color:#4caf50}
+.code-note{font-size:.88rem;color:#3a4a5a;margin-bottom:1rem;line-height:1.45;text-align:center}
+.code-input{font-size:1.3rem;letter-spacing:.3em;text-align:center;text-transform:uppercase;font-family:Consolas,monospace}
+label.trust{display:flex;align-items:center;gap:.5rem;text-transform:none;letter-spacing:0;font-weight:400;font-size:.88rem;color:#3a4a5a;margin-bottom:1rem;cursor:pointer}
+label.trust input{width:auto;margin:0}
+.code-links{display:flex;justify-content:space-between;margin-top:1rem}
+.code-links form{margin:0}
+button.link{background:none;color:#000000;padding:0;width:auto;font-weight:600;font-size:.85rem;text-decoration:underline}
+button.link:hover{background:none;color:#5a6a7a}
+.code-help{font-size:.78rem;color:#5a6a7a;margin-top:1rem;text-align:center;line-height:1.4}
+.code-help a{color:#000000}
 .setup-note{background:#e8f5e9;border-left:4px solid #4caf50;padding:.75rem 1rem;border-radius:4px;font-size:.82rem;color:#1b5e20;margin-bottom:1.25rem}
 </style></head><body>
 <div class="box">
@@ -92,13 +191,40 @@ button:hover{background:#002268}
     <small>Member Administration</small>
   </div>
 
+  <?php $login_flash = $_SESSION['login_flash'] ?? null; unset($_SESSION['login_flash']); ?>
   <?php if ($error): ?>
     <div class="alert"><?= h($error) ?></div>
+  <?php elseif ($login_flash): ?>
+    <div class="alert<?= $login_flash['type'] === 'success' ? ' ok' : '' ?>"><?= h($login_flash['msg']) ?></div>
   <?php elseif (!empty($_GET['deactivated'])): ?>
     <div class="alert">Your account is no longer active. Contact a site admin if this is unexpected.</div>
   <?php endif; ?>
 
-  <?php if ($bootstrap): ?>
+  <?php if ($pending): ?>
+    <h2>Check Your Email</h2>
+    <p class="code-note">
+      <?php if (!empty($pending['hash'])): ?>
+        We sent a <?= LOGIN_CODE_LENGTH ?>-character login code to <strong><?= h($pending['email_masked']) ?></strong>. It expires in 10 minutes.
+      <?php else: ?>
+        Your login code goes to <strong><?= h($pending['email_masked']) ?></strong>. Use "Send a new code" below to get one.
+      <?php endif; ?>
+    </p>
+    <form method="POST">
+      <?= csrf_field() ?>
+      <input type="hidden" name="code_action" value="verify">
+      <label for="login-code">Login Code</label>
+      <input type="text" id="login-code" name="code" required autofocus autocomplete="one-time-code"
+             autocapitalize="characters" spellcheck="false" maxlength="12" class="code-input">
+      <label class="trust"><input type="checkbox" name="trust" value="1"> Trust this device for <?= LOGIN_TRUST_DAYS ?> days</label>
+      <button type="submit">Verify &amp; Log In</button>
+    </form>
+    <div class="code-links">
+      <form method="POST"><?= csrf_field() ?><input type="hidden" name="code_action" value="resend"><button type="submit" class="link">Send a new code</button></form>
+      <form method="POST"><?= csrf_field() ?><input type="hidden" name="code_action" value="cancel"><button type="submit" class="link">Start over</button></form>
+    </div>
+    <p class="code-help">Wrong address, or no email arriving? Check your spam folder, then contact
+      <a href="mailto:<?= LOGIN_SUPPORT_EMAIL ?>"><?= LOGIN_SUPPORT_EMAIL ?></a>.</p>
+  <?php elseif ($bootstrap): ?>
     <div class="setup-note">No admin accounts exist yet. Create the first admin user below.</div>
     <h2>Create First Admin</h2>
     <form method="POST">
