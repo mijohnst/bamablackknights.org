@@ -72,15 +72,16 @@ $year_label = fn($y) => ctype_digit((string)$y) ? 'Class of ' . $y : $y;
 $filter_active = $search !== '' || $region !== '' || $missing !== '' || $bmonth !== ''
     || $member_status !== '' || $consent !== ''
     || (!empty($selected_years) && count($selected_years) < count($all_years));
+
+admin_header('Member Directory');
 ?>
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Member Directory — West Point Parents Club of Alabama</title>
-<link rel="icon" type="image/png" href="../logo01.png" />
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",Arial,sans-serif;font-size:13px;color:#111;background:#fff;padding:1.5rem}
+body{background:#fff}
+.main{font-size:13px;color:#111;margin-top:1.5rem}
 h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
+/* admin_css() sizes every input/select/label for stacked forms — undo that for this inline filter row */
+.filters input[type=text],.filters select{width:auto}
+.filters .cd-panel label{text-transform:none;letter-spacing:0;font-weight:400;margin:0}
 .subtitle{font-size:.82rem;color:#5a6a7a;margin-bottom:1.25rem}
 .filters{display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:flex-end}
 .filters select,.filters a{padding:.4rem .65rem;border:1px solid #d0d5dd;border-radius:4px;font-size:.82rem;font-family:inherit;background:#fff;color:#1a2332;cursor:pointer;text-decoration:none}
@@ -100,7 +101,7 @@ h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
 .yr-group{margin-bottom:1.5rem}
 .yr-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#000000;border-bottom:2px solid #000000;padding-bottom:.25rem;margin-bottom:.75rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.65rem}
-.card{border:1px solid #e1e5eb;border-radius:4px;padding:.7rem .85rem;page-break-inside:avoid}
+.dir-card{background:#fff;border:1px solid #e1e5eb;border-radius:4px;padding:.7rem .85rem;page-break-inside:avoid}
 .cadet-name{font-weight:700;font-size:.92rem;color:#000000}
 .cadet-meta{font-size:.72rem;color:#5a6a7a;margin-bottom:.4rem}
 .p-name{font-weight:600;font-size:.8rem;color:#1a2332;margin-top:.35rem}
@@ -112,14 +113,13 @@ h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
 .count-chip b{font-weight:700}
 .divider{border-top:1px solid #f0f2f5;margin:.35rem 0}
 @media print{
-  body{padding:.5rem}
-  .no-print{display:none!important}
-  .card{border-color:#ccc}
+  .main{margin:0 auto;max-width:none}
+  .topbar,.no-print{display:none!important}
+  .dir-card{border-color:#ccc}
   a{color:#111!important}
   .grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
-</head><body>
 
 <div class="no-print" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1rem">
   <div>
@@ -231,7 +231,7 @@ foreach ($by_year as $yr => $group):
     $company = $m['company'];
     $v = fn(string $k) => h((string)($m[$k] ?? ''));
   ?>
-  <div class="card">
+  <div class="dir-card">
     <div class="cadet-name"><?= h(cadet_last_name_suffixed($m)) ?>, <?= h(trim(($m['cadet_first_name'] ?? '') . ' ' . ($m['cadet_middle_name'] ?? ''))) ?></div>
     <div class="cadet-meta">
       <?= h((string)($company ?? '')) ?><?= $company && $m['al_region'] ? ' &bull; ' : '' ?><?= $v('al_region') ?>
@@ -305,4 +305,4 @@ function setCurrentYears() {
 }
 </script>
 
-</body></html>
+<?php admin_footer(); ?>
