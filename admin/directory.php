@@ -64,6 +64,14 @@ $stmt = $pdo->prepare('SELECT * FROM members WHERE ' . implode(' AND ', $where)
     . ' ORDER BY class_year, cadet_last_name');
 $stmt->execute($params);
 $members = $stmt->fetchAll();
+
+$by_year = [];
+foreach ($members as $m) { $by_year[$m['class_year']][] = $m; }
+$total = count($members);
+$year_label = fn($y) => ctype_digit((string)$y) ? 'Class of ' . $y : $y;
+$filter_active = $search !== '' || $region !== '' || $missing !== '' || $bmonth !== ''
+    || $member_status !== '' || $consent !== ''
+    || (!empty($selected_years) && count($selected_years) < count($all_years));
 ?>
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -98,6 +106,10 @@ h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
 .p-name{font-weight:600;font-size:.8rem;color:#1a2332;margin-top:.35rem}
 .p-detail{font-size:.75rem;color:#333;line-height:1.6}
 .p-detail a{color:#333;text-decoration:none}
+.count-summary{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-top:-.6rem}
+.count-total{font-size:.9rem;font-weight:700;color:#000;margin-right:.35rem}
+.count-chip{font-size:.75rem;background:#f0f2f5;border:1px solid #e1e5eb;border-radius:999px;padding:.15rem .6rem;color:#1a2332}
+.count-chip b{font-weight:700}
 .divider{border-top:1px solid #f0f2f5;margin:.35rem 0}
 @media print{
   body{padding:.5rem}
@@ -113,6 +125,12 @@ h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
   <div>
     <h1>Member Directory</h1>
     <div class="subtitle">West Point Parents Club of Alabama &mdash; <?= date('F Y') ?> &mdash; <?= can_view_member_pii() ? 'excludes families who opted out of directory listing' : 'shows only families who opted in to directory listing' ?></div>
+    <div class="count-summary">
+      <span class="count-total"><?= $total ?> record<?= $total!==1?'s':'' ?><?= $filter_active ? ' match these filters' : '' ?><?= $missing !== '' && isset(MISSING_DATA_OPTIONS[$missing]) ? ' (missing ' . h(MISSING_DATA_OPTIONS[$missing]) . ')' : '' ?></span>
+      <?php foreach ($by_year as $yr => $group): ?>
+        <span class="count-chip"><?= h($year_label($yr)) ?>: <b><?= count($group) ?></b></span>
+      <?php endforeach; ?>
+    </div>
   </div>
   <div style="display:flex;gap:.5rem">
     <button onclick="window.print()" style="padding:.5rem 1.1rem;background:#000000;color:#fff;border:none;border-radius:4px;font-size:.85rem;cursor:pointer">Print / Save PDF</button>
@@ -204,12 +222,10 @@ h1{font-size:1.2rem;color:#000000;margin-bottom:.25rem}
 </form>
 
 <?php
-$by_year = [];
-foreach ($members as $m) { $by_year[$m['class_year']][] = $m; }
 foreach ($by_year as $yr => $group):
 ?>
 <div class="yr-group">
-  <div class="yr-label">Class of <?= h($yr) ?> &mdash; <?= count($group) ?> member<?= count($group)!==1?'s':''?></div>
+  <div class="yr-label"><?= h($year_label($yr)) ?> &mdash; <?= count($group) ?> member<?= count($group)!==1?'s':''?></div>
   <div class="grid">
   <?php foreach ($group as $m):
     $company = $m['company'];
